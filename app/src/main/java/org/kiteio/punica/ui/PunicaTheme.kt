@@ -18,6 +18,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.materialkolor.rememberDynamicColorScheme
 
+/**
+ * 小石榴主题
+ * @param darkTheme 是否为暗色
+ * @param dynamicColor 是否为动态主题（随系统主题变化）
+ * @param content
+ */
 @Composable
 fun PunicaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -36,6 +42,7 @@ fun PunicaTheme(
         )
     }
 
+    // 状态栏主题
     StatusBarTheme(darkTheme = darkTheme, colorScheme = colorScheme)
 
     MaterialTheme(
@@ -46,6 +53,11 @@ fun PunicaTheme(
 }
 
 
+/**
+ * 状态栏主题
+ * @param darkTheme 是否为暗色
+ * @param colorScheme 配色方案
+ */
 @Composable
 private fun StatusBarTheme(darkTheme: Boolean, colorScheme: ColorScheme) {
     val view = LocalView.current
