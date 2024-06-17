@@ -73,4 +73,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.materialKolor)
+    implementation(project(":request"))
 }
