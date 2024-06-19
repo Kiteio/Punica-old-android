@@ -9,6 +9,6 @@ java {
 }
 
 dependencies {
-    implementation(libs.ktor.client)
+    api(libs.ktor.client)
     implementation(libs.ktor.client.okhttp)
 }

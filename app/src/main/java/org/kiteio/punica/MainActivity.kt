@@ -1,5 +1,6 @@
 package org.kiteio.punica
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,6 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        AppContext = applicationContext
         setContent {
             PunicaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -24,3 +26,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * 应用上下文
+ */
+lateinit var AppContext: Context
+    private set
