@@ -17,7 +17,7 @@ private val httpClient = HttpClient(OkHttp)
  * @param block
  * @return [HttpResponse]
  */
-suspend fun get(url: String, block: HttpRequestBuilder.() -> Unit = {}) =
+suspend fun fetch(url: String, block: HttpRequestBuilder.() -> Unit = {}) =
     httpClient.get(url, block)
 
 

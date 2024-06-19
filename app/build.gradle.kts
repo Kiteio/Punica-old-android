@@ -74,4 +74,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.materialKolor)
     implementation(project(":request"))
+    implementation(libs.tesseract4android)
 }
