@@ -14,7 +14,7 @@ object Log {
      * @param any
      * @return [Int]
      */
-    fun d(vararg any: Any) = Log.d(TAG, any.joinToString())
+    fun d(vararg any: Any?) = Log.d(TAG, any.joinToString())
 
 
     /**
@@ -22,7 +22,7 @@ object Log {
      * @param any
      * @return [Int]
      */
-    fun i(vararg any: Any) = Log.i(TAG, any.joinToString())
+    fun i(vararg any: Any?) = Log.i(TAG, any.joinToString())
 
 
     /**
@@ -30,5 +30,5 @@ object Log {
      * @param any
      * @return [Int]
      */
-    fun e(vararg any: Any) = Log.e(TAG, any.joinToString())
+    fun e(vararg any: Any?) = Log.e(TAG, any.joinToString())
 }
