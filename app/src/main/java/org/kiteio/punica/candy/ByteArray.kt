@@ -58,7 +58,7 @@ suspend fun ByteArray.text(): String = withContext(Dispatchers.Default) {
             setImage(this@apply)
         }
 
-        utF8Text.also { recycle() }
+        utF8Text.filter { it.isLetterOrDigit() }.also { recycle() }
     }
 }
 
