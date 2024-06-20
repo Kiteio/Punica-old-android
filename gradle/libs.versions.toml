@@ -11,6 +11,7 @@ composeBom = "2023.08.00"
 materialKolor = "1.7.0"
 ktor = "2.3.11"
 tesseract4android = "4.7.0"
+ksoup = "0.1.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -31,6 +32,7 @@ materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "ma
 ktor-client = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 tesseract4android = { module = "cz.adaptech.tesseract4android:tesseract4android", version.ref = "tesseract4android" }
+ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
