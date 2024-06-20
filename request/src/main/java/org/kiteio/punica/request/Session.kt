@@ -5,10 +5,8 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.Cookie
-import io.ktor.http.HttpHeaders
 import io.ktor.http.Parameters
 import io.ktor.http.setCookie
 
@@ -19,20 +17,18 @@ import io.ktor.http.setCookie
  * @constructor
  * @param cookies 初始 Cookie 列表
  */
-class Session(cookies: List<Cookie> = emptyList()) {
+open class Session(private val cookies: MutableSet<Cookie> = mutableSetOf()) {
     private val httpClient = HttpClient(OkHttp)
-    private val _cookies = arrayListOf<Cookie>() + cookies
-    val cookies: List<Cookie> get() = _cookies
 
 
     /**
      * Ktor GET，会自动保存、使用 Cookie
      * @param url
      * @param block
-     * @return [List]<[Cookie]>
+     * @return [HttpResponse]
      */
-    suspend fun get(url: String, block: HttpRequestBuilder.() -> Unit = {}) =
-        httpClient.get(url) { setCookies(_cookies); block() }.run { _cookies + setCookie() }
+    suspend fun fetch(url: String, block: HttpRequestBuilder.() -> Unit = {}) =
+        httpClient.get(url) { setCookies(cookies); block() }.apply { cookies.addAll(setCookie()) }
 
 
     /**
@@ -47,8 +43,8 @@ class Session(cookies: List<Cookie> = emptyList()) {
         formParameters: Parameters = Parameters.Empty,
         block: HttpRequestBuilder.() -> Unit = {}
     ) = httpClient.submitForm(url, formParameters) {
-        setCookies(_cookies); block()
-    }.apply { _cookies + setCookie() }
+        setCookies(cookies); block()
+    }.apply { cookies.addAll(setCookie()) }
 
 
     /**
@@ -56,7 +52,7 @@ class Session(cookies: List<Cookie> = emptyList()) {
      * @receiver [HttpRequestBuilder]
      * @param cookies
      */
-    private fun HttpRequestBuilder.setCookies(cookies: List<Cookie>) {
-        cookies.forEach { header(HttpHeaders.Cookie, it.toString()) }
+    private fun HttpRequestBuilder.setCookies(cookies: Set<Cookie>) {
+        cookies.forEach { cookie(it) }
     }
 }
