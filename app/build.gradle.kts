@@ -75,4 +75,5 @@ dependencies {
     implementation(libs.materialKolor)
     implementation(project(":request"))
     implementation(libs.tesseract4android)
+    implementation(libs.ksoup)
 }
