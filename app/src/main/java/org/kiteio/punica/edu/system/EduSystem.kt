@@ -8,6 +8,7 @@ import io.ktor.http.parameters
 import org.kiteio.punica.candy.API
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.candy.text
+import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.request.Session
 import org.kiteio.punica.request.fetch
 
@@ -17,7 +18,7 @@ class EduSystem private constructor(private val user: User, val session: Session
 
     companion object: API {
         override val root = "http://jwxt.gdufe.edu.cn"
-        private const val BASE = "/jsxsd"
+        const val BASE = "/jsxsd"
         private const val CAPTCHA = "$BASE/verifycode.servlet"  // 验证码
         private const val LOGIN = "$BASE/xk/LoginToXkLdap"  // 登录
 

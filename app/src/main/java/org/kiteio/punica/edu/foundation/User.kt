@@ -1,4 +1,4 @@
-package org.kiteio.punica.edu.system
+package org.kiteio.punica.edu.foundation
 
 import io.ktor.http.Cookie
 
