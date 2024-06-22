@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Punica</string>
+
+    <string name="campus_guangzhou">广州校区</string>
+    <string name="campus_foshan">佛山校区</string>
+    <string name="course_system_closed">选课系统未开放</string>
+    <string name="course_basic">必修课</string>
+    <string name="course_optional">选修课</string>
+    <string name="course_general">通识课</string>
+    <string name="course_cross_year">跨年级</string>
+    <string name="course_cross_major">跨专业</string>
+    <string name="course_major">专业内计划</string>
 </resources>
