@@ -23,6 +23,7 @@ class EduSystem private constructor(private val user: User, val session: Session
         private const val LOGIN = "$BASE/xk/LoginToXkLdap"  // 登录
         const val TIMETABLE = "$BASE/xskb/xskb_list.do"  // 课表
         const val EXAM_PLAN = "$BASE/xsks/xsksap_list"  // 考试安排
+        const val SCHOOL_REPORT = "$BASE/kscj/cjcx_list"  // 课程成绩
 
 
         /**
