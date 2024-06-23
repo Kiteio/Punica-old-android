@@ -7,10 +7,12 @@ import io.ktor.http.Cookie
 import io.ktor.http.parameters
 import org.kiteio.punica.candy.API
 import org.kiteio.punica.candy.route
+import org.kiteio.punica.candy.semester
 import org.kiteio.punica.candy.text
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.request.Session
 import org.kiteio.punica.request.fetch
+import java.time.LocalDate
 
 class EduSystem private constructor(private val user: User, val session: Session) {
     val name get() = user.name
@@ -27,6 +29,11 @@ class EduSystem private constructor(private val user: User, val session: Session
         const val LEVEL_REPORT = "$BASE/kscj/djkscj_list"  // 等级成绩
         const val TEACHER_LIST = "$BASE/jsxx/jsxx_list"  // 教师列表
         const val TEACHER = "$BASE/jsxx/jsxx_query_detail"  // 教师
+
+        /**
+         * 当前学期
+         */
+        val semester by lazy { LocalDate.now().semester }
 
 
         /**
