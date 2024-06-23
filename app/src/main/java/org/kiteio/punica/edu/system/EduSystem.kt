@@ -25,6 +25,8 @@ class EduSystem private constructor(private val user: User, val session: Session
         const val EXAM_PLAN = "$BASE/xsks/xsksap_list"  // 考试安排
         const val SCHOOL_REPORT = "$BASE/kscj/cjcx_list"  // 课程成绩
         const val LEVEL_REPORT = "$BASE/kscj/djkscj_list"  // 等级成绩
+        const val TEACHER_LIST = "$BASE/jsxx/jsxx_list"  // 教师列表
+        const val TEACHER = "$BASE/jsxx/jsxx_query_detail"  // 教师
 
 
         /**
