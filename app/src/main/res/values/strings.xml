@@ -10,4 +10,9 @@
     <string name="course_cross_year">跨年级</string>
     <string name="course_cross_major">跨专业</string>
     <string name="course_major">专业内计划</string>
+
+    <string name="campus_alarm">校园报警</string>
+    <string name="campus_police_office">校园警务室</string>
+    <string name="guanzhou_police_station">官洲派出所</string>
+    <string name="number_of_hours">%1$d 小时</string>
 </resources>
