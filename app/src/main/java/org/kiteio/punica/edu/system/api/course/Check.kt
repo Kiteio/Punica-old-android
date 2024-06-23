@@ -1,0 +1,45 @@
+package org.kiteio.punica.edu.system.api.course
+
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.parameter
+import io.ktor.client.statement.bodyAsText
+import org.kiteio.punica.candy.json
+import org.kiteio.punica.candy.route
+import org.kiteio.punica.edu.system.CourseSystem
+import java.util.Date
+
+/**
+ * 课程校区与所在校区是否一致
+ * @receiver [CourseSystem]
+ * @param operateId
+ * @return [Boolean]
+ */
+suspend fun CourseSystem.isSameCampus(operateId: String) = session.fetch(
+    CourseSystem.route { CAMPUS_CHECK }
+) { parameters(operateId) }.bodyAsText().json.run {
+    getInt("status") == 0
+}
+
+
+/**
+ * 是否已经通过课程考核
+ * @receiver [CourseSystem]
+ * @param operateId
+ * @return [Boolean]
+ */
+suspend fun CourseSystem.isPassed(operateId: String) = session.fetch(
+    CourseSystem.route { PASSED_CHECK }
+) { parameters(operateId) }.bodyAsText().json.run {
+    getInt("status") != 0
+}
+
+
+/**
+ * 参数
+ * @receiver [HttpRequestBuilder]
+ * @param operateId
+ */
+private fun HttpRequestBuilder.parameters(operateId: String) {
+    parameter("jx0404id", operateId)
+    parameter("_", Date().time)
+}

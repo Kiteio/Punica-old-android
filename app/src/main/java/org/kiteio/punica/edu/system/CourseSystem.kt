@@ -37,6 +37,8 @@ class CourseSystem(
         const val MY_COURSE = "$BASE/xsxkjg/comeXkjglb"  // 已选课程
         const val LOG = "$BASE/xsxkjg/getTkrzList"  // 退课日志
         const val DELETE = "$BASE/xsxkjg/xstkOper"  // 退课
+        const val CAMPUS_CHECK = "$BASE/xsxkkc/checkXq"  // 校区检验
+        const val PASSED_CHECK = "$BASE/xsxkkc/checkXscj"  // 成绩检验
 
 
         /**
