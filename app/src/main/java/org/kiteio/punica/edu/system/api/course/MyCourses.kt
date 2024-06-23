@@ -64,7 +64,6 @@ suspend fun CourseSystem.myCourses(): List<MyCourse> {
  * @property type 课程属性
  * @property teacher 教师
  * @property classInfos 上课信息
- * @constructor
  */
 data class MyCourse(
     val id: String,
@@ -82,7 +81,6 @@ data class MyCourse(
  * @property dayOfWeek 星期几
  * @property section 节次
  * @property area 地点
- * @constructor
  */
 data class ClassInfo(
     val week: String,

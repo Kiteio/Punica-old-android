@@ -8,7 +8,6 @@ import org.kiteio.punica.R
  * @property resId
  * @property listRoute
  * @property selectRoute
- * @constructor
  */
 sealed class Sort(@StringRes val resId: Int, val listRoute: String, val selectRoute: String) {
     data object Basic : Unsearchable(R.string.course_basic, "Bx", "bx")
@@ -23,7 +22,6 @@ sealed class Sort(@StringRes val resId: Int, val listRoute: String, val selectRo
 
 /**
  * 可搜索课程
- * @constructor
  */
 sealed class Searchable(@StringRes resId: Int, listRoute: String, selectRoute: String) :
     Sort(resId, listRoute, selectRoute)
@@ -31,7 +29,6 @@ sealed class Searchable(@StringRes resId: Int, listRoute: String, selectRoute: S
 
 /**
  * 不可搜索课程
- * @constructor
  */
 sealed class Unsearchable(@StringRes resId: Int, listRoute: String, selectRoute: String) :
     Sort(resId, listRoute, selectRoute)

@@ -33,7 +33,6 @@ suspend fun CourseSystem.overview(): Overview {
  * 学分总览
  * @property info 本轮选课提示信息
  * @property pointInfos 选课学分信息
- * @constructor
  */
 data class Overview(val info: String, val pointInfos: List<PointInfo>)
 
@@ -43,6 +42,5 @@ data class Overview(val info: String, val pointInfos: List<PointInfo>)
  * @property name 分类
  * @property have 已有学分
  * @property limit 学分限制
- * @constructor
  */
 data class PointInfo(val name: String, val have: String, val limit: String)
