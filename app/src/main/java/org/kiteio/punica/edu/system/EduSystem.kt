@@ -21,7 +21,7 @@ class EduSystem private constructor(private val user: User, val session: Session
         const val BASE = "/jsxsd"
         private const val CAPTCHA = "$BASE/verifycode.servlet"  // 验证码
         private const val LOGIN = "$BASE/xk/LoginToXkLdap"  // 登录
-
+        
 
         /**
          * 登录

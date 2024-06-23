@@ -77,7 +77,6 @@ suspend fun CourseSystem.search(
 /**
  * 节次
  * @property value
- * @constructor
  */
 sealed class Section(pair: Pair<Int, Int>) {
     val value = "${pair.first}-${pair.second}"
@@ -163,7 +162,6 @@ private fun parse(json: JSONObject, sort: Sort): List<Course> {
  * @property examMode 考核方式
  * @property selectable 是否开放选课
  * @property selected 是否已选
- * @constructor
  */
 data class Course(
     val operateId: String,

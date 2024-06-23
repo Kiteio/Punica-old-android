@@ -19,7 +19,6 @@ import org.kiteio.punica.request.Session
  * @property start 开始时间
  * @property end 结束时间
  * @property token
- * @constructor
  */
 class CourseSystem(
     val session: Session,

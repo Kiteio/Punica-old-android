@@ -16,6 +16,5 @@ fun EduSystem.token(value: String) =
  * 选课系统 [Token]
  * @property name 学号
  * @property value id
- * @constructor
  */
 data class Token(val name: String, val value: String)

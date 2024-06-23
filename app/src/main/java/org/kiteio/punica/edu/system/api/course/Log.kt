@@ -56,7 +56,6 @@ suspend fun CourseSystem.log(): List<CourseLog> {
  * @property time 操作时间
  * @property operator 操作者
  * @property desc 操作说明
- * @constructor
  */
 data class CourseLog(
     val courseId: String,

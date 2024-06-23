@@ -28,7 +28,6 @@ suspend fun CourseSystem.select(operateId: String, sort: Sort, priority: Priorit
 /**
  * 选课志愿
  * @property value
- * @constructor
  */
 sealed class Priority(val value: String) {
     data object First : Priority("1")
