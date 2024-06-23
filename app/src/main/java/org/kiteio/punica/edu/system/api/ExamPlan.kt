@@ -5,14 +5,14 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
+import org.kiteio.punica.edu.system.EduSystem.Companion.semester
 
 /**
  * 考试安排
  * @receiver [EduSystem]
- * @param semester 学期
  * @return [ExamPlan]
  */
-suspend fun EduSystem.examPlan(semester: String): ExamPlan {
+suspend fun EduSystem.examPlan(): ExamPlan {
     val text = session.post(
         EduSystem.route { EXAM_PLAN },
         parameters { append("xnxqid", semester) }
