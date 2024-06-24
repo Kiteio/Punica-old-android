@@ -15,4 +15,6 @@
     <string name="campus_police_office">校园警务室</string>
     <string name="guanzhou_police_station">官洲派出所</string>
     <string name="number_of_hours">%1$d 小时</string>
+
+    <string name="evaluation_closed">教评未开放</string>
 </resources>
