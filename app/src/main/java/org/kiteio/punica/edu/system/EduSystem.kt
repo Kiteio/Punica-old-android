@@ -35,6 +35,7 @@ class EduSystem private constructor(private val user: User, val session: Session
         const val EVALUATE = "$BASE/xspj/xspj_save.do"  // 评教
         const val PROGRESS = "$BASE/pyfa/xyjdcx"  // 学业进度
         const val PLAN = "$BASE/pyfa/pyfa_query"  // 执行计划
+        const val CARD = "$BASE/grxx/xsxx"  // 学籍卡
 
         /**
          * 当前学期
