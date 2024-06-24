@@ -33,6 +33,7 @@ class EduSystem private constructor(private val user: User, val session: Session
         const val EVALUATE_LIST = "$BASE/xspj/xspj_find.do"  // 教评列表
         const val EVALUATE = "$BASE/xspj/xspj_save.do"  // 评教
         const val PROGRESS = "$BASE/pyfa/xyjdcx"  // 学业进度
+        const val PLAN = "$BASE/pyfa/pyfa_query"  // 执行计划
 
         /**
          * 当前学期
