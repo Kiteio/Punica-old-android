@@ -32,6 +32,7 @@ class EduSystem private constructor(private val user: User, val session: Session
         const val SCHOOL_START = "$BASE/jxzl/jxzl_query"  // 开学日期
         const val EVALUATE_LIST = "$BASE/xspj/xspj_find.do"  // 教评列表
         const val EVALUATE = "$BASE/xspj/xspj_save.do"  // 评教
+        const val PROGRESS = "$BASE/pyfa/xyjdcx"  // 学业进度
 
         /**
          * 当前学期
