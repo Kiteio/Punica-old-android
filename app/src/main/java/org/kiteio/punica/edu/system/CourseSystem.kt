@@ -38,6 +38,7 @@ class CourseSystem(
         const val DELETE = "$BASE/xsxkjg/xstkOper"  // 退课
         const val CAMPUS_CHECK = "$BASE/xsxkkc/checkXq"  // 校区检验
         const val PASSED_CHECK = "$BASE/xsxkkc/checkXscj"  // 成绩检验
+        const val EXIT = "$BASE/xsxk/xsxk_exit"  // 退出系统
 
 
         /**
