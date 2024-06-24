@@ -82,7 +82,7 @@ suspend fun EduSystem.timetable(semester: String): Timetable {
  * @param weekStr
  * @return [MutableSet]<[Int]>
  */
-private fun parseWeek(weekStr: String) = mutableSetOf<Int>().apply {
+fun parseWeek(weekStr: String) = mutableSetOf<Int>().apply {
     var firstNum = ""  // 读取到的第一个数字
     var secondNum = ""  // 读取到的第二个数字
     var isSecond = false  // 正在写入的是否为第二个数
@@ -114,7 +114,7 @@ private fun parseWeek(weekStr: String) = mutableSetOf<Int>().apply {
             // 单双周
             else -> {
                 if (isSecond) {
-                    val range = firstNum.toInt() .. secondNum.toInt()
+                    val range = firstNum.toInt()..secondNum.toInt()
                     when (char) {
                         '周' -> addAll(range)
                         '单' -> addAll(range.filter { it.isOdd() })
@@ -157,13 +157,36 @@ class Timetable(
  * @property area 地点
  * @property section 节次
  * @property dayOfWeek 星期几 1..7
+ * @property clazz 班级名
  */
 data class TimetableItem(
     val name: String,
-    val teacher: String,
-    val weekStr: String,
-    val week: Set<Int>,
-    val area: String,
-    val section: Set<Int>,
+    override val teacher: String,
+    override val weekStr: String,
+    override val week: Set<Int>,
+    override val area: String,
+    override val section: Set<Int>,
+    override val dayOfWeek: Int,
+    override val clazz: String? = null,
+) : TimetableItemLike
+
+
+/**
+ * 课表项抽象
+ * @property teacher 教师
+ * @property weekStr 原始周次
+ * @property week 周次
+ * @property area 地点
+ * @property section 节次
+ * @property dayOfWeek 星期几 1..7
+ * @property clazz 班级名
+ */
+interface TimetableItemLike {
+    val teacher: String
+    val weekStr: String
+    val week: Set<Int>
+    val area: String
+    val section: Set<Int>
     val dayOfWeek: Int
-)
+    val clazz: String?
+}
