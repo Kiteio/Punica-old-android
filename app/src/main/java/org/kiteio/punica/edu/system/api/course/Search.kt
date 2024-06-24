@@ -3,6 +3,7 @@ package org.kiteio.punica.edu.system.api.course
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Parameters
+import io.ktor.http.encodeURLParameter
 import io.ktor.http.parameters
 import org.json.JSONObject
 import org.kiteio.punica.candy.json
@@ -33,7 +34,6 @@ suspend fun CourseSystem.list(sort: Unsearchable, pageIndex: Int = 0, count: Int
  * 课程搜索
  * @receiver [CourseSystem]
  * @param sort
- * @param pageIndex
  * @param name 课程名
  * @param teacher 教师
  * @param dayOfWeek 星期几
@@ -41,12 +41,12 @@ suspend fun CourseSystem.list(sort: Unsearchable, pageIndex: Int = 0, count: Int
  * @param emptyOnly 过滤已满
  * @param filterConflicting 过滤冲突课程
  * @param campus 校区
+ * @param pageIndex
  * @param count
  * @return [List]<[Course]>
  */
 suspend fun CourseSystem.search(
     sort: Searchable,
-    pageIndex: Int = 0,
     name: String = "",
     teacher: String = "",
     dayOfWeek: DayOfWeek? = null,
@@ -54,14 +54,15 @@ suspend fun CourseSystem.search(
     emptyOnly: Boolean = false,
     filterConflicting: Boolean = false,
     campus: Campus? = null,
+    pageIndex: Int = 0,
     count: Int = 15
 ) = parse(
     session.post(
         CourseSystem.route { courseListRoute(sort) },
         form(pageIndex, count)
     ) {
-        parameter("kcxx", name)
-        parameter("skls", teacher)
+        parameter("kcxx", name.encodeURLParameter())
+        parameter("skls", teacher.encodeURLParameter())
         parameter("skxq", dayOfWeek?.value ?: "")
         parameter("skjc", section?.value ?: "")
         parameter("sfym", emptyOnly)
@@ -130,7 +131,7 @@ private fun parse(json: JSONObject, sort: Sort): List<Course> {
                     classHours = getString("zxs"),
                     examMode = try {
                         getString("khfs")
-                    } catch (e: Exception) {
+                    } catch (e: Throwable) {
                         null
                     },
                     selectable = getInt("sfkfxk") == 1,
