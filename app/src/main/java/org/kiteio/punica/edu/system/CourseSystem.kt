@@ -20,7 +20,7 @@ import org.kiteio.punica.request.Session
  * @property end 结束时间
  * @property token
  */
-class CourseSystem(
+class CourseSystem private constructor(
     val session: Session,
     val name: String,
     val start: String,
