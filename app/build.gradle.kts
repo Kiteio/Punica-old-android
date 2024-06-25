@@ -76,4 +76,6 @@ dependencies {
     implementation(project(":request"))
     implementation(libs.tesseract4android)
     implementation(libs.ksoup)
+    implementation(libs.markdown)
+    implementation(libs.pdfViewer)
 }
