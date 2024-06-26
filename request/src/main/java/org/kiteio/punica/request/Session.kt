@@ -5,8 +5,10 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.Cookie
+import io.ktor.http.HttpHeaders
 import io.ktor.http.Parameters
 import io.ktor.http.setCookie
 
@@ -28,7 +30,11 @@ open class Session(private val cookies: MutableSet<Cookie> = mutableSetOf()) {
      * @return [HttpResponse]
      */
     suspend fun fetch(url: String, block: HttpRequestBuilder.() -> Unit = {}) =
-        httpClient.get(url) { setCookies(cookies); block() }.apply { cookies.addAll(setCookie()) }
+        httpClient.get(url) {
+            setCookies(cookies)
+            header(HttpHeaders.AcceptEncoding, "br")
+            block()
+        }.apply { cookies.addAll(setCookie()) }
 
 
     /**
@@ -43,7 +49,9 @@ open class Session(private val cookies: MutableSet<Cookie> = mutableSetOf()) {
         formParameters: Parameters = Parameters.Empty,
         block: HttpRequestBuilder.() -> Unit = {}
     ) = httpClient.submitForm(url, formParameters) {
-        setCookies(cookies); block()
+        setCookies(cookies)
+        header(HttpHeaders.AcceptEncoding, "br")
+        block()
     }.apply { cookies.addAll(setCookie()) }
 
 
