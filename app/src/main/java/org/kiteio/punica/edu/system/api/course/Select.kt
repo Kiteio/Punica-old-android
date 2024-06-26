@@ -3,7 +3,6 @@ package org.kiteio.punica.edu.system.api.course
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import org.kiteio.punica.candy.json
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.CourseSystem
 
 /**
@@ -14,7 +13,7 @@ import org.kiteio.punica.edu.system.CourseSystem
  * @param priority 选课志愿
  */
 suspend fun CourseSystem.select(operateId: String, sort: Sort, priority: Priority?) = session.fetch(
-    CourseSystem.route { courseSelectRoute(sort) }
+    route { courseSelectRoute(sort) }
 ) {
     parameter("jx0404id", operateId)
     parameter("xkzy", priority?.value ?: "")

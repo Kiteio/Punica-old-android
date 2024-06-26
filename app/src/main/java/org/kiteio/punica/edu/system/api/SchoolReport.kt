@@ -3,7 +3,6 @@ package org.kiteio.punica.edu.system.api
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -13,7 +12,7 @@ import org.kiteio.punica.edu.system.EduSystem
  */
 suspend fun EduSystem.schoolReport(): SchoolReport {
     val text = session.post(
-        EduSystem.route { SCHOOL_REPORT },
+        route { SCHOOL_REPORT },
         parameters {
             append("fxkc", "0")
             append("xsfs", "all")

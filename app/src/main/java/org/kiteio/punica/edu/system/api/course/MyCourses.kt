@@ -2,7 +2,6 @@ package org.kiteio.punica.edu.system.api.course
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.CourseSystem
 import org.kiteio.punica.edu.system.CourseSystem.Companion.fixTeacherName
 
@@ -12,7 +11,7 @@ import org.kiteio.punica.edu.system.CourseSystem.Companion.fixTeacherName
  * @return [List]<[MyCourse]>
  */
 suspend fun CourseSystem.myCourses(): List<MyCourse> {
-    val document = Ksoup.parse(session.fetch(CourseSystem.route { MY_COURSE }).bodyAsText())
+    val document = Ksoup.parse(session.fetch(route { MY_COURSE }).bodyAsText())
     val table = document.getElementsByTag("tbody")[0]
     val rows = table.getElementsByTag("tr")
 

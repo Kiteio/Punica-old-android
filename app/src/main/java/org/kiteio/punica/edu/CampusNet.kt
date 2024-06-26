@@ -9,13 +9,16 @@ import org.kiteio.punica.candy.json
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.request.fetch
 
+/**
+ * 校园网
+ */
 object CampusNet : API {
     override val root = "http://100.64.13.17"
     private const val STATUS = "/drcom/chkstatus"  // 状态
     private const val LOGIN = ":801/eportal/portal/login"  // 登录
     private const val LOGOUT = ":801/eportal/portal/logout"  // 退出
 
-    private const val CALLBACK = "P"
+    private const val CALLBACK = "Punica"
 
     /**
      * 本机 ip
@@ -36,7 +39,7 @@ object CampusNet : API {
             parameter("user_account", ",0,$name")
             parameter("user_password", pwd)
             parameter("wlan_user_ip", ip)
-        }.jsonString(CALLBACK).json
+        }.jsonString().json
 
         if (json.getInt("result") != 1) {
             try {
@@ -54,17 +57,16 @@ object CampusNet : API {
      */
     private suspend fun status() = fetch(route { STATUS }) {
         parameter("callback", CALLBACK)
-    }.jsonString(CALLBACK).json
+    }.jsonString().json
 
 
     /**
      * 处理 [HttpResponse.bodyAsText] 为 json 字符串
      * @receiver [HttpResponse]
-     * @param callback 回调名称
      * @return [String]
      */
-    private suspend fun HttpResponse.jsonString(callback: String) =
-        bodyAsText().trim().run { substring(callback.length + 1, length - 1) }
+    private suspend fun HttpResponse.jsonString() =
+        bodyAsText().trim().run { substring(CALLBACK.length + 1, length - 1) }
 
 
     /**
@@ -73,7 +75,7 @@ object CampusNet : API {
      */
     suspend fun logout(ip: String) {
         fetch(route { LOGOUT }) {
-            parameter("callback", "P")
+            parameter("callback", CALLBACK)
             parameter("wlan_user_ip", ip)
         }
     }

@@ -4,7 +4,6 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -14,7 +13,7 @@ import org.kiteio.punica.edu.system.EduSystem
  */
 suspend fun EduSystem.progress(): Progress {
     val text = session.post(
-        EduSystem.route { PROGRESS },
+        route { PROGRESS },
         parameters { append("xdlx", "0") }
     ) { parameter("type", "cx") }.bodyAsText()
 

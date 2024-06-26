@@ -4,7 +4,6 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import org.kiteio.punica.candy.json
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.CourseSystem
 import java.util.Date
 
@@ -14,9 +13,7 @@ import java.util.Date
  * @param operateId
  * @return [Boolean]
  */
-suspend fun CourseSystem.isSameCampus(operateId: String) = session.fetch(
-    CourseSystem.route { CAMPUS_CHECK }
-) { parameters(operateId) }.bodyAsText().json.run {
+suspend fun CourseSystem.isSameCampus(operateId: String) = session.fetch(route { CAMPUS_CHECK }) { parameters(operateId) }.bodyAsText().json.run {
     getInt("status") == 0
 }
 
@@ -28,7 +25,7 @@ suspend fun CourseSystem.isSameCampus(operateId: String) = session.fetch(
  * @return [Boolean]
  */
 suspend fun CourseSystem.isPassed(operateId: String) = session.fetch(
-    CourseSystem.route { PASSED_CHECK }
+    route { PASSED_CHECK }
 ) { parameters(operateId) }.bodyAsText().json.run {
     getInt("status") != 0
 }

@@ -3,22 +3,34 @@ package org.kiteio.punica.edu.system
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readBytes
-import io.ktor.http.Cookie
 import io.ktor.http.parameters
-import org.kiteio.punica.candy.API
+import org.kiteio.punica.candy.ProxiedAPI
+import org.kiteio.punica.candy.ProxiedAPIOwner
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.candy.semester
 import org.kiteio.punica.candy.text
+import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.request.Session
-import org.kiteio.punica.request.fetch
 import java.time.LocalDate
 
-class EduSystem private constructor(private val user: User, val session: Session) {
+/**
+ * 教务系统
+ * @property user
+ * @property session
+ * @property proxied 是否使用代理
+ * @property name 学号
+ */
+class EduSystem private constructor(
+    private val user: User,
+    val session: Session,
+    override val proxied: Boolean
+): ProxiedAPIOwner<EduSystem.Companion>(Companion) {
     val name get() = user.name
 
 
-    companion object: API {
+    companion object : ProxiedAPI {
+        override val agent = WebVPN
         override val root = "http://jwxt.gdufe.edu.cn"
         const val BASE = "/jsxsd"
         private const val CAPTCHA = "$BASE/verifycode.servlet"  // 验证码
@@ -45,59 +57,58 @@ class EduSystem private constructor(private val user: User, val session: Session
 
         /**
          * 登录
-         * @param name 学号
-         * @param pwd 门户密码
-         * @param cookies Cookie
-         * @return [EduSystem]
-         */
-        suspend fun login(name: String, pwd: String, cookies: MutableSet<Cookie>) =
-            login(User(name, pwd, cookies = cookies))
-
-
-        /**
-         * 登录
          * @param user
+         * @param proxied 是否使用代理
          * @return [EduSystem]
          */
-        suspend fun login(user: User) =
-            login(user, Session(user.cookies).also { fetch(route { BASE }) })
+        suspend fun login(user: User, proxied: Boolean) =
+            login(user, Session(user.cookies), proxied)
 
 
         /**
          * 登录
          * @param user
          * @param session
+         * @param proxied 是否使用代理
          * @param count 验证码错误重试次数
          * @return [EduSystem]
          */
-        private suspend fun login(user: User, session: Session, count: Int = 15): EduSystem = with(user) {
-            val captcha = session.fetch(route { CAPTCHA }).readBytes().text()
-            val text = session.post(
-                route { LOGIN },
-                parameters {
-                    append("USERNAME", name)
-                    append("PASSWORD", pwd)
-                    append("RANDOMCODE", captcha)
+        private suspend fun login(
+            user: User,
+            session: Session,
+            proxied: Boolean,
+            count: Int = 15
+        ): EduSystem =
+            with(user) {
+                session.fetch(route(proxied) { BASE })
+
+                val captcha = session.fetch(route(proxied) { CAPTCHA }).readBytes().text()
+                val text = session.post(
+                    route(proxied) { LOGIN },
+                    parameters {
+                        append("USERNAME", name)
+                        append("PASSWORD", pwd)
+                        append("RANDOMCODE", captcha)
+                    }
+                ).bodyAsText()
+
+                if (text.isEmpty()) {
+                    // 登录成功
+                    EduSystem(this@with, session, proxied)
+                } else {
+                    val document = Ksoup.parse(text)
+                    val title = document.title()
+
+                    if (title == "广东财经大学综合教务管理系统-强智科技") {
+                        val message = document.getElementsByTag("font")[0].text()
+
+                        if (message == "验证码错误!!" && count > 0)
+                            return@with login(user, session, proxied, count - 1)
+
+                        error(message)
+                    }
+                    error(title)
                 }
-            ).bodyAsText()
-
-            if (text.isEmpty()) {
-                // 登录成功
-                EduSystem(this@with, session)
-            } else {
-                val document = Ksoup.parse(text)
-                val title = document.title()
-
-                if (title == "广东财经大学综合教务管理系统-强智科技") {
-                    val message = document.getElementsByTag("font")[0].text()
-
-                    if (message == "验证码错误!!" && count > 0)
-                        return@with login(user, session, count - 1)
-
-                    error(message)
-                }
-                error(title)
             }
-        }
     }
 }

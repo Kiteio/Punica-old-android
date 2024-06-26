@@ -2,7 +2,6 @@ package org.kiteio.punica.edu.system.api
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -11,7 +10,7 @@ import org.kiteio.punica.edu.system.EduSystem
  * @return [LevelReport]
  */
 suspend fun EduSystem.levelReport(): LevelReport {
-    val text = session.fetch(EduSystem.route { LEVEL_REPORT }).bodyAsText()
+    val text = session.fetch(route { LEVEL_REPORT }).bodyAsText()
 
     val document = Ksoup.parse(text)
     val table = document.getElementById("dataList")!!
