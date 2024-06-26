@@ -1,4 +1,4 @@
-package org.kiteio.punica.edu.network
+package org.kiteio.punica.edu
 
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse

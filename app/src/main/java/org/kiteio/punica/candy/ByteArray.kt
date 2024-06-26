@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.AppContext
 import org.kiteio.punica.request.fetch
-import org.kiteio.punica.shelf.URLs
 import java.io.File
 
 /**

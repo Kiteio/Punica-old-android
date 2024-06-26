@@ -1,4 +1,4 @@
-package org.kiteio.punica.shelf
+package org.kiteio.punica.candy
 
 /**
  * URL 合辑
