@@ -2,7 +2,6 @@ package org.kiteio.punica.edu.system.api.course
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.CourseSystem
 import kotlin.collections.List
 
@@ -11,7 +10,7 @@ import kotlin.collections.List
  * @return [Overview]
  */
 suspend fun CourseSystem.overview(): Overview {
-    val document = Ksoup.parse(session.fetch(CourseSystem.route { OVERVIEW }).bodyAsText())
+    val document = Ksoup.parse(session.fetch(route { OVERVIEW }).bodyAsText())
     val table = document.getElementsByTag("table")[0]
     val rows = table.getElementsByTag("tr")
 

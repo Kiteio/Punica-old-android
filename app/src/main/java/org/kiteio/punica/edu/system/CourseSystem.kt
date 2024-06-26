@@ -5,8 +5,10 @@ import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import org.kiteio.punica.AppContext
 import org.kiteio.punica.R
-import org.kiteio.punica.candy.API
+import org.kiteio.punica.candy.ProxiedAPI
+import org.kiteio.punica.candy.ProxiedAPIOwner
 import org.kiteio.punica.candy.route
+import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.system.api.Token
 import org.kiteio.punica.edu.system.api.course.Sort
 import org.kiteio.punica.edu.system.api.token
@@ -19,15 +21,18 @@ import org.kiteio.punica.request.Session
  * @property start 开始时间
  * @property end 结束时间
  * @property token
+ * @property proxied 是否使用代理
  */
 class CourseSystem private constructor(
     val session: Session,
     val name: String,
     val start: String,
     val end: String,
-    private val token: Token
-) {
-    companion object : API {
+    private val token: Token,
+    override val proxied: Boolean
+): ProxiedAPIOwner<CourseSystem.Companion>(Companion) {
+    companion object : ProxiedAPI {
+        override val agent = WebVPN
         override val root = EduSystem.root
         private const val BASE = EduSystem.BASE
         private const val GET_ENTRY = "$BASE/xsxk/xklc_list"  // 选课系统链接获取
@@ -63,7 +68,7 @@ class CourseSystem private constructor(
          * @return [CourseSystem]
          */
         suspend fun from(eduSystem: EduSystem) = with(eduSystem.session) {
-            val text = fetch(route { GET_ENTRY }).bodyAsText()
+            val text = fetch(route(eduSystem.proxied) { GET_ENTRY }).bodyAsText()
             val document = Ksoup.parse(text)
             val table = document.getElementById("tbKxkc")!!
             val rows = table.getElementsByTag("tr")
@@ -71,14 +76,15 @@ class CourseSystem private constructor(
             if (rows.size > 1) {
                 val infos = rows[1].getElementsByTag("td")
                 val route = infos[6].child(0).attr("href")
-                fetch(route { route })
+                fetch(route(eduSystem.proxied) { route })
 
                 return@with CourseSystem(
                     eduSystem.session,
                     infos[1].text().replace(infos[0].text(), ""),
                     infos[2].text(),
                     infos[3].text(),
-                    eduSystem.token(route.split("jx0502zbid=")[1])
+                    eduSystem.token(route.split("jx0502zbid=")[1]),
+                    eduSystem.proxied
                 )
             }
             error(AppContext.getString(R.string.course_system_closed))
@@ -106,7 +112,8 @@ class CourseSystem private constructor(
                 "由 id 进入",
                 "未知",
                 "未知",
-                token
+                token,
+                eduSystem.proxied
             )
         }
 

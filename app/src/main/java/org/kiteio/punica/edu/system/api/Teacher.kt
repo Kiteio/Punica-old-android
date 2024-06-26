@@ -4,7 +4,6 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -16,7 +15,7 @@ import org.kiteio.punica.edu.system.EduSystem
  */
 suspend fun EduSystem.teacherList(name: String, pageIndex: Int = 0): TeacherList {
     val text = session.post(
-        EduSystem.route { TEACHER_LIST },
+        route { TEACHER_LIST },
         parameters {
             append("jsxm", name)
             append("pageIndex", if (pageIndex == 0) "" else (pageIndex + 1).toString())
@@ -79,7 +78,7 @@ data class TeacherItem(
  * @return [Teacher]
  */
 suspend fun EduSystem.teacher(id: String): Teacher {
-    val text = session.fetch(EduSystem.route { TEACHER }) {
+    val text = session.fetch(route { TEACHER }) {
         parameter("jg0101id", id)
     }.bodyAsText()
 

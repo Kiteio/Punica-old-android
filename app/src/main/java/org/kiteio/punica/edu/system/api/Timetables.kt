@@ -5,7 +5,6 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.EduSystem.Companion.semester
 import java.util.regex.Pattern
@@ -17,7 +16,7 @@ import java.util.regex.Pattern
  */
 suspend fun EduSystem.timetables() = withContext(Dispatchers.Default) {
     val text = session.post(
-        EduSystem.route { TIMETABLES },
+        route { TIMETABLES },
         parameters {
             append("xnxqh", semester)
         }

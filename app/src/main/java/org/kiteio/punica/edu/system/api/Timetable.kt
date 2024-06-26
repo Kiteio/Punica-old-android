@@ -5,7 +5,6 @@ import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import org.kiteio.punica.candy.isEven
 import org.kiteio.punica.candy.isOdd
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -15,7 +14,7 @@ import org.kiteio.punica.edu.system.EduSystem
  * @return [Timetable]
  */
 suspend fun EduSystem.timetable(semester: String): Timetable {
-    val text = session.fetch(EduSystem.route { TIMETABLE }) {
+    val text = session.fetch(route { TIMETABLE }) {
         parameter("xnxq01id", semester)
     }.bodyAsText()
 

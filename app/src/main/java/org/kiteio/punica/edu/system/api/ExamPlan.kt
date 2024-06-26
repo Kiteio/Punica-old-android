@@ -3,7 +3,6 @@ package org.kiteio.punica.edu.system.api
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.EduSystem.Companion.semester
 
@@ -14,7 +13,7 @@ import org.kiteio.punica.edu.system.EduSystem.Companion.semester
  */
 suspend fun EduSystem.examPlan(): ExamPlan {
     val text = session.post(
-        EduSystem.route { EXAM_PLAN },
+        route { EXAM_PLAN },
         parameters { append("xnxqid", semester) }
     ).bodyAsText()
 

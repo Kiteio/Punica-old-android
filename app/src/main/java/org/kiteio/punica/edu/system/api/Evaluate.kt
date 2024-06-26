@@ -6,7 +6,6 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ParametersBuilder
 import org.kiteio.punica.AppContext
 import org.kiteio.punica.R
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -15,7 +14,7 @@ import org.kiteio.punica.edu.system.EduSystem
  * @return [List]<[EvaluateItem]>
  */
 suspend fun EduSystem.evaluateList(): List<EvaluateItem> {
-    val text = session.fetch(EduSystem.route { EVALUATE_LIST }).bodyAsText()
+    val text = session.fetch(route { EVALUATE_LIST }).bodyAsText()
 
     val document = Ksoup.parse(text)
     val table = document.getElementsByClass("Nsb_r_list Nsb_table")[0]
@@ -28,7 +27,7 @@ suspend fun EduSystem.evaluateList(): List<EvaluateItem> {
         for (element in elements) {
             val sort = element.text()
 
-            val innerRows = session.fetch(EduSystem.route { element.attr("href") })
+            val innerRows = session.fetch(route { element.attr("href") })
                 .bodyAsText().run { Ksoup.parse(this@run) }
                 .getElementById("dataList")!!
                 .getElementsByTag("tr")
@@ -64,7 +63,7 @@ suspend fun EduSystem.evaluateList(): List<EvaluateItem> {
 suspend fun EduSystem.evaluate(evaluateItem: EvaluateItem, submit: Boolean, isNegative: Boolean) {
     evaluateItem.route ?: return
 
-    val text = session.fetch(EduSystem.route { evaluateItem.route }).bodyAsText()
+    val text = session.fetch(route { evaluateItem.route }).bodyAsText()
 
     val document = Ksoup.parse(text)
     val table = document.getElementById("Form1")!!
@@ -101,7 +100,7 @@ suspend fun EduSystem.evaluate(evaluateItem: EvaluateItem, submit: Boolean, isNe
         }
     }
 
-    session.post(EduSystem.route { EVALUATE }, parametersBuilder.build())
+    session.post(route { EVALUATE }, parametersBuilder.build())
 }
 
 

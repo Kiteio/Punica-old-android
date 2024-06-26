@@ -7,7 +7,6 @@ import io.ktor.http.encodeURLParameter
 import io.ktor.http.parameters
 import org.json.JSONObject
 import org.kiteio.punica.candy.json
-import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.foundation.Campus
 import org.kiteio.punica.edu.system.CourseSystem
 import org.kiteio.punica.edu.system.CourseSystem.Companion.fixTeacherName
@@ -23,7 +22,7 @@ import java.time.DayOfWeek
  */
 suspend fun CourseSystem.list(sort: Unsearchable, pageIndex: Int = 0, count: Int = 15) = parse(
     session.post(
-        CourseSystem.route { courseListRoute(sort) },
+        route { courseListRoute(sort) },
         form(pageIndex, count)
     ).bodyAsText().json,
     sort
@@ -58,7 +57,7 @@ suspend fun CourseSystem.search(
     count: Int = 15
 ) = parse(
     session.post(
-        CourseSystem.route { courseListRoute(sort) },
+        route { courseListRoute(sort) },
         form(pageIndex, count)
     ) {
         parameter("kcxx", name.encodeURLParameter())

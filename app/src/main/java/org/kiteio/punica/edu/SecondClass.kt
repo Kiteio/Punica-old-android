@@ -5,32 +5,37 @@ import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.Cookie
 import io.ktor.http.parameters
 import org.json.JSONArray
 import org.json.JSONObject
-import org.kiteio.punica.candy.API
+import org.kiteio.punica.candy.ProxiedAPI
+import org.kiteio.punica.candy.ProxiedAPIOwner
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.candy.route
-import org.kiteio.punica.request.fetch
-import org.kiteio.punica.request.post
+import org.kiteio.punica.request.Session
 
 /**
  * 第二课堂
  * @property name 学号
- * @property id
+ * @property id 第二课堂系统提供的 id
  * @property token
+ * @property session
+ * @property proxied 是否使用代理
  */
 class SecondClass private constructor(
     private val name: String,
     private val id: String,
-    private val token: String
-) {
+    private val token: String,
+    private val session: Session,
+    override val proxied: Boolean
+) : ProxiedAPIOwner<SecondClass.Companion>(Companion) {
     /**
      * 成绩单
      * @return [SecondClassReport]
      */
     suspend fun report(): SecondClassReport {
-        val data = fetch(route { REPORT }) {
+        val data = session.fetch(route { REPORT }) {
             parameter("para", "{'userId':$id}")
             token()
         }.arrayData()
@@ -55,7 +60,7 @@ class SecondClass private constructor(
      * @return [List]<[SecondClassLog]>
      */
     suspend fun log(): List<SecondClassLog> {
-        val data = fetch(route { LOG }) {
+        val data = session.fetch(route { LOG }) {
             parameter("para", "{'sourceType':'','xueqiId':'','classId':''}")
             token()
         }.arrayData()
@@ -82,7 +87,7 @@ class SecondClass private constructor(
      * @return [List]<[SecondClassActivityItem]>
      */
     suspend fun activities(): List<SecondClassActivityItem> {
-        val list = fetch(route { ACTIVITIES }) {
+        val list = session.fetch(route { ACTIVITIES }) {
             parameter("para", "{'cur':1,'size':10000}")
             token()
         }.jsonData().getJSONArray("records")
@@ -113,7 +118,7 @@ class SecondClass private constructor(
      * @param id
      * @return [SecondClassActivity]
      */
-    suspend fun activity(id: String) = fetch(route { ACTIVITY_INFO }) {
+    suspend fun activity(id: String) = session.fetch(route { ACTIVITY_INFO }) {
         parameter("para", "{'activityId':'$id'}")
         token()
     }.jsonData().run {
@@ -147,33 +152,8 @@ class SecondClass private constructor(
     private fun HttpRequestBuilder.token() = header("X-Token", token)
 
 
-    /**
-     * 获取 data 列表
-     * @receiver [HttpResponse]
-     * @return [JSONArray]
-     */
-    private suspend fun HttpResponse.arrayData() = bodyAsText().json.getJSONArray("data")
-
-
-    /**
-     * 获取 data json
-     * @receiver [HttpResponse]
-     * @return [JSONObject]
-     */
-    private suspend fun HttpResponse.jsonData() = bodyAsText().json.getJSONObject("data")
-
-
-    /**
-     * 遍历 [JSONArray]
-     * @receiver [JSONArray]
-     * @param block
-     */
-    private inline fun JSONArray.forEachApply(block: JSONObject.() -> Unit) {
-        for (index in 0..<length()) block(getJSONObject(index))
-    }
-
-
-    companion object : API {
+    companion object : ProxiedAPI {
+        override val agent = WebVPN
         override val root = "http://2ketang.gdufe.edu.cn"
         private const val LOGIN = "/apps/common/login"  // 登录
         private const val REPORT = "/apps/user/achievement/by-classify-list"  // 成绩单
@@ -186,22 +166,57 @@ class SecondClass private constructor(
          * 登录
          * @param name 学号
          * @param pwd 密码
+         * @param cookies Cookie
+         * @param proxied 是否使用代理
          * @return [SecondClass]
          */
-        suspend fun login(name: String, pwd: String) = post(
-            route { LOGIN },
-            parameters {
-                append(
-                    "para",
-                    "{'school':10018,'account':'${name}','password':'${pwd.ifBlank { name }}'}"
-                )
-            }
-        ).run {
-            val json = bodyAsText().json
-            val token = headers["X-token"]!!
+        suspend fun login(
+            name: String,
+            pwd: String,
+            cookies: MutableSet<Cookie>,
+            proxied: Boolean
+        ) = Session(cookies).run {
+            val response = post(
+                route(proxied) { LOGIN },
+                parameters {
+                    append(
+                        "para",
+                        "{'school':10018,'account':'${name}','password':'${pwd.ifBlank { name }}'}"
+                    )
+                }
+            )
+
+            val json = response.bodyAsText().json
+            val token = response.headers["X-token"]!!
             val id = json.getJSONObject("data").getString("id")
 
-            SecondClass(name, id, token)
+            SecondClass(name, id, token, this@run, proxied)
+        }
+
+
+        /**
+         * 获取 data 列表
+         * @receiver [HttpResponse]
+         * @return [JSONArray]
+         */
+        private suspend fun HttpResponse.arrayData() = bodyAsText().json.getJSONArray("data")
+
+
+        /**
+         * 获取 data json
+         * @receiver [HttpResponse]
+         * @return [JSONObject]
+         */
+        private suspend fun HttpResponse.jsonData() = bodyAsText().json.getJSONObject("data")
+
+
+        /**
+         * 遍历 [JSONArray]
+         * @receiver [JSONArray]
+         * @param block
+         */
+        private inline fun JSONArray.forEachApply(block: JSONObject.() -> Unit) {
+            for (index in 0..<length()) block(getJSONObject(index))
         }
     }
 }
