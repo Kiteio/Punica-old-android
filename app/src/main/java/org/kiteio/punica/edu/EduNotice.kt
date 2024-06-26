@@ -1,4 +1,4 @@
-package org.kiteio.punica.edu.notice
+package org.kiteio.punica.edu
 
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
