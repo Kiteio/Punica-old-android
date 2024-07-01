@@ -8,7 +8,7 @@ import com.googlecode.tesseract.android.TessBaseAPI
 import io.ktor.client.statement.readBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiteio.punica.AppContext
+import org.kiteio.punica.FilesDir
 import org.kiteio.punica.request.fetch
 import java.io.File
 
@@ -19,7 +19,7 @@ import java.io.File
  */
 suspend fun ByteArray.text(): String = withContext(Dispatchers.Default) {
     with(TessBaseAPI()) {
-        val filesDir = AppContext.filesDir.absolutePath
+        val filesDir = FilesDir.absolutePath
         val fileDir = "$filesDir/tessdata/"
         val dataFile = File(fileDir + "eng.traineddata")
 

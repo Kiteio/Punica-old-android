@@ -3,7 +3,6 @@ package org.kiteio.punica.edu.system
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
-import org.kiteio.punica.AppContext
 import org.kiteio.punica.R
 import org.kiteio.punica.candy.ProxiedAPI
 import org.kiteio.punica.candy.ProxiedAPIOwner
@@ -12,6 +11,7 @@ import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.system.api.Token
 import org.kiteio.punica.edu.system.api.course.Sort
 import org.kiteio.punica.edu.system.api.token
+import org.kiteio.punica.getString
 import org.kiteio.punica.request.Session
 
 /**
@@ -87,7 +87,7 @@ class CourseSystem private constructor(
                     eduSystem.proxied
                 )
             }
-            error(AppContext.getString(R.string.course_system_closed))
+            error(getString(R.string.course_system_closed))
         }
 
 
@@ -105,7 +105,7 @@ class CourseSystem private constructor(
             ) { parameter("jx0502zbid", token.value) }.bodyAsText()
 
             if (Ksoup.parse(text).body().text() == "当前未开放选课，具体请查看学校选课通知！")
-                error(AppContext.getString(R.string.course_system_closed))
+                error(getString(R.string.course_system_closed))
 
             return CourseSystem(
                 eduSystem.session,

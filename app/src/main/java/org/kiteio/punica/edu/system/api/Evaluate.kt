@@ -4,9 +4,9 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ParametersBuilder
-import org.kiteio.punica.AppContext
 import org.kiteio.punica.R
 import org.kiteio.punica.edu.system.EduSystem
+import org.kiteio.punica.getString
 
 /**
  * 教评列表
@@ -49,7 +49,7 @@ suspend fun EduSystem.evaluateList(): List<EvaluateItem> {
         }
 
         return items
-    }else error(AppContext.getString(R.string.evaluation_closed))
+    }else error(getString(R.string.evaluation_closed))
 }
 
 
