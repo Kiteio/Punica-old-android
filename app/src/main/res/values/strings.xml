@@ -17,4 +17,15 @@
     <string name="number_of_hours">%1$d 小时</string>
 
     <string name="evaluation_closed">教评未开放</string>
+
+    <string name="login">登录</string>
+    <string name="cancel">取消</string>
+    <string name="logged_in">已登录</string>
+    <string name="logout">退出登录</string>
+    <string name="student_id">学号</string>
+    <string name="portal_password">门户密码</string>
+    
+    <string name="slogan">新一代广财教学信息查询工具</string>
+    <string name="security_convenient_intelligent">安全 | 便捷 | 智能</string>
+    <string name="open_source_under_the_MIT_license">基于 MIT 许可证开源</string>
 </resources>

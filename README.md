@@ -71,6 +71,15 @@ Punica 支持数据本地化，断网也能正常使用。
 - 第二课堂
 - 教务通知
 
+## 提前体验
+最近一段时间在制作 UI，如果希望提前使用部分功能，您可以参照以下步骤。
+> 有时候 Push 后发现有不足，会在本地还原并强制 Push，非常抱歉给您带来不便。
+
+1. 下载 [Android Studio](https://developer.android.google.cn/studio?hl=zh-cn) 并安装 Android SDK。
+2. 将项目克隆到本地（可以使用 Android Studio 的克隆功能、Git 或者直接下载压缩包）。
+3. 使用 Android Studio 打开项目。
+4. 运行项目。
+
 ## 支持 🦢
 我们的项目开发没有任何启动资金，全靠爱发电，我们需要一些反馈来维持项目的运营。
 
