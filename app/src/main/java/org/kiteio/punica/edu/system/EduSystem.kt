@@ -1,6 +1,7 @@
 package org.kiteio.punica.edu.system
 
 import com.fleeksoft.ksoup.Ksoup
+import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readBytes
 import io.ktor.http.parameters
@@ -13,6 +14,7 @@ import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.request.Session
 import java.time.LocalDate
+import java.util.Date
 
 /**
  * 教务系统
@@ -25,8 +27,21 @@ class EduSystem private constructor(
     private val user: User,
     val session: Session,
     override val proxied: Boolean
-): ProxiedAPIOwner<EduSystem.Companion>(Companion) {
+) : ProxiedAPIOwner<EduSystem.Companion>(Companion) {
     val name get() = user.name
+
+
+    /**
+     * 退出登录
+     */
+    suspend fun logout() {
+        session.fetch(
+            route { LOGOUT }
+        ) {
+            parameter("amp;method: exit", "exit")
+            parameter("amp;tktime", Date().time)
+        }
+    }
 
 
     companion object : ProxiedAPI {
@@ -35,6 +50,7 @@ class EduSystem private constructor(
         const val BASE = "/jsxsd"
         private const val CAPTCHA = "$BASE/verifycode.servlet"  // 验证码
         private const val LOGIN = "$BASE/xk/LoginToXkLdap"  // 登录
+        private const val LOGOUT = "$BASE/xk/LoginToXk"  // 退出登录
         const val TIMETABLE = "$BASE/xskb/xskb_list.do"  // 课表
         const val TIMETABLES = "$BASE/kbcx/kbxx_kc_ifr"  // 全校课表
         const val EXAM_PLAN = "$BASE/xsks/xsksap_list"  // 考试安排
