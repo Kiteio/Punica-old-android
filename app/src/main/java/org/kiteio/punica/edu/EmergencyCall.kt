@@ -1,8 +1,8 @@
 package org.kiteio.punica.edu
 
 import androidx.annotation.StringRes
-import org.kiteio.punica.AppContext
 import org.kiteio.punica.R
+import org.kiteio.punica.getString
 
 /**
  * 紧急电话
@@ -19,7 +19,7 @@ sealed class EmergencyCall(
     data object CampusAlarm : EmergencyCall(
         R.string.campus_alarm,
         "84096060",
-        { AppContext.getString(R.string.number_of_hours, 24) }
+        { getString(R.string.number_of_hours, 24) }
     )
 
     data object CampusPoliceOffice : EmergencyCall(
@@ -31,6 +31,6 @@ sealed class EmergencyCall(
     data object GuanzhouPoliceOffice : EmergencyCall(
         R.string.guanzhou_police_station,
         "84092782",
-        { AppContext.getString(R.string.number_of_hours, 24) }
+        { getString(R.string.number_of_hours, 24) }
     )
 }
