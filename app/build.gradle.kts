@@ -78,4 +78,5 @@ dependencies {
     implementation(libs.ksoup)
     implementation(libs.markdown)
     implementation(libs.pdfViewer)
+    implementation(libs.material.icons.extended)
 }

@@ -7,12 +7,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import org.kiteio.punica.ui.ApplicationViewModel
+import org.kiteio.punica.ui.LocalViewModel
 import org.kiteio.punica.ui.PunicaTheme
+import org.kiteio.punica.ui.screen.LoginScreen
 import java.io.File
 
 /** 应用上下文 */
@@ -29,8 +29,10 @@ class MainActivity : ComponentActivity() {
         AppContext = applicationContext
         setContent {
             PunicaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Text("Hello World", modifier = Modifier.padding(innerPadding))
+                CompositionLocalProvider(
+                    value = LocalViewModel provides viewModel { ApplicationViewModel() }
+                ) {
+                    LoginScreen()
                 }
             }
         }
