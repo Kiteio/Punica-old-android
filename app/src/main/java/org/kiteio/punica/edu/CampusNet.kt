@@ -5,6 +5,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import org.json.JSONObject
 import org.kiteio.punica.candy.API
+import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.request.fetch
@@ -42,10 +43,8 @@ object CampusNet : API {
         }.jsonString().json
 
         if (json.getInt("result") != 1) {
-            try {
+            catching({ error(json.getString("msg")) }) {
                 if (ip == status().getString("v4ip")) return
-            } catch (_: Exception) {
-                error(json.getString("msg"))
             }
         }
     }
