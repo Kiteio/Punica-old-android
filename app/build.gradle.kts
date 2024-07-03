@@ -56,6 +56,10 @@ android {
     }
 }
 
+composeCompiler {
+    enableStrongSkippingMode = true
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -79,4 +83,5 @@ dependencies {
     implementation(libs.markdown)
     implementation(libs.pdfViewer)
     implementation(libs.material.icons.extended)
+    implementation(libs.navigation)
 }
