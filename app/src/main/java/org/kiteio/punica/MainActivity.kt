@@ -9,10 +9,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.kiteio.punica.ui.ApplicationViewModel
+import androidx.navigation.compose.rememberNavController
+import org.kiteio.punica.ui.AppViewModel
+import org.kiteio.punica.ui.LocalNavController
 import org.kiteio.punica.ui.LocalViewModel
 import org.kiteio.punica.ui.PunicaTheme
-import org.kiteio.punica.ui.screen.LoginScreen
+import org.kiteio.punica.ui.navigation.NavHost
+import org.kiteio.punica.ui.navigation.Route
+import org.kiteio.punica.ui.navigation.composable
 import java.io.File
 
 /** 应用上下文 */
@@ -29,10 +33,15 @@ class MainActivity : ComponentActivity() {
         AppContext = applicationContext
         setContent {
             PunicaTheme {
+                val navController = rememberNavController()
+
                 CompositionLocalProvider(
-                    value = LocalViewModel provides viewModel { ApplicationViewModel() }
+                    LocalViewModel provides viewModel { AppViewModel() },
+                    LocalNavController provides navController
                 ) {
-                    LoginScreen()
+                    NavHost(navController = navController, startRoute = Route.Main) {
+                        composable(Route.Main)
+                    }
                 }
             }
         }

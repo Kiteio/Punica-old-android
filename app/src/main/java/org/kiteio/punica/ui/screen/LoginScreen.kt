@@ -53,7 +53,7 @@ import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.getString
-import org.kiteio.punica.ui.ApplicationViewModel
+import org.kiteio.punica.ui.AppViewModel
 import org.kiteio.punica.ui.LocalViewModel
 import org.kiteio.punica.ui.component.Image
 import org.kiteio.punica.ui.component.PasswordField
@@ -166,7 +166,7 @@ fun LoginScreen() {
 }
 
 
-class LoginViewModel(private val viewModel: ApplicationViewModel) : ViewModel() {
+class LoginViewModel(private val viewModel: AppViewModel) : ViewModel() {
     var name by mutableStateOf("")
     var pwd by mutableStateOf("")
     private var secondClassPwd by mutableStateOf("")

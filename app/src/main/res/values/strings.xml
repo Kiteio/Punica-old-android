@@ -28,4 +28,9 @@
     <string name="slogan">新一代广财教学信息查询工具</string>
     <string name="security_convenient_intelligent">安全 | 便捷 | 智能</string>
     <string name="open_source_under_the_MIT_license">基于 MIT 许可证开源</string>
+
+    <string name="schedule">日程</string>
+    <string name="todo">待办</string>
+    <string name="module">模块</string>
+    <string name="me">我</string>
 </resources>

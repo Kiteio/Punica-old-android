@@ -3,15 +3,14 @@ package org.kiteio.punica.ui
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.lifecycle.ViewModel
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
  * 应用级 [ViewModel]
- * @property eduSystem EduSystem?
+ * @property eduSystem
  */
-class ApplicationViewModel : ViewModel() {
+class AppViewModel : ViewModel() {
     var eduSystem by mutableStateOf<EduSystem?>(null)
         private set
 
@@ -25,16 +24,11 @@ class ApplicationViewModel : ViewModel() {
     }
 
 
+    /**
+     * 退出登录
+     */
     suspend fun onLogout() {
         eduSystem?.logout()
         eduSystem = null
     }
-}
-
-
-/**
- * [ApplicationViewModel]
- */
-val LocalViewModel = staticCompositionLocalOf<ApplicationViewModel> {
-    error("CompositionLocal ${ApplicationViewModel::class.simpleName} not present")
 }

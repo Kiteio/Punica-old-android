@@ -15,6 +15,7 @@ ksoup = "0.1.2"
 markdown = "0.5.0"
 pdfViewer = "2.1.1"
 material-icons-extended = "1.7.0-beta04"
+navigation = "2.7.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +40,7 @@ ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
 markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "markdown" }
 pdfViewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfViewer" }
 material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material-icons-extended" }
+navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
