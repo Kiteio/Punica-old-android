@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import org.kiteio.punica.ui.AppViewModel
@@ -25,6 +26,15 @@ private lateinit var AppContext: Context
 /** 全局 [Context.getFilesDir] */
 val FilesDir: File get() = AppContext.filesDir
 
+private val Context.Preferences by preferencesDataStore("preferences")
+private val Context.Users by preferencesDataStore("users")
+
+/** 首选项（设置） */
+val Preferences get() = AppContext.Preferences
+
+/** 用户 */
+val Users get() = AppContext.Users
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +51,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavHost(navController = navController, startRoute = Route.Main) {
                         composable(Route.Main)
+                        composable(Route.Login)
+                        composable(Route.Account)
+                        composable(Route.Version)
+                        composable(Route.Settings)
                     }
                 }
             }
@@ -71,8 +85,8 @@ fun Toast(@StringRes resId: Int, duration: Int = Toast.LENGTH_SHORT): Toast =
 
 /**
  * 获取字符串资源
- * @param redId Int
- * @return String
+ * @param redId
+ * @return [String]
  */
 fun getString(@StringRes redId: Int) = AppContext.getString(redId)
 

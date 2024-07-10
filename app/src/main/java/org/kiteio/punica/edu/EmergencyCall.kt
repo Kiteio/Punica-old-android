@@ -6,13 +6,12 @@ import org.kiteio.punica.getString
 
 /**
  * 紧急电话
- * @property name 单位
+ * @property nameResId 单位
  * @property phoneNumber 电话号码
  * @property workingHours 工作时间
- * @constructor
  */
 sealed class EmergencyCall(
-    @StringRes val name: Int,
+    @StringRes val nameResId: Int,
     val phoneNumber: String,
     val workingHours: () -> String
 ) {

@@ -1,5 +1,7 @@
 package org.kiteio.punica.ui.screen
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.captionBar
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -16,6 +18,7 @@ import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.navigation.NavHost
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.navigation.composable
+import org.kiteio.punica.ui.navigation.navigate
 
 /**
  * 主页面
@@ -31,7 +34,8 @@ fun MainScreen() {
     )
 
     ScaffoldBox(
-        bottomBar = { BottomBar(navController, routes) }
+        bottomBar = { BottomBar(navController, routes) },
+        contentWindowInsets = WindowInsets.captionBar
     ) {
         NavHost(navController = navController, startRoute = Route.Bottom.Schedule) {
             composable(routes)
@@ -57,7 +61,7 @@ private fun BottomBar(navController: NavHostController, routes: List<Route.Botto
                 onClick = {
                     if (currentRouteId != route.id) {
                         navController.popBackStack()
-                        navController.navigate(route.id)
+                        navController.navigate(route)
                     }
                 },
                 icon = { Icon(imageVector = route.icon) },

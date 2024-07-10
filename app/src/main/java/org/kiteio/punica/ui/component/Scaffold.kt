@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,6 +27,7 @@ import androidx.compose.ui.platform.LocalFocusManager
  * @param topBar
  * @param bottomBar
  * @param floatingActionButton
+ * @param contentWindowInsets
  * @param content
  */
 @Composable
@@ -36,13 +39,15 @@ fun ScaffoldColumn(
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
+    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Scaffold(
         modifier = modifier.focusCleaner(),
         topBar = topBar,
         bottomBar = bottomBar,
-        floatingActionButton = floatingActionButton
+        floatingActionButton = floatingActionButton,
+        contentWindowInsets = contentWindowInsets
     ) { innerPadding ->
         Column(
             modifier = innerModifier.padding(innerPadding),
@@ -62,6 +67,7 @@ fun ScaffoldColumn(
  * @param topBar
  * @param bottomBar
  * @param floatingActionButton
+ * @param contentWindowInsets
  * @param content
  */
 @Composable
@@ -72,6 +78,7 @@ fun ScaffoldBox(
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
+    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable BoxScope.() -> Unit
 ) {
     Scaffold(
@@ -79,6 +86,7 @@ fun ScaffoldBox(
         topBar = topBar,
         bottomBar = bottomBar,
         floatingActionButton = floatingActionButton,
+        contentWindowInsets = contentWindowInsets
     ) { innerPadding ->
         Box(
             modifier = innerModifier.padding(innerPadding),

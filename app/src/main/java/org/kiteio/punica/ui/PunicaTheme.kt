@@ -1,22 +1,43 @@
 package org.kiteio.punica.ui
 
-import android.app.Activity
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.compose.ui.res.painterResource
+import androidx.core.graphics.drawable.toBitmap
+import androidx.palette.graphics.Palette
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.materialkolor.rememberDynamicColorScheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.kiteio.punica.Preferences
+import org.kiteio.punica.R
+import org.kiteio.punica.candy.collectAsState
+import org.kiteio.punica.datastore.Keys
+import org.kiteio.punica.ui.component.Image
+
+lateinit var avatarPainter: AsyncImagePainter
+    private set
+var avatarImageBitmap by mutableStateOf<Bitmap?>(null)
+    private set
 
 /**
  * 小石榴主题
@@ -27,23 +48,34 @@ import com.materialkolor.rememberDynamicColorScheme
 @Composable
 fun PunicaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    val preferences by Preferences.data.collectAsState()
+    val avatarUri by remember { derivedStateOf { preferences?.get(Keys.avatarUri)?.let { Uri.parse(it) } } }
+    avatarPainter = rememberAsyncImagePainter(
+        model = avatarUri,
+        error = painterResource(id = R.drawable.punica),
+        onSuccess = {
+            avatarImageBitmap = it.result.drawable.toBitmap()
+        }
+    )
+    // Painter 得使用才会请求图片
+    Image(painter = avatarPainter, modifier = Modifier.alpha(0f))
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        else -> rememberDynamicColorScheme(
-            seedColor = remember { Color.random() },
-            isDark = darkTheme
-        )
+        else -> {
+            rememberDynamicColorScheme(
+                seedColor = rememberBitmapTheme(bitmap = avatarImageBitmap),
+                isDark = darkTheme
+            )
+        }
     }
-
-    // 状态栏主题
-    StatusBarTheme(darkTheme = darkTheme, colorScheme = colorScheme)
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -54,18 +86,27 @@ fun PunicaTheme(
 
 
 /**
- * 状态栏主题
- * @param darkTheme 是否为暗色
- * @param colorScheme 配色方案
+ * 获取 [bitmap] 主色
+ * @param bitmap
+ * @param init
+ * @return [Color]
  */
+@Stable
 @Composable
-private fun StatusBarTheme(darkTheme: Boolean, colorScheme: ColorScheme) {
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+private fun rememberBitmapTheme(
+    bitmap: Bitmap?,
+    init: Color = remember { Color.random() }
+): Color {
+    var themeColor by remember { mutableStateOf(init) }
+    LaunchedEffect(bitmap) {
+        bitmap?.let {
+            withContext(Dispatchers.Default) {
+                Palette.from(bitmap.copy(Bitmap.Config.ARGB_8888, true)).generate().dominantSwatch?.apply {
+                    themeColor = Color(rgb)
+                }
+            }
         }
     }
+
+    return themeColor
 }

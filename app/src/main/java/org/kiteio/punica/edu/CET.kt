@@ -41,7 +41,6 @@ object CET : API {
  * 考试时间
  * @property name 考试名称
  * @property rows 考试信息
- * @constructor
  */
 class CETTime(
     val name: String,
