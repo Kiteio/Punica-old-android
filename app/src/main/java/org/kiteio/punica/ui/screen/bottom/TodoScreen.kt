@@ -4,11 +4,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import org.kiteio.punica.R
 import org.kiteio.punica.getString
+import org.kiteio.punica.ui.component.ScaffoldColumn
 
 /**
  * 待办
  */
 @Composable
 fun TodoScreen() {
-    Text(text = getString(R.string.todo))
+    ScaffoldColumn {
+        Text(text = getString(R.string.todo))
+    }
 }

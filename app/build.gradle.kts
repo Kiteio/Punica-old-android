@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -84,4 +85,10 @@ dependencies {
     implementation(libs.pdfViewer)
     implementation(libs.material.icons.extended)
     implementation(libs.navigation)
+    implementation(libs.datastore)
+    implementation(libs.serialization.json)
+    implementation(libs.composeIcons.simple)
+    implementation(libs.composeIcons.tabler)
+    implementation(libs.coil.compose)
+    implementation(libs.palette)
 }

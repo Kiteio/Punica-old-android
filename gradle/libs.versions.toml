@@ -5,7 +5,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.8.2"
+lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
 composeBom = "2024.06.00"
 materialKolor = "1.7.0"
@@ -16,6 +16,11 @@ markdown = "0.5.0"
 pdfViewer = "2.1.1"
 material-icons-extended = "1.7.0-beta04"
 navigation = "2.7.7"
+datastore = "1.1.1"
+serialization = "1.6.3"
+composeIcons = "1.1.0"
+coil = "2.6.0"
+palette = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,9 +46,16 @@ markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "m
 pdfViewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfViewer" }
 material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material-icons-extended" }
 navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+composeIcons-simple = { module = "br.com.devsrsouza.compose.icons:simple-icons", version.ref = "composeIcons" }
+composeIcons-tabler = { module = "br.com.devsrsouza.compose.icons:tabler-icons", version.ref = "composeIcons" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+palette = { module = "androidx.palette:palette", version.ref = "palette" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

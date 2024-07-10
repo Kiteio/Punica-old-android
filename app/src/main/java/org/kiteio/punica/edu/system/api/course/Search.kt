@@ -120,7 +120,7 @@ private fun parse(json: JSONObject, sort: Sort): List<Course> {
                     name = getString("kcmc"),
                     teacher = getString("skls").fixTeacherName(),
                     point = getString("xf"),
-                    campus = if (getInt("xqid") == 1) Campus.Guangzhou else Campus.Foshan,
+                    campus = Campus.getById(getInt("xqid")),
                     time = getString("sksj"),
                     area = getString("skdd"),
                     total = getString("xxrs"),

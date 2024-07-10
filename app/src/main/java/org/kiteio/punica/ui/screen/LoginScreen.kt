@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,19 +45,27 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.kiteio.punica.Preferences
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
+import org.kiteio.punica.Users
 import org.kiteio.punica.candy.Toast
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.candy.limit
+import org.kiteio.punica.datastore.Keys
+import org.kiteio.punica.datastore.get
 import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.AppViewModel
+import org.kiteio.punica.ui.LocalNavController
 import org.kiteio.punica.ui.LocalViewModel
+import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.Image
 import org.kiteio.punica.ui.component.PasswordField
 import org.kiteio.punica.ui.component.ScaffoldBox
@@ -70,6 +81,7 @@ import org.kiteio.punica.ui.dp4
 fun LoginScreen() {
     val coroutineScope = rememberCoroutineScope()
     val viewModel = LocalViewModel.current
+    val navController = LocalNavController.current
 
     var isLogoScaled by remember { mutableStateOf(false) }
     val logoSize by animateDpAsState(
@@ -90,6 +102,15 @@ fun LoginScreen() {
     }
 
     ScaffoldBox {
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(dp4(2))
+        ) {
+            Icon(imageVector = Icons.AutoMirrored.Rounded.NavigateBefore)
+        }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -140,19 +161,22 @@ fun LoginScreen() {
 
                 Button(
                     onClick = when {
-                        viewModel.eduSystem != null -> ::logout
-                        interactable -> ::login
+                        viewModel.eduSystem?.name == name -> ::logout
+                        interactable -> {
+                            { login { navController.popBackStack() } }
+                        }
+
                         else -> ::cancel
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
-                    enabled = name.length == 11 && pwd.isNotEmpty()
+                    enabled = name.length == 11 && pwd.isNotEmpty() || name == viewModel.eduSystem?.name
                 ) {
                     Text(
                         text = getString(
                             when {
-                                viewModel.eduSystem != null -> R.string.logout
+                                viewModel.eduSystem?.name == name -> R.string.logout
                                 interactable -> R.string.login
                                 else -> R.string.cancel
                             }
@@ -175,10 +199,35 @@ class LoginViewModel(private val viewModel: AppViewModel) : ViewModel() {
     var interactable by mutableStateOf(true)
     private var job: Job? = null
 
+    init {
+        // 初始化用户
+        viewModelScope.launchCatching {
+            Preferences.data.map { it[Keys.lastUser] }.firstOrNull()?.let { username ->
+                refreshUser(username)
+            }
+        }
+    }
+
+
+    /**
+     * 刷新用户信息
+     * @param username 学号
+     */
+    private suspend fun refreshUser(username: String) {
+        Users.data.map { it.get<User>(username) }.firstOrNull()?.let {
+            name = it.name
+            pwd = it.pwd
+            secondClassPwd = it.secondClassPwd
+            campusNetPwd = it.campusNetPwd
+            cookies = it.cookies
+        }
+    }
+
+
     /**
      * 登录
      */
-    fun login() {
+    fun login(onLoggedIn: () -> Unit) {
         interactable = false
         val user = User(name, pwd, secondClassPwd, campusNetPwd, cookies)
         job = viewModelScope.launchCatching(onCatch = { Toast().show(); interactable = true }) {
@@ -190,9 +239,10 @@ class LoginViewModel(private val viewModel: AppViewModel) : ViewModel() {
                     emit(EduSystem.login(user, true))
                 } else throw it
             }.collect {
-                viewModel.onLoggedIn(it)
+                viewModel.onLoggedIn(it, user)
                 Toast(getString(R.string.logged_in)).show()
                 interactable = true
+                onLoggedIn()
             }
         }
     }
@@ -215,6 +265,7 @@ class LoginViewModel(private val viewModel: AppViewModel) : ViewModel() {
     fun logout() {
         viewModelScope.launch {
             viewModel.onLogout()
+            refreshUser(name)  // 防止在退出登录前更改了密码
             Toast(R.string.logout).show()
         }
     }
