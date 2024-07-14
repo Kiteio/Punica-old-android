@@ -2,6 +2,7 @@ package org.kiteio.punica.edu.system.api
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
+import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -23,7 +24,7 @@ suspend fun EduSystem.plan(): Plan {
         items.add(
             PlanItem(
                 id = infos[2].text(),
-                semester = infos[1].text(),
+                semester = Semester.of(infos[1].text()),
                 name = infos[3].text(),
                 department = infos[4].text(),
                 point = infos[5].text(),
@@ -62,7 +63,7 @@ class Plan(
  */
 data class PlanItem(
     val id: String,
-    val semester: String,
+    val semester: Semester,
     val name: String,
     val department: String,
     val point: String,

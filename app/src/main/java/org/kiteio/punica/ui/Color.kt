@@ -1,5 +1,7 @@
 package org.kiteio.punica.ui
 
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import kotlin.random.Random
@@ -33,3 +35,12 @@ fun Color.toHexString() = toArgb().toHexString(HexFormat.UpperCase)
  */
 @OptIn(ExperimentalStdlibApi::class)
 fun String.toColor() = Color(hexToInt(HexFormat.UpperCase))
+
+
+/**
+ * 弱化 [LocalContentColor]
+ * @param alpha
+ * @return [Color]
+ */
+@Composable
+fun subduedContentColor(alpha: Float = 0.7f) = LocalContentColor.current.copy(alpha)

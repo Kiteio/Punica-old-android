@@ -3,8 +3,13 @@ package org.kiteio.punica.edu.system.api
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import org.kiteio.punica.candy.isEven
 import org.kiteio.punica.candy.isOdd
+import org.kiteio.punica.datastore.Identified
+import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -13,7 +18,7 @@ import org.kiteio.punica.edu.system.EduSystem
  * @param semester 学期，可借助 LocalDate 扩展属性 semester 获取
  * @return [Timetable]
  */
-suspend fun EduSystem.timetable(semester: String): Timetable {
+suspend fun EduSystem.timetable(semester: Semester) = withContext(Dispatchers.Default) {
     val text = session.fetch(route { TIMETABLE }) {
         parameter("xnxq01id", semester)
     }.bodyAsText()
@@ -51,13 +56,13 @@ suspend fun EduSystem.timetable(semester: String): Timetable {
                 else continue
             }
 
-            val weekStr = childTextNodes[indexPlus1].text()
+            val weeksStr = childTextNodes[indexPlus1].text()
             items.add(
                 TimetableItem(
                     name = textNodes[index].text(),
                     teacher = childTextNodes[index].text(),
-                    weekStr = weekStr,
-                    week = parseWeek(weekStr),
+                    weeksStr = weeksStr,
+                    weeks = parseWeek(weeksStr),
                     area = childTextNodes[index + 2].text(),
                     section = section.toSet(),
                     dayOfWeek = columnIndex + 1
@@ -67,7 +72,7 @@ suspend fun EduSystem.timetable(semester: String): Timetable {
         itemsList.add(items)
     }
 
-    return Timetable(
+    Timetable(
         username = name,
         semester = semester,
         remark = rawItems.last()!!.text(),
@@ -78,16 +83,16 @@ suspend fun EduSystem.timetable(semester: String): Timetable {
 
 /**
  * 解析周次
- * @param weekStr
+ * @param weeksStr
  * @return [MutableSet]<[Int]>
  */
-fun parseWeek(weekStr: String) = mutableSetOf<Int>().apply {
+fun parseWeek(weeksStr: String) = mutableSetOf<Int>().apply {
     var firstNum = ""  // 读取到的第一个数字
     var secondNum = ""  // 读取到的第二个数字
     var isSecond = false  // 正在写入的是否为第二个数
 
-    for (index in weekStr.indices) {
-        val char = weekStr[index]
+    for (index in weeksStr.indices) {
+        val char = weeksStr[index]
 
         if (char.isDigit()) {
             if (isSecond) secondNum += char
@@ -138,31 +143,36 @@ fun parseWeek(weekStr: String) = mutableSetOf<Int>().apply {
  * @property semester 学期
  * @property remark 备注
  * @property items
+ * @property id [username] + [semester]
  */
+@Serializable
 class Timetable(
     val username: String,
-    val semester: String,
+    val semester: Semester,
     val remark: String,
     val items: List<List<TimetableItem>?>
-)
+) : Identified() {
+    override val id = username + semester
+}
 
 
 /**
  * 课程项
  * @property name 课程名
  * @property teacher 教师
- * @property weekStr 原始周次
- * @property week 周次
+ * @property weeksStr 原始周次
+ * @property weeks 周次
  * @property area 地点
  * @property section 节次
  * @property dayOfWeek 星期几 1..7
  * @property clazz 班级名
  */
+@Serializable
 data class TimetableItem(
     val name: String,
     override val teacher: String,
-    override val weekStr: String,
-    override val week: Set<Int>,
+    override val weeksStr: String,
+    override val weeks: Set<Int>,
     override val area: String,
     override val section: Set<Int>,
     override val dayOfWeek: Int,
@@ -173,8 +183,8 @@ data class TimetableItem(
 /**
  * 课表项抽象
  * @property teacher 教师
- * @property weekStr 原始周次
- * @property week 周次
+ * @property weeksStr 原始周次
+ * @property weeks 周次
  * @property area 地点
  * @property section 节次
  * @property dayOfWeek 星期几 1..7
@@ -182,8 +192,8 @@ data class TimetableItem(
  */
 interface TimetableItemLike {
     val teacher: String
-    val weekStr: String
-    val week: Set<Int>
+    val weeksStr: String
+    val weeks: Set<Int>
     val area: String
     val section: Set<Int>
     val dayOfWeek: Int

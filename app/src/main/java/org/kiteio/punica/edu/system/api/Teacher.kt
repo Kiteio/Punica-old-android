@@ -4,6 +4,7 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
+import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -113,7 +114,7 @@ suspend fun EduSystem.teacher(id: String): Teacher {
                 CourseItem(
                     name = infos[1].text(),
                     sort = infos[2].text(),
-                    semester = infos[3].text()
+                    semester = Semester.of(infos[3].text())
                 )
             )
         }
@@ -211,5 +212,5 @@ data class Teacher(
 data class CourseItem(
     val name: String,
     val sort: String,
-    val semester: String
+    val semester: Semester
 )

@@ -14,7 +14,7 @@ import org.kiteio.punica.edu.system.EduSystem.Companion.semester
 suspend fun EduSystem.examPlan(): ExamPlan {
     val text = session.post(
         route { EXAM_PLAN },
-        parameters { append("xnxqid", semester) }
+        parameters { append("xnxqid", semester.toString()) }
     ).bodyAsText()
 
     val document = Ksoup.parse(text)

@@ -12,13 +12,13 @@ import java.util.regex.Pattern
 /**
  * 全校课表
  * @receiver [EduSystem]
- * @return [HashMap]<[String], [List]<[List]<[TimetablesItem]>?>>
+ * @return [HashMap]<[String], [List]<[List]<[TimetableAllItem]>?>>
  */
-suspend fun EduSystem.timetables() = withContext(Dispatchers.Default) {
+suspend fun EduSystem.timetableAll() = withContext(Dispatchers.Default) {
     val text = session.post(
         route { TIMETABLES },
         parameters {
-            append("xnxqh", semester)
+            append("xnxqh", semester.toString())
         }
     ).bodyAsText()
 
@@ -26,13 +26,13 @@ suspend fun EduSystem.timetables() = withContext(Dispatchers.Default) {
 
     matcher.apply { find(); find() }  // 去掉表头
     val regex = Regex("^(.+?)?\\s*\\((.*?)\\)$")  // 匹配教师和周次
-    val timetables = HashMap<String, List<List<TimetablesItem>?>>()
+    val timetables = HashMap<String, List<List<TimetableAllItem>?>>()
 
     while (matcher.find()) {
         val document = Ksoup.parseBodyFragment(matcher.group())
         val elements = document.body().children()
 
-        val itemsList = arrayListOf<List<TimetablesItem>?>()
+        val itemsList = arrayListOf<List<TimetableAllItem>?>()
         for (index in 1..<elements.size) {
             // 空格子
             if (elements[index].childrenSize() == 0) {
@@ -44,16 +44,16 @@ suspend fun EduSystem.timetables() = withContext(Dispatchers.Default) {
             val dayOfWeek = (index - 1) / 6 + 1
 
             // 一个格子
-            val items = arrayListOf<TimetablesItem>()
+            val items = arrayListOf<TimetableAllItem>()
             for (itemIndex in texts.indices step 3) {
                 val destructed = regex.find(texts[itemIndex + 1])!!.destructured
-                val weekStr = destructed.component2()
+                val weeksStr = destructed.component2()
 
                 items.add(
-                    TimetablesItem(
+                    TimetableAllItem(
                         teacher = destructed.component1(),
-                        weekStr = weekStr,
-                        week = parseWeek(weekStr),
+                        weeksStr = weeksStr,
+                        weeks = parseWeek(weeksStr),
                         area = texts[itemIndex + 2],
                         section = section,
                         dayOfWeek = dayOfWeek,
@@ -75,17 +75,17 @@ suspend fun EduSystem.timetables() = withContext(Dispatchers.Default) {
 /**
  * 全校课表项
  * @property teacher 教师
- * @property weekStr 原始周次
- * @property week 周次
+ * @property weeksStr 原始周次
+ * @property weeks 周次
  * @property area 地点
  * @property section 节次
  * @property dayOfWeek 星期几 1..7
  * @property clazz 班级名
  */
-data class TimetablesItem(
+data class TimetableAllItem(
     override val teacher: String,
-    override val weekStr: String,
-    override val week: Set<Int>,
+    override val weeksStr: String,
+    override val weeks: Set<Int>,
     override val area: String,
     override val section: Set<Int>,
     override val dayOfWeek: Int,

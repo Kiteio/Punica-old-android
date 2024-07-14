@@ -9,13 +9,16 @@ import org.kiteio.punica.R
  * @property id
  */
 sealed class Campus(@StringRes val nameResId: Int, val id: Int) {
-    data object Guangzhou : Campus(R.string.campus_guangzhou, 1)
+    /** 广州 */
+    data object Canton : Campus(R.string.campus_canton, 1)
+
+    /** 佛山 */
     data object Foshan : Campus(R.string.campus_foshan, 2)
 
 
     companion object {
-        /** 列表 */
-        val list by lazy { listOf(Guangzhou, Foshan) }
+        /** [Campus] 所有值 */
+        val values by lazy { listOf(Canton, Foshan) }
 
 
         /**
@@ -23,8 +26,8 @@ sealed class Campus(@StringRes val nameResId: Int, val id: Int) {
          * @param id
          * @return [Campus]
          */
-        fun getById(id: Int) = when(id) {
-            Guangzhou.id -> Guangzhou
+        fun getById(id: Int?) = when(id) {
+            Canton.id, null -> Canton
             Foshan.id -> Foshan
             else -> error("No such a Campus id.")
         }

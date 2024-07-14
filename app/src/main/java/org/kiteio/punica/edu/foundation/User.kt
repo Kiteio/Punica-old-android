@@ -7,6 +7,7 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import org.kiteio.punica.datastore.Identified
 
 /**
  * 用户
@@ -15,26 +16,17 @@ import kotlinx.serialization.encoding.Encoder
  * @property secondClassPwd 第二课堂密码
  * @property campusNetPwd 校园网密码
  * @property cookies Cookie
+ * @property id [name]
  */
 @Serializable
-data class User(
+class User(
     val name: String,
     var pwd: String = "",
     var secondClassPwd: String = name,
     var campusNetPwd: String = "",
     val cookies: MutableSet<@Serializable(with = CookieSerializer::class) Cookie> = mutableSetOf(),
-) {
-    override fun hashCode() = name.hashCode()
-
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as User
-
-        return name == other.name
-    }
+) : Identified() {
+    override val id = name
 }
 
 

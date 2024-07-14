@@ -2,7 +2,7 @@
     <string name="app_name">Punica</string>
     <string name="punica_poem">却是石榴知立夏，年年此日一花开</string>
 
-    <string name="campus_guangzhou">广州校区</string>
+    <string name="campus_canton">广州校区</string>
     <string name="campus_foshan">佛山校区</string>
     <string name="course_system_closed">选课系统未开放</string>
     <string name="course_basic">必修课</string>
@@ -55,4 +55,29 @@
     <string name="save">保存</string>
     <string name="confirm">确定</string>
     <string name="close">关闭</string>
+
+    <string name="schedule_change_to">时间更换为%1$s</string>
+    <string-array name="days_of_week">
+        <item>一</item>
+        <item>二</item>
+        <item>三</item>
+        <item>四</item>
+        <item>五</item>
+        <item>六</item>
+        <item>日</item>
+    </string-array>
+    <string-array name="grades">
+        <item>大一</item>
+        <item>大二</item>
+        <item>大三</item>
+        <item>大四</item>
+    </string-array>
+    <string name="week_count">第%1$d周</string>
+    <string name="week_number">%1$d周</string>
+    <string name="more">更多</string>
+    <string name="back_to_this_week">回到本周</string>
+    <string name="teacher">教师</string>
+    <string name="area">地点</string>
+    <string name="weeks">周次</string>
+    <string name="section">节次</string>
 </resources>

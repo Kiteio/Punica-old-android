@@ -3,6 +3,7 @@ package org.kiteio.punica.edu.system.api
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
+import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -47,7 +48,7 @@ suspend fun EduSystem.schoolReport(): SchoolReport {
         val infos = rows[index].getElementsByTag("td")
         items.add(
             SchoolReportItem(
-                semester = infos[1].text(),
+                semester = Semester.of(infos[1].text()),
                 id = infos[2].text(),
                 name = infos[3].text(),
                 usualScore = infos[4].text(),
@@ -98,7 +99,7 @@ class SchoolReport(
  * @property examSort 考试性质
  */
 data class SchoolReportItem(
-    val semester: String,
+    val semester: Semester,
     val id: String,
     val name: String,
     val usualScore: String,

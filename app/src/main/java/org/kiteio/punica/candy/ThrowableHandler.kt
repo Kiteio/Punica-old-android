@@ -42,6 +42,23 @@ inline fun catching(
 
 
 /**
+ * 开启一个捕获异常的 [block]，在无异常时返回 [block] 返回的值，否则为 null
+ * @param onCatch 捕获异常回调
+ * @param block
+ * @return [R]?
+ */
+inline fun <R> catching(
+    onCatch: Throwable.() -> Unit = { Toast().show() },
+    block: () -> R
+) = try {
+    block()
+}catch (e: Throwable) {
+    onCatch(e)
+    null
+}
+
+
+/**
  * 生成 [Toast]
  * @receiver [Throwable]
  * @param duration
