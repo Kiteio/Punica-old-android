@@ -8,9 +8,9 @@ import io.ktor.http.parameters
 import org.kiteio.punica.candy.ProxiedAPI
 import org.kiteio.punica.candy.ProxiedAPIOwner
 import org.kiteio.punica.candy.route
-import org.kiteio.punica.candy.semester
 import org.kiteio.punica.candy.text
 import org.kiteio.punica.edu.WebVPN
+import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.request.Session
 import java.time.LocalDate
@@ -65,10 +65,8 @@ class EduSystem private constructor(
         const val PLAN = "$BASE/pyfa/pyfa_query"  // 执行计划
         const val CARD = "$BASE/grxx/xsxx"  // 学籍卡
 
-        /**
-         * 当前学期
-         */
-        val semester by lazy { LocalDate.now().semester }
+        /** 当前学期 */
+        val semester by lazy { Semester.of(LocalDate.now()) }
 
 
         /**

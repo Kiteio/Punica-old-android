@@ -31,7 +31,7 @@ suspend fun CourseSystem.myCourses(): List<MyCourse> {
                 val timeInfos = time.split(" ")
                 classInfos.add(
                     ClassInfo(
-                        week = timeInfos[0],
+                        weeksStr = timeInfos[0],
                         dayOfWeek = timeInfos[1],
                         section = timeInfos[2],
                         area = areaTextNodes[index].text()
@@ -76,13 +76,13 @@ data class MyCourse(
 
 /**
  * 上课信息
- * @property week 周次
+ * @property weeksStr 周次
  * @property dayOfWeek 星期几
  * @property section 节次
  * @property area 地点
  */
 data class ClassInfo(
-    val week: String,
+    val weeksStr: String,
     val dayOfWeek: String,
     val section: String,
     val area: String

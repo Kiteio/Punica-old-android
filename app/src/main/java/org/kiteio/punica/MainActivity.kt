@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.datastore.preferences.preferencesDataStore
@@ -28,12 +29,16 @@ val FilesDir: File get() = AppContext.filesDir
 
 private val Context.Preferences by preferencesDataStore("preferences")
 private val Context.Users by preferencesDataStore("users")
+private val Context.Timetables by preferencesDataStore("timetables")
 
 /** 首选项（设置） */
 val Preferences get() = AppContext.Preferences
 
 /** 用户 */
 val Users get() = AppContext.Users
+
+/** 课表 */
+val Timetables get() = AppContext.Timetables
 
 
 class MainActivity : ComponentActivity() {
@@ -98,4 +103,12 @@ fun getString(@StringRes redId: Int) = AppContext.getString(redId)
  * @return [String]
  */
 fun getString(@StringRes redId: Int, vararg formatArgs: Any) =
-    AppContext.getString(redId, formatArgs)
+    AppContext.getString(redId, *formatArgs)
+
+
+/**
+ * 获取字符串数组资源
+ * @param resId
+ * @return [Array]<[String]>
+ */
+fun getStringArray(@ArrayRes resId: Int): Array<String> = AppContext.resources.getStringArray(resId)

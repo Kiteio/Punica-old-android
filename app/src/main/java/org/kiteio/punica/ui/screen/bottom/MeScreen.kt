@@ -388,14 +388,14 @@ private fun Settings(modifier: Modifier = Modifier) {
                 Text(
                     text = getString(
                         (preferences?.get(Keys.campusId)?.let { Campus.getById(it) }
-                            ?: Campus.Guangzhou).nameResId
+                            ?: Campus.Canton).nameResId
                     )
                 )
                 DropdownMenu(
                     expanded = dropdownMenuExpanded,
                     onDismissRequest = { dropdownMenuExpanded = false }
                 ) {
-                    Campus.list.forEach { campus ->
+                    Campus.values.forEach { campus ->
                         DropdownMenuItem(
                             text = { Text(text = getString(campus.nameResId)) },
                             onClick = {
@@ -503,12 +503,12 @@ private fun SettingItem(
 private fun CampusDialog(visible: Boolean, onDismiss: () -> Unit, initialCampus: Int?) {
     DialogVisibility(visible = visible) {
         val coroutineScope = rememberCoroutineScope()
-        var campusId by remember { mutableIntStateOf(initialCampus ?: Campus.Guangzhou.id) }
+        var campusId by remember { mutableIntStateOf(initialCampus ?: Campus.Canton.id) }
 
         Dialog(
             title = { Text(text = getString(R.string.change_campus)) },
             text = {
-                Campus.list.forEach { campus ->
+                Campus.values.forEach { campus ->
                     RadioButton(
                         selected = campus.id == campusId,
                         onClick = {
