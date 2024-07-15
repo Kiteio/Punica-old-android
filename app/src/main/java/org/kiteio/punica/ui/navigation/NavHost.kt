@@ -39,7 +39,7 @@ fun NavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = startRoute.id,
+        startDestination = startRoute.route,
         enterTransition = enterTransition,
         exitTransition = exitTransition,
         popEnterTransition = popEnterTransition,

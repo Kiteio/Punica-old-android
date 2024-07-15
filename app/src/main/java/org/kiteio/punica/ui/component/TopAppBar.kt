@@ -25,10 +25,30 @@ fun NavBackTopAppBar(
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
+    NavBackTopAppBar(
+        title = { Text(text = getString(route.nameResId)) },
+        modifier = modifier,
+        actions = actions
+    )
+}
+
+
+/**
+ * 可回退的 [TopAppBar]
+ * @param route
+ * @param modifier
+ * @param actions
+ */
+@Composable
+fun NavBackTopAppBar(
+    title: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {}
+) {
     val navController = LocalNavController.current
 
-    TopAppBar(
-        route = route,
+    org.kiteio.punica.ui.component.TopAppBar(
+        title = title,
         modifier = modifier,
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {

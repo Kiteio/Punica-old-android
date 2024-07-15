@@ -13,7 +13,10 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import compose.icons.TablerIcons
 import compose.icons.tablericons.BellRinging
 import compose.icons.tablericons.Book
@@ -35,6 +38,7 @@ import org.kiteio.punica.ui.screen.LoginScreen
 import org.kiteio.punica.ui.screen.MainScreen
 import org.kiteio.punica.ui.screen.SettingsScreen
 import org.kiteio.punica.ui.screen.VersionScreen
+import org.kiteio.punica.ui.screen.WebViewScreen
 import org.kiteio.punica.ui.screen.bottom.MeScreen
 import org.kiteio.punica.ui.screen.bottom.ModuleScreen
 import org.kiteio.punica.ui.screen.bottom.ScheduleScreen
@@ -47,6 +51,7 @@ import org.kiteio.punica.ui.screen.module.EvaluationScreen
 import org.kiteio.punica.ui.screen.module.ExamPlanScreen
 import org.kiteio.punica.ui.screen.module.LevelReportScreen
 import org.kiteio.punica.ui.screen.module.NotEmptyRoomScreen
+import org.kiteio.punica.ui.screen.module.NoticeDetailScreen
 import org.kiteio.punica.ui.screen.module.NoticeScreen
 import org.kiteio.punica.ui.screen.module.PlanScreen
 import org.kiteio.punica.ui.screen.module.ProgressScreen
@@ -60,14 +65,17 @@ import org.kiteio.punica.ui.screen.module.TimetableAllScreen
  * @property content 页面内容
  * @property nameResId 标题
  * @property icon 图标
- * @property id 唯一标识
+ * @property routeNotArgs 路由
+ * @property route 路由声明
  */
 sealed class Route(
     val content: @Composable NavBackStackEntry.() -> Unit,
     @StringRes val nameResId: Int = R.string.app_name,
-    val icon: ImageVector = Icons.Rounded.Numbers
+    val icon: ImageVector = Icons.Rounded.Numbers,
+    val args: List<NamedNavArgument> = emptyList()
 ) {
-    val id = this::class.simpleName!!
+    val routeNotArgs = this::class.simpleName!!
+    val route = routeNotArgs + argsOf(args) { "{${it.name}}" }
 
 
     /** 主页面 */
@@ -85,6 +93,21 @@ sealed class Route(
     /** 设置 */
     data object Settings : Route({ SettingsScreen() }, R.string.settings, Icons.Rounded.Settings)
 
+    /** 教学通知详情 */
+    data object NoticeDetail : Route(
+        { NoticeDetailScreen(this) },
+        args = listOf(
+            navArgument("notice") { type = NavType.StringType }
+        )
+    )
+
+    /** 网页 */
+    data object WebView : Route(
+        { WebViewScreen(this) },
+        args = listOf(
+            navArgument("url") { type = NavType.StringType }
+        )
+    )
 
     /** 底部导航路由 */
     sealed class Bottom(
@@ -200,5 +223,21 @@ sealed class Route(
                 )
             }
         }
+    }
+
+
+    companion object {
+        /**
+         * 将 [args] 生成为 [Route] 参数
+         * @param args
+         * @param transform
+         * @return [String]
+         */
+        fun <T> argsOf(
+            args: List<T>?,
+            transform: ((T) -> CharSequence)? = null
+        ) = args?.takeIf { it.isNotEmpty() }?.run {
+            "/" + joinToString("/", transform = transform)
+        } ?: ""
     }
 }

@@ -8,7 +8,11 @@ import androidx.navigation.compose.composable
  * @receiver [NavGraphBuilder]
  * @param route
  */
-fun NavGraphBuilder.composable(route: Route) = composable(route.id) { route.content(it) }
+fun NavGraphBuilder.composable(route: Route) =
+    composable(
+        route.route,
+        arguments = route.args
+    ) { route.content(it) }
 
 
 /**
