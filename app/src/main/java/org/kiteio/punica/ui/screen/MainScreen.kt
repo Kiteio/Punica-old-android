@@ -26,19 +26,13 @@ import org.kiteio.punica.ui.navigation.navigate
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val routes = listOf(
-        Route.Bottom.Schedule,
-        Route.Bottom.Todo,
-        Route.Bottom.Module,
-        Route.Bottom.Me
-    )
 
     ScaffoldBox(
-        bottomBar = { BottomBar(navController, routes) },
+        bottomBar = { BottomBar(navController, Route.Bottom.values) },
         contentWindowInsets = WindowInsets.captionBar
     ) {
         NavHost(navController = navController, startRoute = Route.Bottom.Schedule) {
-            composable(routes)
+            composable(Route.Bottom.values)
         }
     }
 }

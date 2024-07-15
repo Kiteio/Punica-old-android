@@ -80,4 +80,20 @@
     <string name="area">地点</string>
     <string name="weeks">周次</string>
     <string name="section">节次</string>
+
+    <string name="emergency_call">紧急电话</string>
+    <string name="evaluation">教学评价</string>
+    <string name="course_system">选课系统</string>
+    <string name="exam_plan">考试安排</string>
+    <string name="cet">四六级考试</string>
+    <string name="school_report">课程成绩</string>
+    <string name="level_report">等级成绩</string>
+    <string name="second_class">第二课堂</string>
+    <string name="teacher_info">教师信息</string>
+    <string name="notice">教学通知</string>
+    <string name="campus_net">校园网</string>
+    <string name="not_empty_room">非空教室</string>
+    <string name="timetable_all">全校课表</string>
+    <string name="plan">执行计划</string>
+    <string name="progress">学业进度</string>
 </resources>
