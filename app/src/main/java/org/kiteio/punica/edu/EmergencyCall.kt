@@ -15,21 +15,34 @@ sealed class EmergencyCall(
     val phoneNumber: String,
     val workingHours: () -> String
 ) {
-    data object CampusAlarm : EmergencyCall(
-        R.string.campus_alarm,
-        "84096060",
+    data object Clinic: EmergencyCall(
+        R.string.clinic,
+        "13112234297",
         { getString(R.string.number_of_hours, 24) }
     )
 
+    /** 校园报警 */
+    data object CampusAlarm : EmergencyCall(
+        R.string.campus_alarm,
+        "020-84096060",
+        { getString(R.string.number_of_hours, 24) }
+    )
+
+    /** 校园警务室 */
     data object CampusPoliceOffice : EmergencyCall(
         R.string.campus_police_office,
-        "84096110",
+        "020-84096110",
         { "8:30 - 17:30" }
     )
 
+    /** 官洲派出所 */
     data object GuanzhouPoliceOffice : EmergencyCall(
         R.string.guanzhou_police_station,
-        "84092782",
+        "020-84092782",
         { getString(R.string.number_of_hours, 24) }
     )
+
+    companion object {
+        val values by lazy { listOf(Clinic, CampusAlarm, CampusPoliceOffice, GuanzhouPoliceOffice) }
+    }
 }
