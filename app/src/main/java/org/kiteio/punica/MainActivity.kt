@@ -60,6 +60,7 @@ class MainActivity : ComponentActivity() {
                         composable(Route.Account)
                         composable(Route.Version)
                         composable(Route.Settings)
+                        composable(Route.Module.values)
                     }
                 }
             }
