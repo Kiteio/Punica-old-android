@@ -91,4 +91,7 @@ dependencies {
     implementation(libs.composeIcons.tabler)
     implementation(libs.coil.compose)
     implementation(libs.palette)
+    implementation(libs.paging)
+    implementation(libs.paging.compose)
+    implementation(libs.webview)
 }

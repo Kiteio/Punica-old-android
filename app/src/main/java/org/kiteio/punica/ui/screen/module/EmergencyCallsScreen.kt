@@ -27,6 +27,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.buildAnnotatedString
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Copy
+import org.kiteio.punica.R
+import org.kiteio.punica.Toast
 import org.kiteio.punica.edu.EmergencyCall
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.component.Icon
@@ -52,6 +54,7 @@ fun EmergencyCallsScreen() {
                     emergencyCall = it,
                     onCopy = {
                         clipboardManager.setText(buildAnnotatedString { append(it.phoneNumber) })
+                        Toast(R.string.copied).show()
                     },
                     onOpenInPhoneBook = {
                         val intent = Intent(Intent.ACTION_DIAL).apply {

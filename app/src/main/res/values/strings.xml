@@ -97,4 +97,6 @@
     <string name="timetable_all">全校课表</string>
     <string name="plan">执行计划</string>
     <string name="progress">学业进度</string>
+
+    <string name="copied">已复制</string>
 </resources>

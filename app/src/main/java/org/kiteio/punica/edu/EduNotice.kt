@@ -4,7 +4,13 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import com.fleeksoft.ksoup.select.Elements
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import org.kiteio.punica.candy.API
+import org.kiteio.punica.candy.Log
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.request.fetch
 
@@ -21,7 +27,7 @@ object EduNotice : API {
      * @return [String]
      */
     private fun listRoute(index: Int) =
-        "/4133/list${if (index != 0) index + 1 else ""}.${if (index <= 10) "htm" else "psp"}"
+        "/4133/list${if (index != 0) index + 1 else ""}.htm"
 
 
     /**
@@ -29,8 +35,15 @@ object EduNotice : API {
      * @param index
      * @return [List]<[NoticeItem]>
      */
-    suspend fun list(index: Int): List<NoticeItem> {
-        val text = fetch(route { listRoute(index) }).bodyAsText()
+    suspend fun list(index: Int): List<NoticeItem> = withContext(Dispatchers.Default) {
+        val response = fetch(route { listRoute(index) })
+
+        if (index == 10) Log.e(response.status)
+
+        // 处理重定向
+        val text = if (response.status == HttpStatusCode.MovedPermanently) {
+            fetch(response.headers[HttpHeaders.Location]!!).bodyAsText()
+        } else response.bodyAsText()
 
         val document = Ksoup.parse(text)
         val elements = document.getElementsByClass("news_list list2")[0]
@@ -49,7 +62,7 @@ object EduNotice : API {
             }
         }
 
-        return items
+        items
     }
 
 
@@ -66,7 +79,7 @@ object EduNotice : API {
      * @param noticeItem
      * @return [String]
      */
-    suspend fun notice(noticeItem: NoticeItem): Notice {
+    suspend fun notice(noticeItem: NoticeItem): Notice = withContext(Dispatchers.Default) {
         val text = fetch(noticeItem.url).bodyAsText()
 
         val document = Ksoup.parse(text)
@@ -75,7 +88,8 @@ object EduNotice : API {
         val pdf = article.getElementsByClass("wp_pdf_player")
 
         // 通知内容为 PDF 文件
-        if (pdf.isNotEmpty()) return Notice(noticeItem.url, fixURL(pdf[0].attr("pdfsrc")))
+        if (pdf.isNotEmpty())
+            return@withContext Notice(noticeItem.url, fixURL(pdf[0].attr("pdfsrc")))
 
         // 通知内容为 Html
         val markdown = buildString {
@@ -87,7 +101,6 @@ object EduNotice : API {
                     info.children().apply { removeLast() }.joinToString { it.text() }
                 }"
             )
-            appendParagraph("> [# URL](${noticeItem.url})")
 
             val h1Regex = Regex("^[一二三四五六七八九十]+[、·].*?")
             val h2Regex = Regex("^[(（][一二三四五六七八九十]+[）)].*?")
@@ -111,7 +124,7 @@ object EduNotice : API {
             }
         }
 
-        return Notice(noticeItem.url, markdown = markdown)
+        Notice(noticeItem.url, markdown = markdown)
     }
 
 
@@ -217,6 +230,7 @@ object EduNotice : API {
  * @property time 发布时间
  * @property url
  */
+@Serializable
 data class NoticeItem(
     val title: String,
     val time: String,
