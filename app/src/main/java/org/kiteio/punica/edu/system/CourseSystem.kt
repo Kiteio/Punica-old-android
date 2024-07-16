@@ -3,6 +3,8 @@ package org.kiteio.punica.edu.system
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.R
 import org.kiteio.punica.candy.ProxiedAPI
 import org.kiteio.punica.candy.ProxiedAPIOwner
@@ -30,7 +32,7 @@ class CourseSystem private constructor(
     val end: String,
     private val token: Token,
     override val proxied: Boolean
-): ProxiedAPIOwner<CourseSystem.Companion>(Companion) {
+) : ProxiedAPIOwner<CourseSystem.Companion>(Companion) {
     companion object : ProxiedAPI {
         override val agent = WebVPN
         override val root = EduSystem.root
@@ -67,27 +69,29 @@ class CourseSystem private constructor(
          * @param eduSystem
          * @return [CourseSystem]
          */
-        suspend fun from(eduSystem: EduSystem) = with(eduSystem.session) {
-            val text = fetch(route(eduSystem.proxied) { GET_ENTRY }).bodyAsText()
-            val document = Ksoup.parse(text)
-            val table = document.getElementById("tbKxkc")!!
-            val rows = table.getElementsByTag("tr")
+        suspend fun from(eduSystem: EduSystem) = withContext(Dispatchers.Default) {
+            with(eduSystem.session) {
+                val text = fetch(route(eduSystem.proxied) { GET_ENTRY }).bodyAsText()
+                val document = Ksoup.parse(text)
+                val table = document.getElementById("tbKxkc")!!
+                val rows = table.getElementsByTag("tr")
 
-            if (rows.size > 1) {
-                val infos = rows[1].getElementsByTag("td")
-                val route = infos[6].child(0).attr("href")
-                fetch(route(eduSystem.proxied) { route })
+                if (rows.size > 1) {
+                    val infos = rows[1].getElementsByTag("td")
+                    val route = infos[6].child(0).attr("href")
+                    fetch(route(eduSystem.proxied) { route })
 
-                return@with CourseSystem(
-                    eduSystem.session,
-                    infos[1].text().replace(infos[0].text(), ""),
-                    infos[2].text(),
-                    infos[3].text(),
-                    eduSystem.token(route.split("jx0502zbid=")[1]),
-                    eduSystem.proxied
-                )
+                    return@with CourseSystem(
+                        eduSystem.session,
+                        infos[1].text().replace(infos[0].text(), ""),
+                        infos[2].text(),
+                        infos[3].text(),
+                        eduSystem.token(route.split("jx0502zbid=")[1]),
+                        eduSystem.proxied
+                    )
+                }
+                error(getString(R.string.course_system_closed))
             }
-            error(getString(R.string.course_system_closed))
         }
 
 
@@ -97,7 +101,7 @@ class CourseSystem private constructor(
          * @param token 选课系统 [Token]
          * @return [CourseSystem]
          */
-        suspend fun from(eduSystem: EduSystem, token: Token): CourseSystem {
+        suspend fun from(eduSystem: EduSystem, token: Token) = withContext(Dispatchers.Default) {
             if (token.name != eduSystem.name) error("token.name != eduSystem.name")
 
             val text = eduSystem.session.fetch(
@@ -107,7 +111,7 @@ class CourseSystem private constructor(
             if (Ksoup.parse(text).body().text() == "当前未开放选课，具体请查看学校选课通知！")
                 error(getString(R.string.course_system_closed))
 
-            return CourseSystem(
+            return@withContext CourseSystem(
                 eduSystem.session,
                 "由 id 进入",
                 "未知",

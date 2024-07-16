@@ -2,6 +2,8 @@ package org.kiteio.punica.edu.system.api.course
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.edu.system.CourseSystem
 import org.kiteio.punica.edu.system.CourseSystem.Companion.fixTeacherName
 
@@ -10,7 +12,7 @@ import org.kiteio.punica.edu.system.CourseSystem.Companion.fixTeacherName
  * @receiver [CourseSystem]
  * @return [List]<[CourseLog]>
  */
-suspend fun CourseSystem.log(): List<CourseLog> {
+suspend fun CourseSystem.log() = withContext(Dispatchers.Default) {
     val document = Ksoup.parse(session.fetch(route { LOG }).bodyAsText())
     val table = document.getElementsByTag("tbody")[0]
     val rows = table.getElementsByTag("tr")
@@ -38,7 +40,7 @@ suspend fun CourseSystem.log(): List<CourseLog> {
             )
         }
     }
-    return logs
+    return@withContext logs
 }
 
 

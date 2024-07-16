@@ -28,7 +28,7 @@ suspend fun EduSystem.schoolStart(): LocalDate = withContext(Dispatchers.Default
     val table = document.getElementById("kbtable")!!
     val rows = table.getElementsByTag("tr")
 
-    LocalDate.parse(
+    return@withContext LocalDate.parse(
         rows[1].getElementsByTag("td")[2].attr("title").apply {
             ifBlank { error(getString(R.string.calendar_not_updated)) }
         },

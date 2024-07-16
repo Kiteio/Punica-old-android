@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.Preferences
 import org.kiteio.punica.R
+import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.ui.component.Image
@@ -52,7 +53,11 @@ fun PunicaTheme(
     content: @Composable () -> Unit
 ) {
     val preferences by Preferences.data.collectAsState()
-    val avatarUri by remember { derivedStateOf { preferences?.get(Keys.avatarUri)?.let { Uri.parse(it) } } }
+    val avatarUri by remember {
+        derivedStateOf {
+            preferences?.get(Keys.avatarUri)?.let { Uri.parse(it) }
+        }
+    }
     avatarPainter = rememberAsyncImagePainter(
         model = avatarUri,
         error = painterResource(id = R.drawable.punica),
@@ -100,9 +105,10 @@ private fun rememberBitmapTheme(
     var themeColor by remember { mutableStateOf(init) }
     LaunchedEffect(bitmap) {
         bitmap?.let {
-            withContext(Dispatchers.Default) {
-                Palette.from(bitmap.copy(Bitmap.Config.ARGB_8888, true)).generate().dominantSwatch?.apply {
-                    themeColor = Color(rgb)
+            catching {
+                withContext(Dispatchers.Default) {
+                    Palette.from(bitmap.copy(Bitmap.Config.ARGB_8888, true))
+                        .generate().dominantSwatch?.also { themeColor = Color(it.rgb) }
                 }
             }
         }

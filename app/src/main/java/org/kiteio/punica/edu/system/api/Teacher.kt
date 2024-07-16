@@ -4,6 +4,8 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 
@@ -14,38 +16,41 @@ import org.kiteio.punica.edu.system.EduSystem
  * @param pageIndex 页码
  * @return [TeacherList]
  */
-suspend fun EduSystem.teacherList(name: String, pageIndex: Int = 0): TeacherList {
-    val text = session.post(
-        route { TEACHER_LIST },
-        parameters {
-            append("jsxm", name)
-            append("pageIndex", if (pageIndex == 0) "" else (pageIndex + 1).toString())
-        }
-    ).bodyAsText()
+suspend fun EduSystem.teacherList(
+    name: String,
+    pageIndex: Int = 0
+) = withContext(Dispatchers.Default) {
+        val text = session.post(
+            route { TEACHER_LIST },
+            parameters {
+                append("jsxm", name)
+                append("pageIndex", if (pageIndex == 0) "" else (pageIndex + 1).toString())
+            }
+        ).bodyAsText()
 
-    val document = Ksoup.parse(text)
-    val table = document.getElementById("Form1")!!
-    val rows = table.getElementsByTag("tr")
+        val document = Ksoup.parse(text)
+        val table = document.getElementById("Form1")!!
+        val rows = table.getElementsByTag("tr")
 
-    // 总页数
-    val totalPages = Regex("\\d+").find(
-        table.getElementsByClass("Nsb_r_list_fy3").text()
-    )!!.value.toInt()
+        // 总页数
+        val totalPages = Regex("\\d+").find(
+            table.getElementsByClass("Nsb_r_list_fy3").text()
+        )!!.value.toInt()
 
-    val items = arrayListOf<TeacherItem>()
-    for (index in 1..<rows.size) {
-        val infos = rows[index].children()
-        items.add(
-            TeacherItem(
-                id = infos[1].text(),
-                name = infos[2].text(),
-                department = infos[3].text()
+        val items = arrayListOf<TeacherItem>()
+        for (index in 1..<rows.size) {
+            val infos = rows[index].children()
+            items.add(
+                TeacherItem(
+                    id = infos[1].text(),
+                    name = infos[2].text(),
+                    department = infos[3].text()
+                )
             )
-        )
-    }
+        }
 
-    return TeacherList(totalPages, items)
-}
+        return@withContext TeacherList(totalPages, items)
+    }
 
 
 /**
@@ -78,7 +83,7 @@ data class TeacherItem(
  * @param id 工号
  * @return [Teacher]
  */
-suspend fun EduSystem.teacher(id: String): Teacher {
+suspend fun EduSystem.teacher(id: String) = withContext(Dispatchers.Default) {
     val text = session.fetch(route { TEACHER }) {
         parameter("jg0101id", id)
     }.bodyAsText()
@@ -128,7 +133,7 @@ suspend fun EduSystem.teacher(id: String): Teacher {
         else ""
     }
 
-    return Teacher(
+    return@withContext Teacher(
         name = nameGender[2].text(),
         gender = nameGender[4].text(),
         politics = politicsNative[1].text(),

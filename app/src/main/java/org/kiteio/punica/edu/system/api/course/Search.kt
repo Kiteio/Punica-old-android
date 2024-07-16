@@ -5,6 +5,8 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Parameters
 import io.ktor.http.encodeURLParameter
 import io.ktor.http.parameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.edu.foundation.Campus
@@ -20,13 +22,16 @@ import java.time.DayOfWeek
  * @param count
  * @return [List]<[Course]>
  */
-suspend fun CourseSystem.list(sort: Unsearchable, pageIndex: Int = 0, count: Int = 15) = parse(
-    session.post(
-        route { courseListRoute(sort) },
-        form(pageIndex, count)
-    ).bodyAsText().json,
-    sort
-)
+suspend fun CourseSystem.list(
+    sort: Unsearchable,
+    pageIndex: Int = 0,
+    count: Int = 15
+) = withContext(Dispatchers.Default) {
+    parse(
+        session.post(route { courseListRoute(sort) }, form(pageIndex, count)).bodyAsText().json,
+        sort
+    )
+}
 
 
 /**
@@ -55,23 +60,25 @@ suspend fun CourseSystem.search(
     campus: Campus? = null,
     pageIndex: Int = 0,
     count: Int = 15
-) = parse(
-    session.post(
-        route { courseListRoute(sort) },
-        form(pageIndex, count)
-    ) {
-        parameter("kcxx", name.encodeURLParameter())
-        parameter("skls", teacher.encodeURLParameter())
-        parameter("skxq", dayOfWeek?.value ?: "")
-        parameter("skjc", section?.value ?: "")
-        parameter("sfym", emptyOnly)
-        parameter("sfct", filterConflicting)
-        if (sort is Sort.General) {
-            parameter("xq", campus?.id ?: "")  // 校区
-        }
-    }.bodyAsText().json,
-    sort
-)
+) = withContext(Dispatchers.Default) {
+    parse(
+        session.post(
+            route { courseListRoute(sort) },
+            form(pageIndex, count)
+        ) {
+            parameter("kcxx", name.encodeURLParameter())
+            parameter("skls", teacher.encodeURLParameter())
+            parameter("skxq", dayOfWeek?.value ?: "")
+            parameter("skjc", section?.value ?: "")
+            parameter("sfym", emptyOnly)
+            parameter("sfct", filterConflicting)
+            if (sort is Sort.General) {
+                parameter("xq", campus?.id ?: "")  // 校区
+            }
+        }.bodyAsText().json,
+        sort
+    )
+}
 
 
 /**

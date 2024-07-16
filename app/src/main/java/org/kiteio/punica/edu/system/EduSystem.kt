@@ -5,6 +5,8 @@ import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readBytes
 import io.ktor.http.parameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.candy.ProxiedAPI
 import org.kiteio.punica.candy.ProxiedAPIOwner
 import org.kiteio.punica.candy.route
@@ -35,9 +37,7 @@ class EduSystem private constructor(
      * 退出登录
      */
     suspend fun logout() {
-        session.fetch(
-            route { LOGOUT }
-        ) {
+        session.fetch(route { LOGOUT }) {
             parameter("amp;method: exit", "exit")
             parameter("amp;tktime", Date().time)
         }
@@ -92,7 +92,7 @@ class EduSystem private constructor(
             session: Session,
             proxied: Boolean,
             count: Int = 15
-        ): EduSystem =
+        ): EduSystem = withContext(Dispatchers.Default) {
             with(user) {
                 session.fetch(route(proxied) { BASE })
 
@@ -108,7 +108,7 @@ class EduSystem private constructor(
 
                 if (text.isEmpty()) {
                     // 登录成功
-                    EduSystem(this@with, session, proxied)
+                    return@withContext EduSystem(this@with, session, proxied)
                 } else {
                     val document = Ksoup.parse(text)
                     val title = document.title()
@@ -124,5 +124,6 @@ class EduSystem private constructor(
                     error(title)
                 }
             }
+        }
     }
 }

@@ -4,6 +4,8 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -11,7 +13,7 @@ import org.kiteio.punica.edu.system.EduSystem
  * @receiver [EduSystem]
  * @return [Progress]
  */
-suspend fun EduSystem.progress(): Progress {
+suspend fun EduSystem.progress() = withContext(Dispatchers.Default) {
     val text = session.post(
         route { PROGRESS },
         parameters { append("xdlx", "0") }
@@ -56,7 +58,7 @@ suspend fun EduSystem.progress(): Progress {
         )
     }
 
-    return Progress(name, progressTables)
+    return@withContext Progress(name, progressTables)
 }
 
 
