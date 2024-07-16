@@ -43,4 +43,17 @@ fun String.toColor() = Color(hexToInt(HexFormat.UpperCase))
  * @return [Color]
  */
 @Composable
-fun subduedContentColor(alpha: Float = 0.7f) = LocalContentColor.current.copy(alpha)
+fun subduedContentColor(alpha: Float = 0.7f) = LocalContentColor.current.copy(alpha).applyLocalAlpha()
+
+
+/**
+ * 遵循 [LocalContentColor] 的 alpha 值
+ * @receiver [Color]
+ * @return [Color]
+ */
+@Composable
+fun Color.applyLocalAlpha() = LocalContentColor.current.alpha.let { alpha ->
+    if (alpha != 1f) {
+        copy(alpha = alpha)
+    } else this
+}

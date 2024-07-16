@@ -84,7 +84,7 @@ private fun Call(
     onOpenInPhoneBook: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ElevatedCard(onClick = { }, modifier = modifier) {
+    ElevatedCard(onClick = {}, modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

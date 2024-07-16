@@ -103,4 +103,9 @@
     <string name="noting_to_evaluate">没有待评价项</string>
     <string name="evaluated">已评价%1$s</string>
     <string name="saved">已保存%1$s</string>
+
+    <string name="exam_plan_is_unavailable">暂无安排</string>
+    <string name="start">开始</string>
+    <string name="end">结束</string>
+    <string name="minutes">%1$d 分钟</string>
 </resources>

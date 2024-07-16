@@ -1,6 +1,5 @@
 package org.kiteio.punica.ui.screen.bottom
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -9,6 +8,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,9 +58,7 @@ private fun Module(route: Route, onClick: () -> Unit, modifier: Modifier = Modif
             Card(onClick = onClick) {
                 Icon(imageVector = route.icon, modifier = Modifier.padding(dp4()))
             }
-            Column {
-                Title(text = getString(route.nameResId))
-            }
+            Title(text = getString(route.nameResId), style = MaterialTheme.typography.titleMedium)
         }
     }
 }

@@ -30,6 +30,7 @@ val FilesDir: File get() = AppContext.filesDir
 private val Context.Preferences by preferencesDataStore("preferences")
 private val Context.Users by preferencesDataStore("users")
 private val Context.Timetables by preferencesDataStore("timetables")
+private val Context.ExamPlans by preferencesDataStore("examPlans")
 
 /** 首选项（设置） */
 val Preferences get() = AppContext.Preferences
@@ -39,6 +40,9 @@ val Users get() = AppContext.Users
 
 /** 课表 */
 val Timetables get() = AppContext.Timetables
+
+/** 考试安排 */
+val ExamPlans get() = AppContext.ExamPlans
 
 
 class MainActivity : ComponentActivity() {

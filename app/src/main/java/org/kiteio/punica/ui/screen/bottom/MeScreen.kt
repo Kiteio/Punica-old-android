@@ -202,7 +202,8 @@ private fun UserCard(
                     Spacer(modifier = Modifier.width(dp4(4)))
                     Column {
                         Title(
-                            text = viewModel.eduSystem?.name ?: getString(R.string.click_to_login)
+                            text = viewModel.eduSystem?.name ?: getString(R.string.click_to_login),
+                            style = MaterialTheme.typography.titleMedium
                         )
                         SubduedText(text = getString(R.string.punica_poem))
                     }
