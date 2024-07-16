@@ -4,6 +4,8 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -38,8 +40,12 @@ suspend fun EduSystem.levelReport() = withContext(Dispatchers.Default) {
  * 等级成绩
  * @property username 学号
  * @property items
+ * @property id [username]
  */
-class LevelReport(val username: String, val items: List<LevelReportItem>)
+@Serializable
+class LevelReport(val username: String, val items: List<LevelReportItem>) : Identified() {
+    override val id = username
+}
 
 
 /**
@@ -48,6 +54,7 @@ class LevelReport(val username: String, val items: List<LevelReportItem>)
  * @property time 时间
  * @property score 成绩
  */
+@Serializable
 data class LevelReportItem(
     val name: String,
     val time: String,
