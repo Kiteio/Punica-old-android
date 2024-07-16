@@ -29,7 +29,7 @@ import java.time.temporal.ChronoUnit
 import kotlin.math.floor
 
 /**
- * [remember] 来自本地或远端的数据，并且自动将远端数据保存至 [DataStore]
+ * [remember] 来自本地或远端的 [EduSystem] 数据，并且自动将远端数据保存至 [DataStore]
  * @receiver [DataStore]<[Preferences]>
  * @param semester 对于区分学期的数据，该参数是必要的
  * @param fromRemote
@@ -62,6 +62,34 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.remembe
 }
 
 
+/**
+ * [remember] 来自远端的 [EduSystem] 列表数据
+ * @param fromRemote
+ * @return [SnapshotStateList]<[T]>
+ */
+@Composable
+fun <T> rememberRemoteList(fromRemote: suspend EduSystem.() -> List<T>): SnapshotStateList<T> {
+    val viewModel = LocalViewModel.current
+    val list = remember { mutableStateListOf<T>() }
+
+    LaunchedEffect(key1 = viewModel.eduSystem) {
+        launchCatching {
+            list.clear()
+            viewModel.eduSystem?.run { fromRemote() }?.let {
+                list.addAll(it)
+            }
+        }
+    }
+
+    return list
+}
+
+
+/**
+ * [remember] 本地 [Identified] 列表
+ * @receiver [DataStore]<[Preferences]>
+ * @return [SnapshotStateList]<[T]>
+ */
 @Composable
 inline fun <reified T : @Serializable Identified> DataStore<Preferences>.rememberIdentifiedList(): SnapshotStateList<T> {
     val preferences by data.collectAsState()

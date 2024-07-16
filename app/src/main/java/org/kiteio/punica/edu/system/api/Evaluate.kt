@@ -57,7 +57,7 @@ suspend fun EduSystem.evaluateList(): List<EvaluateItem> {
  * 评教
  * @receiver [EduSystem]
  * @param evaluateItem
- * @param submit 是否提交
+ * @param submit true 提交  false 保存
  * @param isNegative 是否差评
  */
 suspend fun EduSystem.evaluate(evaluateItem: EvaluateItem, submit: Boolean, isNegative: Boolean) {
