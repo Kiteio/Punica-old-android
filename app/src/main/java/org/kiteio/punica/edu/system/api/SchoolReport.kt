@@ -3,6 +3,10 @@ package org.kiteio.punica.edu.system.api
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 
@@ -11,7 +15,7 @@ import org.kiteio.punica.edu.system.EduSystem
  * @receiver [EduSystem]
  * @return [SchoolReport]
  */
-suspend fun EduSystem.schoolReport(): SchoolReport {
+suspend fun EduSystem.schoolReport(): SchoolReport = withContext(Dispatchers.Default) {
     val text = session.post(
         route { SCHOOL_REPORT },
         parameters {
@@ -65,7 +69,7 @@ suspend fun EduSystem.schoolReport(): SchoolReport {
         )
     }
 
-    return SchoolReport(name, evaluation, items)
+    return@withContext SchoolReport(name, evaluation, items)
 }
 
 
@@ -74,12 +78,16 @@ suspend fun EduSystem.schoolReport(): SchoolReport {
  * @property username 学号
  * @property evaluation 评估
  * @property items
+ * @property id [username]
  */
+@Serializable
 class SchoolReport(
     val username: String,
     val evaluation: String,
     val items: List<SchoolReportItem>
-)
+) : Identified() {
+    override val id = username
+}
 
 
 /**
@@ -98,6 +106,7 @@ class SchoolReport(
  * @property sort 课程性质
  * @property examSort 考试性质
  */
+@Serializable
 data class SchoolReportItem(
     val semester: Semester,
     val id: String,

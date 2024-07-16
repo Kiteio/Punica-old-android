@@ -45,7 +45,7 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.remembe
     val dataPreferences by data.collectAsState()
     var value by remember { mutableStateOf<T?>(null) }
 
-    LaunchedEffect(key1 = preferences, key2 = semester) {
+    LaunchedEffect(key1 = preferences, key2 = dataPreferences, key3 = semester) {
         launchCatching {
             // 存储非空 value
             value = viewModel.eduSystem?.run {

@@ -1,19 +1,257 @@
 package org.kiteio.punica.ui.screen.module
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.MergeType
+import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
+import androidx.compose.material.icons.automirrored.rounded.Sort
+import androidx.compose.material.icons.rounded.AddChart
+import androidx.compose.material.icons.rounded.AllOut
+import androidx.compose.material.icons.rounded.Explicit
+import androidx.compose.material.icons.rounded.HourglassBottom
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Numbers
+import androidx.compose.material.icons.rounded.Score
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Timelapse
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import org.kiteio.punica.R
+import org.kiteio.punica.SchoolReports
+import org.kiteio.punica.edu.system.api.SchoolReportItem
+import org.kiteio.punica.edu.system.api.schoolReport
 import org.kiteio.punica.getString
+import org.kiteio.punica.ui.component.BottomSheet
+import org.kiteio.punica.ui.component.Dialog
+import org.kiteio.punica.ui.component.DialogVisibility
+import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
+import org.kiteio.punica.ui.component.SubduedText
+import org.kiteio.punica.ui.component.TabPager
+import org.kiteio.punica.ui.component.Text
+import org.kiteio.punica.ui.component.Title
+import org.kiteio.punica.ui.component.rememberTabPagerState
+import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
+import org.kiteio.punica.ui.rememberIdentified
 
 /**
  * 课程成绩
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SchoolReportScreen() {
-    ScaffoldBox(topBar = { NavBackTopAppBar(route = Route.Module.SchoolReport) }) {
-        Text(text = getString(R.string.school_report))
+    val schoolReport = SchoolReports.rememberIdentified { schoolReport() }
+    var evaluationDialogVisible by remember { mutableStateOf(false) }
+    val tabPagerState = rememberTabPagerState(R.string.newest, R.string.all)
+    var detailBottomSheetVisible by remember { mutableStateOf(false) }
+    var visibleSchoolReportItem by remember { mutableStateOf<SchoolReportItem?>(null) }
+
+    ScaffoldBox(
+        topBar = {
+            NavBackTopAppBar(
+                route = Route.Module.SchoolReport,
+                shadowElevation = 0.dp,
+                actions = {
+                    IconButton(onClick = { evaluationDialogVisible = true }) {
+                        Icon(imageVector = Icons.Rounded.Info)
+                    }
+                }
+            )
+        }
+    ) {
+        schoolReport?.run {
+            TabPager(state = tabPagerState, tabContent = { Text(text = getString(it)) }) { page ->
+                val schoolReportItems = when (page) {
+                    0 -> {
+                        val semester = items.firstOrNull()?.semester
+                        items.filter { it.semester == semester }
+                    }
+
+                    else -> items
+                }
+
+                LazyColumn(contentPadding = PaddingValues(dp4(2))) {
+                    items(schoolReportItems) {
+                        SchoolReportItem(
+                            schoolReportItem = it,
+                            onClick = {
+                                detailBottomSheetVisible = true
+                                visibleSchoolReportItem = it
+                            },
+                            modifier = Modifier.padding(dp4(2))
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    EvaluationDialog(
+        visible = evaluationDialogVisible,
+        onDismiss = { evaluationDialogVisible = false },
+        evaluation = schoolReport?.evaluation
+    )
+
+    DetailBottomSheet(
+        visible = detailBottomSheetVisible,
+        onDismiss = { detailBottomSheetVisible = false },
+        schoolReportItem = visibleSchoolReportItem
+    )
+}
+
+
+/**
+ * 课程成绩项
+ * @param schoolReportItem
+ * @param onClick
+ * @param modifier
+ */
+@Composable
+private fun SchoolReportItem(
+    schoolReportItem: SchoolReportItem,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) = with(schoolReportItem) {
+    ElevatedCard(onClick = onClick, modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dp4(4)),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Title(text = name)
+                Spacer(modifier = Modifier.height(dp4()))
+                SubduedText(text = id)
+                Spacer(modifier = Modifier.height(dp4()))
+                SubduedText(text = "$semester")
+
+                // 无需翻译
+                if (examSort != "正常考试") SubduedText(text = examSort)
+            }
+            Spacer(modifier = Modifier.width(dp4(4)))
+            Title(text = score)
+        }
+    }
+}
+
+
+/**
+ * 系统评估信息
+ * @param visible
+ * @param onDismiss
+ * @param evaluation
+ */
+@Composable
+private fun EvaluationDialog(visible: Boolean, onDismiss: () -> Unit, evaluation: String?) {
+    DialogVisibility(visible = visible) {
+        Dialog(
+            text = {
+                evaluation?.let {
+                    Text(text = it)
+                }
+            },
+            onConfirm = {},
+            onDismiss = onDismiss,
+            confirmButtonText = { Text(text = getString(R.string.close)) }
+        )
+    }
+}
+
+
+/**
+ * 课程成绩详情
+ * @param visible
+ * @param onDismiss
+ * @param schoolReportItem
+ */
+@Composable
+private fun DetailBottomSheet(
+    visible: Boolean,
+    onDismiss: () -> Unit,
+    schoolReportItem: SchoolReportItem?
+) {
+    BottomSheet(visible = visible, onDismiss = onDismiss, skipPartiallyExpanded = true) {
+        schoolReportItem?.run {
+            Column(modifier = Modifier.padding(dp4(4))) {
+                Title(text = name)
+                Spacer(modifier = Modifier.height(dp4()))
+                SubduedText(text = "$semester")
+                Spacer(modifier = Modifier.height(dp4(4)))
+
+                Text(text = id, leadingIcon = Icons.Rounded.Numbers, getString(R.string.id))
+                Text(
+                    text = sort,
+                    leadingIcon = Icons.AutoMirrored.Rounded.Sort,
+                    getString(R.string.sort)
+                )
+                Text(
+                    text = type,
+                    leadingIcon = Icons.AutoMirrored.Rounded.MergeType,
+                    getString(R.string.type)
+                )
+                Text(text = point, leadingIcon = Icons.Rounded.Star, getString(R.string.point))
+                Text(text = score, leadingIcon = Icons.Rounded.Score, getString(R.string.score))
+                Spacer(modifier = Modifier.height(dp4(4)))
+
+                Text(
+                    text = usualScore,
+                    leadingIcon = Icons.Rounded.Timelapse,
+                    getString(R.string.usual)
+                )
+                Text(
+                    text = experimentScore,
+                    leadingIcon = Icons.Rounded.Explicit,
+                    getString(R.string.experiment)
+                )
+                Text(
+                    text = examScore,
+                    leadingIcon = Icons.AutoMirrored.Rounded.ReceiptLong,
+                    getString(R.string.exam)
+                )
+                Spacer(modifier = Modifier.height(dp4(4)))
+
+                Text(
+                    text = classHours,
+                    leadingIcon = Icons.Rounded.HourglassBottom,
+                    getString(R.string.class_hours)
+                )
+                Text(
+                    text = examMode,
+                    leadingIcon = Icons.Rounded.AddChart,
+                    getString(R.string.exam_mode)
+                )
+                Text(
+                    text = examSort,
+                    leadingIcon = Icons.Rounded.AllOut,
+                    getString(R.string.exam_sort)
+                )
+            }
+        }
     }
 }
