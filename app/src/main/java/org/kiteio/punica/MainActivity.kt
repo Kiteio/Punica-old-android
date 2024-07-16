@@ -31,6 +31,7 @@ private val Context.Preferences by preferencesDataStore("preferences")
 private val Context.Users by preferencesDataStore("users")
 private val Context.Timetables by preferencesDataStore("timetables")
 private val Context.ExamPlans by preferencesDataStore("examPlans")
+private val Context.SchoolReports by preferencesDataStore("schoolReports")
 
 /** 首选项（设置） */
 val Preferences get() = AppContext.Preferences
@@ -43,6 +44,9 @@ val Timetables get() = AppContext.Timetables
 
 /** 考试安排 */
 val ExamPlans get() = AppContext.ExamPlans
+
+/** 课程成绩 */
+val SchoolReports get() = AppContext.SchoolReports
 
 
 class MainActivity : ComponentActivity() {

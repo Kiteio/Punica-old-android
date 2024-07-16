@@ -108,4 +108,18 @@
     <string name="start">开始</string>
     <string name="end">结束</string>
     <string name="minutes">%1$d 分钟</string>
+
+    <string name="newest">最新</string>
+    <string name="all">全部</string>
+    <string name="id">编号</string>
+    <string name="sort">属性</string>
+    <string name="type">性质</string>
+    <string name="point">学分</string>
+    <string name="score">成绩</string>
+    <string name="usual">平时</string>
+    <string name="experiment">实验</string>
+    <string name="exam">期末</string>
+    <string name="class_hours">学时</string>
+    <string name="exam_mode">考核方式</string>
+    <string name="exam_sort">考试性质</string>
 </resources>
