@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -50,7 +51,7 @@ fun ScaffoldColumn(
         contentWindowInsets = contentWindowInsets
     ) { innerPadding ->
         Column(
-            modifier = innerModifier.padding(innerPadding),
+            modifier = innerModifier.fillMaxSize().padding(innerPadding),
             verticalArrangement = verticalArrangement,
             horizontalAlignment = horizontalAlignment,
             content = content
@@ -89,7 +90,7 @@ fun ScaffoldBox(
         contentWindowInsets = contentWindowInsets
     ) { innerPadding ->
         Box(
-            modifier = innerModifier.padding(innerPadding),
+            modifier = innerModifier.fillMaxSize().padding(innerPadding),
             contentAlignment = contentAlignment,
             content = content
         )

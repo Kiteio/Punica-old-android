@@ -62,6 +62,18 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.remembe
 }
 
 
+@Composable
+fun <T> rememberRemote(fromRemote: suspend () -> T): T? {
+    var value by remember { mutableStateOf<T?>(null) }
+
+    LaunchedEffect(key1 = Unit) {
+        value = catching<T> { fromRemote() }
+    }
+
+    return value
+}
+
+
 /**
  * [remember] 来自远端的 [EduSystem] 列表数据
  * @param fromRemote

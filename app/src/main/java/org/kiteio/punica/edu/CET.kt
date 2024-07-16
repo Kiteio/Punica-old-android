@@ -14,6 +14,7 @@ import org.kiteio.punica.request.fetch
 object CET : API {
     override val root = "https://resource.neea.edu.cn"
     private const val TIME = "/project/CET/IndexEdu.css"  // 考试时间
+    const val TIME_PDF = "/project/CET/News/TestDataPlan-CET.pdf"
 
 
     /**
