@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.kiteio.punica.ui.applyLocalAlpha
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.subduedContentColor
 
@@ -23,13 +25,18 @@ import org.kiteio.punica.ui.subduedContentColor
  * 标题
  * @param text
  * @param modifier
+ * @param style
  */
 @Composable
-fun Title(text: String, modifier: Modifier = Modifier) {
+fun Title(
+    text: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp)
+) {
     Text(
         text = text,
-        color = MaterialTheme.colorScheme.primary,
-        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.primary.applyLocalAlpha(),
+        style = style,
         modifier = modifier
     )
 }
@@ -78,14 +85,14 @@ fun Text(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = leadingIcon,
-            tint = color.takeOrElse { subduedContentColor() },
+            tint = color.takeOrElse { MaterialTheme.colorScheme.secondary.applyLocalAlpha() },
             modifier = Modifier.size(
                 LocalTextStyle.current.fontSize.value.dp
             )
         )
         Spacer(modifier = Modifier.width(dp4()))
         leadingText?.run {
-            Text(text = "$leadingText  ")
+            Text(text = "$leadingText  ", color = MaterialTheme.colorScheme.secondary.applyLocalAlpha())
         }
         Text(
             text = text,

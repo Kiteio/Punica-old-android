@@ -3,8 +3,13 @@ package org.kiteio.punica.edu.system.api
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
+import kotlinx.serialization.Serializable
+import org.kiteio.punica.R
+import org.kiteio.punica.datastore.Identified
+import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.EduSystem.Companion.semester
+import org.kiteio.punica.getString
 
 /**
  * 考试安排
@@ -21,6 +26,8 @@ suspend fun EduSystem.examPlan(): ExamPlan {
     val table = document.getElementById("dataList")!!
     val rows = table.getElementsByTag("tr")
 
+    if (rows.size == 1) error(getString(R.string.exam_plan_is_unavailable))
+
     val items = arrayListOf<ExamPlanItem>()
     for (index in 1..<rows.size) {
         val infos = rows[index].getElementsByTag("td")
@@ -36,19 +43,26 @@ suspend fun EduSystem.examPlan(): ExamPlan {
         )
     }
 
-    return ExamPlan(name, items)
+    return ExamPlan(name, semester, items)
 }
 
 
 /**
  * 考试安排
  * @property username 学号
+ * @property semester 学期
  * @property items
+ * @property id [username] + [semester]
  */
+@Serializable
 class ExamPlan(
     val username: String,
+    val semester: Semester,
     val items: List<ExamPlanItem>
-)
+) : Identified() {
+    override val id = username + semester
+
+}
 
 
 /**
@@ -59,6 +73,7 @@ class ExamPlan(
  * @property campus 校区
  * @property area 地点
  */
+@Serializable
 data class ExamPlanItem(
     val id: String,
     val name: String,
