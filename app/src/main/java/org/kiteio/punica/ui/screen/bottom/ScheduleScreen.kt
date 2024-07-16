@@ -154,7 +154,8 @@ private fun TopAppBar(
     var moreDropdownMenuExpanded by remember { mutableStateOf(false) }
 
     TopAppBar(
-        title = { Text(text = getString(R.string.week_count, week)) }
+        title = { Text(text = getString(R.string.week_count, week)) },
+        shadowElevation = 0.dp
     ) {
         // 学期
         TextButton(onClick = { semesterDropdownMenuExpanded = true }) {
@@ -256,43 +257,45 @@ private fun Timetable(
         LazyColumn {
             // 顶部周次和星期几
             stickyHeader {
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(dp4(12))
-                        .background(MaterialTheme.colorScheme.surface)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width(timeBarWidth)
-                            .fillMaxHeight(),
-                        contentAlignment = Alignment.Center
+                Surface(shadowElevation = 0.8.dp) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(dp4(12))
+                            .background(MaterialTheme.colorScheme.surface)
                     ) {
-                        Text(text = getString(R.string.week_number, offsetWeek))
-                    }
-                    daysOfWeek.forEachIndexed { index, item ->
-                        Column(
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth(1f / (7 - index))
+                                .width(timeBarWidth)
                                 .fillMaxHeight(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+                            contentAlignment = Alignment.Center
                         ) {
-                            val date = mondayDate.plusDays(index.toLong())
-
-                            CompositionLocalProvider(
-                                value = LocalContentColor provides
-                                        if (date == now) MaterialTheme.colorScheme.primary
-                                        else LocalContentColor.current
+                            Text(text = getString(R.string.week_number, offsetWeek))
+                        }
+                        daysOfWeek.forEachIndexed { index, item ->
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth(1f / (7 - index))
+                                    .fillMaxHeight(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
                             ) {
-                                Text(
-                                    text = item,
-                                    fontWeight = FontWeight.Black.takeIf { date == now }
-                                )
-                                PlaidText(
-                                    text = "${date.month.value}-${date.dayOfMonth}",
-                                    color = subduedContentColor()
-                                )
+                                val date = mondayDate.plusDays(index.toLong())
+
+                                CompositionLocalProvider(
+                                    value = LocalContentColor provides
+                                            if (date == now) MaterialTheme.colorScheme.primary
+                                            else LocalContentColor.current
+                                ) {
+                                    Text(
+                                        text = item,
+                                        fontWeight = FontWeight.Black.takeIf { date == now }
+                                    )
+                                    PlaidText(
+                                        text = "${date.month.value}-${date.dayOfMonth}",
+                                        color = subduedContentColor()
+                                    )
+                                }
                             }
                         }
                     }
@@ -332,7 +335,7 @@ private fun TimeBar(width: Dp, itemHeight: Dp) {
         remember(campusId) { Schedule.getById(campusId) }.items.forEachIndexed { index, section ->
             Surface(
                 modifier = Modifier
-                    .border(1.dp, MaterialTheme.colorScheme.surfaceVariant)
+                    .border(0.5.dp, MaterialTheme.colorScheme.surfaceVariant)
                     .clickable {
                         coroutineScope.launchCatching {
                             Preferences.edit {
