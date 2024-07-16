@@ -2,6 +2,8 @@ package org.kiteio.punica.edu.system.api
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 
@@ -10,7 +12,7 @@ import org.kiteio.punica.edu.system.EduSystem
  * @receiver [EduSystem]
  * @return [Plan]
  */
-suspend fun EduSystem.plan(): Plan {
+suspend fun EduSystem.plan() = withContext(Dispatchers.Default) {
     val text = session.fetch(route { PLAN }).bodyAsText()
 
     val document = Ksoup.parse(text)
@@ -35,7 +37,7 @@ suspend fun EduSystem.plan(): Plan {
         )
     }
 
-    return Plan(name, items)
+    return@withContext Plan(name, items)
 }
 
 

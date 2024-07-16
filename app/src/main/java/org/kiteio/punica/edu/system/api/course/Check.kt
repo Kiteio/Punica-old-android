@@ -3,6 +3,8 @@ package org.kiteio.punica.edu.system.api.course
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.edu.system.CourseSystem
 import java.util.Date
@@ -13,8 +15,9 @@ import java.util.Date
  * @param operateId
  * @return [Boolean]
  */
-suspend fun CourseSystem.isSameCampus(operateId: String) = session.fetch(route { CAMPUS_CHECK }) { parameters(operateId) }.bodyAsText().json.run {
-    getInt("status") == 0
+suspend fun CourseSystem.isSameCampus(operateId: String) = withContext(Dispatchers.Default) {
+    session.fetch(route { CAMPUS_CHECK }) { parameters(operateId) }.bodyAsText()
+        .json.run { getInt("status") == 0 }
 }
 
 
@@ -24,10 +27,9 @@ suspend fun CourseSystem.isSameCampus(operateId: String) = session.fetch(route {
  * @param operateId
  * @return [Boolean]
  */
-suspend fun CourseSystem.isPassed(operateId: String) = session.fetch(
-    route { PASSED_CHECK }
-) { parameters(operateId) }.bodyAsText().json.run {
-    getInt("status") != 0
+suspend fun CourseSystem.isPassed(operateId: String) = withContext(Dispatchers.Default) {
+    session.fetch(route { PASSED_CHECK }) { parameters(operateId) }.bodyAsText()
+        .json.run { getInt("status") != 0 }
 }
 
 

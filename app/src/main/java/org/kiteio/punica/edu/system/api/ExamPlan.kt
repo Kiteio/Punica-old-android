@@ -3,6 +3,8 @@ package org.kiteio.punica.edu.system.api
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.R
 import org.kiteio.punica.datastore.Identified
@@ -16,7 +18,7 @@ import org.kiteio.punica.getString
  * @receiver [EduSystem]
  * @return [ExamPlan]
  */
-suspend fun EduSystem.examPlan(): ExamPlan {
+suspend fun EduSystem.examPlan() = withContext(Dispatchers.Default) {
     val text = session.post(
         route { EXAM_PLAN },
         parameters { append("xnxqid", semester.toString()) }
@@ -43,7 +45,7 @@ suspend fun EduSystem.examPlan(): ExamPlan {
         )
     }
 
-    return ExamPlan(name, semester, items)
+    return@withContext ExamPlan(name, semester, items)
 }
 
 

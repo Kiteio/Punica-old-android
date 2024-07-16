@@ -2,14 +2,15 @@ package org.kiteio.punica.edu.system.api.course
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.edu.system.CourseSystem
-import kotlin.collections.List
 
 /**
  * 学分总览
  * @return [Overview]
  */
-suspend fun CourseSystem.overview(): Overview {
+suspend fun CourseSystem.overview() = withContext(Dispatchers.Default) {
     val document = Ksoup.parse(session.fetch(route { OVERVIEW }).bodyAsText())
     val table = document.getElementsByTag("table")[0]
     val rows = table.getElementsByTag("tr")
@@ -24,7 +25,7 @@ suspend fun CourseSystem.overview(): Overview {
         pointInfos.add(PointInfo(header[index].text(), have[index].text(), limit[index].text()))
     }
 
-    return Overview(infos, pointInfos)
+    return@withContext Overview(infos, pointInfos)
 }
 
 

@@ -2,6 +2,8 @@ package org.kiteio.punica.edu.system.api
 
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -9,7 +11,7 @@ import org.kiteio.punica.edu.system.EduSystem
  * @receiver [EduSystem]
  * @return [LevelReport]
  */
-suspend fun EduSystem.levelReport(): LevelReport {
+suspend fun EduSystem.levelReport() = withContext(Dispatchers.Default) {
     val text = session.fetch(route { LEVEL_REPORT }).bodyAsText()
 
     val document = Ksoup.parse(text)
@@ -28,7 +30,7 @@ suspend fun EduSystem.levelReport(): LevelReport {
         )
     }
 
-    return LevelReport(name, items)
+    return@withContext LevelReport(name, items)
 }
 
 

@@ -7,6 +7,8 @@ import io.ktor.http.Cookie
 import io.ktor.http.HttpHeaders
 import io.ktor.http.parameters
 import io.ktor.utils.io.core.toByteArray
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.candy.AgentAPI
 import org.kiteio.punica.candy.ProxiedAPI
 import org.kiteio.punica.candy.json
@@ -62,7 +64,11 @@ object WebVPN : AgentAPI {
      * @param cookies Cookie
      * @return [WebVPN]
      */
-    suspend fun login(name: String, pwd: String, cookies: MutableSet<Cookie>) {
+    suspend fun login(
+        name: String,
+        pwd: String,
+        cookies: MutableSet<Cookie>
+    ) = withContext(Dispatchers.Default) {
         val session = Session(cookies).apply { fetch(route { COOKIE }) }
 
         val text = session.fetch(route { LOGIN }) {
@@ -71,7 +77,7 @@ object WebVPN : AgentAPI {
 
         val document = Ksoup.parse(text)
         // 已登录
-        if (document.title() == "资源导航登录") return
+        if (document.title() == "资源导航登录") return@withContext
 
         val execution = document.getElementById("execution")!!.attr("value")
         val key = document.getElementById("pwdEncryptSalt")!!.attr("value")

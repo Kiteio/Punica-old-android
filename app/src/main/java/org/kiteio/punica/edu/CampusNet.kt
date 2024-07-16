@@ -3,6 +3,8 @@ package org.kiteio.punica.edu
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import org.kiteio.punica.candy.API
 import org.kiteio.punica.candy.catching
@@ -34,7 +36,7 @@ object CampusNet : API {
      * @param pwd 校园网密码
      * @param ip ip
      */
-    suspend fun login(name: String, pwd: String, ip: String) {
+    suspend fun login(name: String, pwd: String, ip: String) = withContext(Dispatchers.Default) {
         val json = fetch(route { LOGIN }) {
             parameter("callback", CALLBACK)
             parameter("user_account", ",0,$name")
@@ -44,7 +46,7 @@ object CampusNet : API {
 
         if (json.getInt("result") != 1) {
             catching({ error(json.getString("msg")) }) {
-                if (ip == status().getString("v4ip")) return
+                if (ip == status().getString("v4ip")) return@withContext
             }
         }
     }
@@ -54,9 +56,8 @@ object CampusNet : API {
      * 状态
      * @return [JSONObject]
      */
-    private suspend fun status() = fetch(route { STATUS }) {
-        parameter("callback", CALLBACK)
-    }.jsonString().json
+    private suspend fun status() =
+        fetch(route { STATUS }) { parameter("callback", CALLBACK) }.jsonString().json
 
 
     /**
@@ -64,8 +65,9 @@ object CampusNet : API {
      * @receiver [HttpResponse]
      * @return [String]
      */
-    private suspend fun HttpResponse.jsonString() =
+    private suspend fun HttpResponse.jsonString() = withContext(Dispatchers.Default) {
         bodyAsText().trim().run { substring(CALLBACK.length + 1, length - 1) }
+    }
 
 
     /**

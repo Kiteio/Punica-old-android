@@ -17,7 +17,7 @@ import java.io.File
  * @receiver [ByteArray]
  * @return [String]
  */
-suspend fun ByteArray.text(): String = withContext(Dispatchers.Default) {
+suspend fun ByteArray.text() = withContext(Dispatchers.Default) {
     with(TessBaseAPI()) {
         val filesDir = FilesDir.absolutePath
         val fileDir = "$filesDir/tessdata/"
@@ -57,7 +57,7 @@ suspend fun ByteArray.text(): String = withContext(Dispatchers.Default) {
             setImage(this@apply)
         }
 
-        utF8Text.filter { it.isLetterOrDigit() }.also { recycle() }
+        return@withContext utF8Text.filter { it.isLetterOrDigit() }.also { recycle() }
     }
 }
 

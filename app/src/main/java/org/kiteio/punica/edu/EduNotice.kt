@@ -35,7 +35,7 @@ object EduNotice : API {
      * @param index
      * @return [List]<[NoticeItem]>
      */
-    suspend fun list(index: Int): List<NoticeItem> = withContext(Dispatchers.Default) {
+    suspend fun list(index: Int) = withContext(Dispatchers.Default) {
         val response = fetch(route { listRoute(index) })
 
         if (index == 10) Log.e(response.status)
@@ -62,7 +62,7 @@ object EduNotice : API {
             }
         }
 
-        items
+        return@withContext items
     }
 
 
@@ -79,7 +79,7 @@ object EduNotice : API {
      * @param noticeItem
      * @return [String]
      */
-    suspend fun notice(noticeItem: NoticeItem): Notice = withContext(Dispatchers.Default) {
+    suspend fun notice(noticeItem: NoticeItem) = withContext(Dispatchers.Default) {
         val text = fetch(noticeItem.url).bodyAsText()
 
         val document = Ksoup.parse(text)
@@ -124,7 +124,7 @@ object EduNotice : API {
             }
         }
 
-        Notice(noticeItem.url, markdown = markdown)
+        return@withContext Notice(noticeItem.url, markdown = markdown)
     }
 
 

@@ -7,6 +7,8 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Cookie
 import io.ktor.http.parameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import org.kiteio.punica.candy.ProxiedAPI
@@ -34,7 +36,7 @@ class SecondClass private constructor(
      * 成绩单
      * @return [SecondClassReport]
      */
-    suspend fun report(): SecondClassReport {
+    suspend fun report() = withContext(Dispatchers.Default) {
         val data = session.fetch(route { REPORT }) {
             parameter("para", "{'userId':$id}")
             token()
@@ -51,7 +53,7 @@ class SecondClass private constructor(
             )
         }
 
-        return SecondClassReport(name, items)
+        return@withContext SecondClassReport(name, items)
     }
 
 
@@ -59,7 +61,7 @@ class SecondClass private constructor(
      * 成绩单日志
      * @return [List]<[SecondClassLog]>
      */
-    suspend fun log(): List<SecondClassLog> {
+    suspend fun log() = withContext(Dispatchers.Default) {
         val data = session.fetch(route { LOG }) {
             parameter("para", "{'sourceType':'','xueqiId':'','classId':''}")
             token()
@@ -78,7 +80,7 @@ class SecondClass private constructor(
             )
         }
 
-        return items
+        return@withContext items
     }
 
 
@@ -86,7 +88,7 @@ class SecondClass private constructor(
      * 活动列表
      * @return [List]<[SecondClassActivityItem]>
      */
-    suspend fun activities(): List<SecondClassActivityItem> {
+    suspend fun activities() = withContext(Dispatchers.Default) {
         val list = session.fetch(route { ACTIVITIES }) {
             parameter("para", "{'cur':1,'size':10000}")
             token()
@@ -109,7 +111,7 @@ class SecondClass private constructor(
             )
         }
 
-        return items
+        return@withContext items
     }
 
 
@@ -118,30 +120,32 @@ class SecondClass private constructor(
      * @param id
      * @return [SecondClassActivity]
      */
-    suspend fun activity(id: String) = session.fetch(route { ACTIVITY_INFO }) {
-        parameter("para", "{'activityId':'$id'}")
-        token()
-    }.jsonData().run {
-        SecondClassActivity(
-            name = getString("name"),
-            desc = getString("introduce"),
-            sort = getString("className"),
-            score = getDouble("hours"),
-            area = getString("pitchAddress"),
-            deadline = getString("senrollEndTime"),
-            picture = getString("haibaoUrl"),
-            organization = getString("zhubanName"),
-            owner = getString("adminName"),
-            phoneNumber = getString("adminContact"),
-            teacher = getString("teacherName"),
-            trainingHours = getInt("classHours"),
-            start = getString("startTime"),
-            end = getString("endTime"),
-            submit = getInt("subJob") == 1,
-            maxNum = getInt("peopleLimit"),
-            num = getInt("peopleCount"),
-            type = getString("typeName")
-        )
+    suspend fun activity(id: String) = withContext(Dispatchers.Default) {
+        session.fetch(route { ACTIVITY_INFO }) {
+            parameter("para", "{'activityId':'$id'}")
+            token()
+        }.jsonData().run {
+            SecondClassActivity(
+                name = getString("name"),
+                desc = getString("introduce"),
+                sort = getString("className"),
+                score = getDouble("hours"),
+                area = getString("pitchAddress"),
+                deadline = getString("senrollEndTime"),
+                picture = getString("haibaoUrl"),
+                organization = getString("zhubanName"),
+                owner = getString("adminName"),
+                phoneNumber = getString("adminContact"),
+                teacher = getString("teacherName"),
+                trainingHours = getInt("classHours"),
+                start = getString("startTime"),
+                end = getString("endTime"),
+                submit = getInt("subJob") == 1,
+                maxNum = getInt("peopleLimit"),
+                num = getInt("peopleCount"),
+                type = getString("typeName")
+            )
+        }
     }
 
 
@@ -175,22 +179,24 @@ class SecondClass private constructor(
             pwd: String,
             cookies: MutableSet<Cookie>,
             proxied: Boolean
-        ) = Session(cookies).run {
-            val response = post(
-                route(proxied) { LOGIN },
-                parameters {
-                    append(
-                        "para",
-                        "{'school':10018,'account':'${name}','password':'${pwd.ifBlank { name }}'}"
-                    )
-                }
-            )
+        ) = withContext(Dispatchers.Default) {
+            Session(cookies).run {
+                val response = post(
+                    route(proxied) { LOGIN },
+                    parameters {
+                        append(
+                            "para",
+                            "{'school':10018,'account':'${name}','password':'${pwd.ifBlank { name }}'}"
+                        )
+                    }
+                )
 
-            val json = response.bodyAsText().json
-            val token = response.headers["X-token"]!!
-            val id = json.getJSONObject("data").getString("id")
+                val json = response.bodyAsText().json
+                val token = response.headers["X-token"]!!
+                val id = json.getJSONObject("data").getString("id")
 
-            SecondClass(name, id, token, this@run, proxied)
+                SecondClass(name, id, token, this@run, proxied)
+            }
         }
 
 

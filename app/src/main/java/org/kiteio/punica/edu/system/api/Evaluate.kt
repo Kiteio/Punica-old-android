@@ -4,6 +4,8 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ParametersBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.kiteio.punica.R
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.getString
@@ -13,7 +15,7 @@ import org.kiteio.punica.getString
  * @receiver [EduSystem]
  * @return [List]<[EvaluateItem]>
  */
-suspend fun EduSystem.evaluateList(): List<EvaluateItem> {
+suspend fun EduSystem.evaluateList() = withContext(Dispatchers.Default) {
     val text = session.fetch(route { EVALUATE_LIST }).bodyAsText()
 
     val document = Ksoup.parse(text)
@@ -48,7 +50,7 @@ suspend fun EduSystem.evaluateList(): List<EvaluateItem> {
             }
         }
 
-        return items
+        return@withContext items
     }else error(getString(R.string.evaluation_closed))
 }
 
