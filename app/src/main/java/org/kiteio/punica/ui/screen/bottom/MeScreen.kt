@@ -88,7 +88,7 @@ import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.navigation.navigate
-import java.time.LocalDate
+import org.kiteio.punica.ui.rememberSchoolStart
 
 /**
  * 我
@@ -361,6 +361,8 @@ private fun Tip(leadingText: String, text: String) {
 private fun Settings(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val preferences by Preferences.data.collectAsState()
+    val schoolStart = rememberSchoolStart()
+
     var datePickerDialogVisible by remember { mutableStateOf(false) }
     var campusDialogVisible by remember { mutableStateOf(false) }
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
@@ -375,7 +377,7 @@ private fun Settings(modifier: Modifier = Modifier) {
             onClick = { datePickerDialogVisible = true },
             value = {
                 Text(
-                    text = preferences?.get(Keys.schoolStart) ?: getString(R.string.not_set)
+                    text = schoolStart?.toString() ?: getString(R.string.not_set)
                 )
             }
         )
@@ -430,7 +432,7 @@ private fun Settings(modifier: Modifier = Modifier) {
             }
         },
         title = { Text(text = getString(R.string.school_start)) },
-        initialDate = preferences?.get(Keys.schoolStart)?.let { LocalDate.parse(it) }
+        initialDate = schoolStart
     )
     CampusDialog(
         visible = campusDialogVisible,

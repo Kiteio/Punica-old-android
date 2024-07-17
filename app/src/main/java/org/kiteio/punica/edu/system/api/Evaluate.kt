@@ -15,7 +15,7 @@ import org.kiteio.punica.getString
  * @receiver [EduSystem]
  * @return [List]<[EvaluateItem]>
  */
-suspend fun EduSystem.evaluateList() = withContext(Dispatchers.Default) {
+suspend fun EduSystem.evaluateList(): List<EvaluateItem> = withContext(Dispatchers.Default) {
     val text = session.fetch(route { EVALUATE_LIST }).bodyAsText()
 
     val document = Ksoup.parse(text)

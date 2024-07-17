@@ -27,6 +27,8 @@ import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.api.ExamPlanItem
 import org.kiteio.punica.edu.system.api.examPlan
 import org.kiteio.punica.getString
+import org.kiteio.punica.ui.LocalViewModel
+import org.kiteio.punica.ui.collectAsIdentified
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
@@ -34,7 +36,7 @@ import org.kiteio.punica.ui.component.Text
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
-import org.kiteio.punica.ui.rememberIdentified
+import org.kiteio.punica.ui.rememberLastUsername
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -44,7 +46,9 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ExamPlanScreen() {
     val now = remember { LocalDateTime.now() }
-    val examPlan = ExamPlans.rememberIdentified(EduSystem.semester) { examPlan() }
+    val eduSystem = LocalViewModel.current.eduSystem
+    val examPlan =
+        ExamPlans.collectAsIdentified(id = rememberLastUsername(EduSystem.semester)) { eduSystem?.examPlan() }
 
     ScaffoldBox(
         topBar = {

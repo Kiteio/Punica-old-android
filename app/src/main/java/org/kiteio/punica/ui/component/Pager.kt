@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
@@ -54,7 +55,10 @@ fun <T> TabPager(
                 }
             }
         }
-        org.kiteio.punica.ui.component.HorizontalPager(state = state, pageContent = pageContent)
+        org.kiteio.punica.ui.component.HorizontalPager(
+            state = state,
+            pageContent = { Box(modifier = Modifier.fillMaxSize()) { pageContent(it) } }
+        )
     }
 }
 

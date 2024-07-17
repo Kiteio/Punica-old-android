@@ -57,15 +57,17 @@ import org.kiteio.punica.ui.rememberRemoteList
  */
 @Composable
 fun EvaluationScreen() {
-    val viewModel = LocalViewModel.current
+    val eduSystem = LocalViewModel.current.eduSystem
     val coroutineScope = rememberCoroutineScope()
-    val evaluateItems = rememberRemoteList { evaluateList().sortedBy { it.route == null } }
+    val evaluateItems = rememberRemoteList(key = eduSystem) {
+        eduSystem?.evaluateList()?.sortedBy { it.route == null }
+    }
     var stateSelectDialogVisible by remember { mutableStateOf(false) }
     var isAll by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(-1) }
 
     LaunchedEffect(key1 = Unit) {
-        if (viewModel.eduSystem == null) Toast(R.string.not_logged_in).show()
+        if (eduSystem == null) Toast(R.string.not_logged_in).show()
     }
 
     ScaffoldBox(
@@ -109,7 +111,7 @@ fun EvaluationScreen() {
         visible = stateSelectDialogVisible,
         onDismiss = { stateSelectDialogVisible = false },
         onSelect = { submit ->
-            viewModel.eduSystem?.run {
+            eduSystem?.run {
                 if (selectedIndex == -1)
                     for (index in evaluateItems.indices.reversed())
                         evaluate(evaluateItems, coroutineScope, submit, index)

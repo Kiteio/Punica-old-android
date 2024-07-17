@@ -16,20 +16,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.kiteio.punica.LevelReports
 import org.kiteio.punica.edu.system.api.levelReport
+import org.kiteio.punica.ui.LocalViewModel
+import org.kiteio.punica.ui.collectAsIdentified
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
-import org.kiteio.punica.ui.rememberIdentified
 
 /**
  * 等级成绩
  */
 @Composable
 fun LevelReportScreen() {
-    val levelReport = LevelReports.rememberIdentified { levelReport() }
+    val eduSystem = LocalViewModel.current.eduSystem
+    val levelReport = LevelReports.collectAsIdentified { eduSystem?.levelReport() }
 
     ScaffoldBox(topBar = { NavBackTopAppBar(route = Route.Module.LevelReport) }) {
         LazyColumn(contentPadding = PaddingValues(dp4(2))) {

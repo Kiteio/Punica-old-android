@@ -202,7 +202,7 @@ class LoginViewModel(private val viewModel: AppViewModel) : ViewModel() {
     init {
         // 初始化用户
         viewModelScope.launchCatching {
-            Preferences.data.map { it[Keys.lastUser] }.firstOrNull()?.let { username ->
+            Preferences.data.map { it[Keys.lastUsername] }.firstOrNull()?.let { username ->
                 refreshUser(username)
             }
         }

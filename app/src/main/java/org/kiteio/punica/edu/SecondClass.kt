@@ -9,12 +9,14 @@ import io.ktor.http.Cookie
 import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import org.json.JSONArray
 import org.json.JSONObject
 import org.kiteio.punica.candy.ProxiedAPI
 import org.kiteio.punica.candy.ProxiedAPIOwner
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.candy.route
+import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.request.Session
 
 /**
@@ -61,7 +63,7 @@ class SecondClass private constructor(
      * 成绩单日志
      * @return [List]<[SecondClassLog]>
      */
-    suspend fun log() = withContext(Dispatchers.Default) {
+    suspend fun log(): List<SecondClassLog> = withContext(Dispatchers.Default) {
         val data = session.fetch(route { LOG }) {
             parameter("para", "{'sourceType':'','xueqiId':'','classId':''}")
             token()
@@ -71,7 +73,9 @@ class SecondClass private constructor(
         data.forEachApply {
             items.add(
                 SecondClassLog(
-                    name = getString("actName"),
+                    name = getString("actName").takeIf { it != "null" } ?: run {
+                        "${getString("proName")}（${getString("optName")}）"
+                    },
                     sort = getString("className"),
                     score = getDouble("score"),
                     time = getLong("sendTime"),
@@ -88,7 +92,7 @@ class SecondClass private constructor(
      * 活动列表
      * @return [List]<[SecondClassActivityItem]>
      */
-    suspend fun activities() = withContext(Dispatchers.Default) {
+    suspend fun activities(): List<SecondClassActivityItem> = withContext(Dispatchers.Default) {
         val list = session.fetch(route { ACTIVITIES }) {
             parameter("para", "{'cur':1,'size':10000}")
             token()
@@ -106,7 +110,8 @@ class SecondClass private constructor(
                     end = getLong("endTime"),
                     organization = getString("orgName"),
                     logo = getString("logo"),
-                    type = getString("typeName")
+                    type = getString("typeName"),
+                    isOnline = getInt("oto") == 1
                 )
             )
         }
@@ -136,7 +141,7 @@ class SecondClass private constructor(
                 organization = getString("zhubanName"),
                 owner = getString("adminName"),
                 phoneNumber = getString("adminContact"),
-                teacher = getString("teacherName"),
+                teacher = getString("teacherName").takeIf { it != "null" } ?: "",
                 trainingHours = getInt("classHours"),
                 start = getString("startTime"),
                 end = getString("endTime"),
@@ -232,11 +237,15 @@ class SecondClass private constructor(
  * 第二课堂成绩单
  * @property username 学号
  * @property items
+ * @property id [username]
  */
+@Serializable
 class SecondClassReport(
     val username: String,
     val items: List<SecondClassReportItem>
-)
+) : Identified() {
+    override val id = username
+}
 
 
 /**
@@ -245,6 +254,7 @@ class SecondClassReport(
  * @property score 分数
  * @property requiredScore 要求分数
  */
+@Serializable
 data class SecondClassReportItem(
     val name: String,
     val score: Double,
@@ -280,6 +290,7 @@ data class SecondClassLog(
  * @property organization 组织名
  * @property logo
  * @property type 类型
+ * @property isOnline 线上 true  线下 false
  */
 data class SecondClassActivityItem(
     val id: String,
@@ -290,7 +301,8 @@ data class SecondClassActivityItem(
     val end: Long,
     val organization: String,
     val logo: String,
-    val type: String
+    val type: String,
+    val isOnline: Boolean
 )
 
 
@@ -301,7 +313,7 @@ data class SecondClassActivityItem(
  * @property sort 分类
  * @property score 分数
  * @property area 地点
- * @property deadline 保命截止时间
+ * @property deadline 报名截止时间
  * @property picture 图片
  * @property organization 主办方
  * @property owner 管理员

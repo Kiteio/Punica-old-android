@@ -33,6 +33,7 @@ private val Context.Timetables by preferencesDataStore("timetables")
 private val Context.ExamPlans by preferencesDataStore("examPlans")
 private val Context.SchoolReports by preferencesDataStore("schoolReports")
 private val Context.LevelReports by preferencesDataStore("levelReports")
+private val Context.SecondClassReports by preferencesDataStore("secondClassReports")
 
 /** 首选项（设置） */
 val Preferences get() = AppContext.Preferences
@@ -51,6 +52,9 @@ val SchoolReports get() = AppContext.SchoolReports
 
 /** 等级成绩 */
 val LevelReports get() = AppContext.LevelReports
+
+/** 第二课堂 */
+val SecondClassReports get() = AppContext.SecondClassReports
 
 
 class MainActivity : ComponentActivity() {
