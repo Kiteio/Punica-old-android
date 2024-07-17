@@ -82,17 +82,19 @@ fun Text(
     leadingText: String? = null,
     color: Color = Color.Unspecified,
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = leadingIcon,
-            tint = color.takeOrElse { MaterialTheme.colorScheme.secondary.applyLocalAlpha() },
-            modifier = Modifier.size(
-                LocalTextStyle.current.fontSize.value.dp
+    Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = leadingIcon,
+                tint = color.takeOrElse { MaterialTheme.colorScheme.secondary.applyLocalAlpha() },
+                modifier = Modifier.size(
+                    LocalTextStyle.current.fontSize.value.dp
+                )
             )
-        )
-        Spacer(modifier = Modifier.width(dp4()))
-        leadingText?.run {
-            Text(text = "$leadingText  ", color = MaterialTheme.colorScheme.secondary.applyLocalAlpha())
+            Spacer(modifier = Modifier.width(dp4()))
+            leadingText?.run {
+                Text(text = "$leadingText  ", color = MaterialTheme.colorScheme.secondary.applyLocalAlpha())
+            }
         }
         Text(
             text = text,

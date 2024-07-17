@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.compose.LazyPagingItems
@@ -58,6 +60,22 @@ fun <T : Any> LazyListScope.items(
         lazyPagingItems[index]?.let { itemContent(it) }
     }
 }
+
+
+/**
+ * [Pager]<[Int], [Value]>
+ * @param pageSize
+ * @param pagingSourceFactory
+ * @return [Pager]<[Int], [Value]>
+ */
+fun <Value: Any> Pager(
+    pageSize: Int,
+    pagingSourceFactory: () -> PagingSource<Int, Value>
+) = Pager(
+    PagingConfig(pageSize, initialLoadSize = pageSize),
+    initialKey = 0,
+    pagingSourceFactory = pagingSourceFactory
+)
 
 
 /**

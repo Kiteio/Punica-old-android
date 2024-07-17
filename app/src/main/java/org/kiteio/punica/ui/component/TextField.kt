@@ -1,25 +1,36 @@
 package org.kiteio.punica.ui.component
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
@@ -29,6 +40,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.ui.dp4
 
 /**
@@ -81,14 +94,16 @@ fun TextField(
             },
         enabled = enabled,
         readOnly = readOnly,
-        label = label?.run { {
-            Column {
-                label()
-                AnimatedVisibility(visible = isFocused) {
-                    Spacer(modifier = Modifier.height(dp4(2)))
+        label = label?.run {
+            {
+                Column {
+                    label()
+                    AnimatedVisibility(visible = isFocused) {
+                        Spacer(modifier = Modifier.height(dp4(2)))
+                    }
                 }
             }
-        } },
+        },
         placeholder = placeholder,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
@@ -171,6 +186,77 @@ fun PasswordField(
         maxLines = maxLines,
         minLines = minLines
     )
+}
+
+
+/**
+ * 搜索栏
+ * @param value
+ * @param onValueChange
+ * @param onSearch
+ * @param modifier
+ * @param placeholder
+ * @param leadingIcon
+ * @param trailingIcon
+ */
+@Composable
+fun SearchBar(
+    value: String,
+    onValueChange: (String) -> Unit,
+    onSearch: () -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = {
+        IconButton(onClick = onSearch) {
+            Icon(
+                imageVector = Icons.Rounded.Search,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+    },
+    trailingIcon: @Composable (() -> Unit)? = null
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val interactions by interactionSource.interactions.collectAsState()
+
+    val clickInteractionSource = remember { MutableInteractionSource() }
+
+    // 监听 interactions 并发送给点击的 clickInteractionSource
+    LaunchedEffect(key1 = interactions) {
+        interactions?.let { clickInteractionSource.tryEmit(it) }
+    }
+
+    Surface(
+        modifier = modifier.wrapContentSize(),
+        shape = MaterialTheme.shapes.extraLarge,
+        shadowElevation = 1.dp
+    ) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(MaterialTheme.shapes.extraLarge)
+                .clickable(
+                    interactionSource = clickInteractionSource,
+                    indication = LocalIndication.current
+                ) {},
+            placeholder = placeholder,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            keyboardActions = KeyboardActions(
+                ImeAction.Search,
+                LocalFocusManager.current,
+                onSearch = { onSearch() }
+            ),
+            interactionSource = interactionSource,
+            shape = MaterialTheme.shapes.extraLarge,
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(0.4f),
+                focusedBorderColor = MaterialTheme.colorScheme.primary.copy(0.8f)
+            )
+        )
+    }
 }
 
 
