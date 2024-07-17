@@ -1,5 +1,6 @@
 package org.kiteio.punica.ui.screen.bottom
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -58,6 +59,7 @@ import org.kiteio.punica.R
 import org.kiteio.punica.Timetables
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.collectAsState
+import org.kiteio.punica.candy.daysUntil
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.edu.foundation.Campus
@@ -69,6 +71,8 @@ import org.kiteio.punica.edu.system.api.TimetableItem
 import org.kiteio.punica.edu.system.api.timetable
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
+import org.kiteio.punica.ui.LocalViewModel
+import org.kiteio.punica.ui.collectAsIdentified
 import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.HorizontalPager
@@ -79,11 +83,11 @@ import org.kiteio.punica.ui.component.Text
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.TopAppBar
 import org.kiteio.punica.ui.dp4
-import org.kiteio.punica.ui.rememberIdentified
-import org.kiteio.punica.ui.rememberSchoolStartDate
-import org.kiteio.punica.ui.rememberWeek
+import org.kiteio.punica.ui.rememberLastUsername
+import org.kiteio.punica.ui.rememberSchoolStart
 import org.kiteio.punica.ui.subduedContentColor
 import java.time.LocalDate
+import kotlin.math.floor
 
 /**
  * 日程
@@ -91,9 +95,21 @@ import java.time.LocalDate
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScheduleScreen() {
+    val eduSystem = LocalViewModel.current.eduSystem
     var semester by remember { mutableStateOf(EduSystem.semester) }
-    val week = rememberWeek()
-    val timetable = Timetables.rememberIdentified(semester) { timetable(semester) }
+    val timetable = Timetables.collectAsIdentified(id = rememberLastUsername(semester)) {
+        eduSystem?.timetable(semester)
+    }
+
+    val preferences by Preferences.data.collectAsState()
+    val week by remember {
+        derivedStateOf {
+            preferences?.get(Keys.schoolStart)?.let {
+                floor(LocalDate.parse(it).daysUntil(LocalDate.now()) / 7.0).toInt() + 1
+            } ?: 0
+        }
+    }
+
     val pagerState = rememberPagerState(initialPage = 30) { 60 }
     var itemsDialogVisible by remember { mutableStateOf(false) }
     var visibleItems by remember { mutableStateOf<List<TimetableItem>?>(null) }
@@ -111,6 +127,7 @@ fun ScheduleScreen() {
         Timetable(
             pagerState = pagerState,
             week = week,
+            semester = semester,
             timetable = timetable,
             onItemClick = { visibleItems = it; itemsDialogVisible = true },
             modifier = Modifier.weight(1f)
@@ -160,7 +177,7 @@ private fun TopAppBar(
         // 学期
         TextButton(onClick = { semesterDropdownMenuExpanded = true }) {
             Text(text = "$semester")
-            preferences?.get(Keys.lastUser)?.let { username ->
+            preferences?.get(Keys.lastUsername)?.let { username ->
                 DropdownMenu(
                     expanded = semesterDropdownMenuExpanded,
                     onDismissRequest = { semesterDropdownMenuExpanded = false }
@@ -229,6 +246,7 @@ private fun TopAppBar(
  * 课表
  * @param pagerState
  * @param week 当前周次
+ * @param semester
  * @param timetable
  * @param onItemClick
  * @param modifier
@@ -238,6 +256,7 @@ private fun TopAppBar(
 private fun Timetable(
     pagerState: PagerState,
     week: Int,
+    semester: Semester,
     timetable: Timetable?,
     onItemClick: (List<TimetableItem>?) -> Unit,
     modifier: Modifier = Modifier
@@ -245,13 +264,14 @@ private fun Timetable(
     val height = dp4(14)
     val timeBarWidth = dp4(9)
     val daysOfWeek = getStringArray(R.array.days_of_week)
-    val schoolStartDate = rememberSchoolStartDate()
+    val schoolStart = rememberSchoolStart()
     val now = LocalDate.now()
 
     HorizontalPager(state = pagerState, modifier = modifier) { page ->
         val offsetWeek = page - (pagerState.pageCount / 2 - week)
-        val mondayDate = remember(offsetWeek) {
-            schoolStartDate.plusWeeks(offsetWeek.toLong() - 1)
+        val mondayDate = remember(offsetWeek, semester) {
+            if (semester != EduSystem.semester) null else (schoolStart
+                ?: now).plusWeeks(offsetWeek.toLong() - 1)
         }
 
         LazyColumn {
@@ -273,28 +293,38 @@ private fun Timetable(
                             Text(text = getString(R.string.week_number, offsetWeek))
                         }
                         daysOfWeek.forEachIndexed { index, item ->
-                            Column(
+                            val date = mondayDate?.plusDays(index.toLong())
+
+                            Surface(
                                 modifier = Modifier
                                     .fillMaxWidth(1f / (7 - index))
                                     .fillMaxHeight(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
+                                shadowElevation = if (date == now) 1.dp else 0.dp,
+                                shape = MaterialTheme.shapes.medium,
+                                color = if (date == now) MaterialTheme.colorScheme.surfaceVariant
+                                else MaterialTheme.colorScheme.surface
                             ) {
-                                val date = mondayDate.plusDays(index.toLong())
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
 
-                                CompositionLocalProvider(
-                                    value = LocalContentColor provides
-                                            if (date == now) MaterialTheme.colorScheme.primary
-                                            else LocalContentColor.current
-                                ) {
-                                    Text(
-                                        text = item,
-                                        fontWeight = FontWeight.Black.takeIf { date == now }
-                                    )
-                                    PlaidText(
-                                        text = "${date.month.value}-${date.dayOfMonth}",
-                                        color = subduedContentColor()
-                                    )
+                                    ) {
+                                    CompositionLocalProvider(
+                                        value = LocalContentColor provides
+                                                if (date == now) MaterialTheme.colorScheme.primary
+                                                else LocalContentColor.current
+                                    ) {
+                                        Text(
+                                            text = item,
+                                            fontWeight = FontWeight.Black.takeIf { date == now }
+                                        )
+                                        AnimatedVisibility(visible = date != null) {
+                                            if (date != null) PlaidText(
+                                                text = "${date.month.value}-${date.dayOfMonth}",
+                                                color = subduedContentColor()
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }

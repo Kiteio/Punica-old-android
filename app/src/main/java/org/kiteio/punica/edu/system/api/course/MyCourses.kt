@@ -12,7 +12,7 @@ import org.kiteio.punica.edu.system.CourseSystem.Companion.fixTeacherName
  * @receiver [CourseSystem]
  * @return [List]<[MyCourse]>
  */
-suspend fun CourseSystem.myCourses() = withContext(Dispatchers.Default) {
+suspend fun CourseSystem.myCourses(): List<MyCourse> = withContext(Dispatchers.Default) {
     val document = Ksoup.parse(session.fetch(route { MY_COURSE }).bodyAsText())
     val table = document.getElementsByTag("tbody")[0]
     val rows = table.getElementsByTag("tr")

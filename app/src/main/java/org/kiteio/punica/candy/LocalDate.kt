@@ -1,7 +1,10 @@
 package org.kiteio.punica.candy
 
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 /** 时间戳 */
@@ -16,6 +19,23 @@ val LocalDate.dateMillis
  */
 fun LocalDate(dateMillis: Long): LocalDate =
     LocalDate.ofEpochDay(dateMillis / (24 * 60 * 60 * 1000L))
+
+
+/**
+ * [LocalDateTime]
+ * @param dateMillis
+ * @return [LocalDateTime]
+ */
+fun LocalDateTime(dateMillis: Long): LocalDateTime =
+    LocalDateTime.ofInstant(Instant.ofEpochMilli(dateMillis), ZoneId.systemDefault())
+
+
+/**
+ * [LocalDateTime] 格式化
+ * @receiver [LocalDateTime]
+ * @return [String]
+ */
+fun LocalDateTime.format(): String = format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
 
 
 /**

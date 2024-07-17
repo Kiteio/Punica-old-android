@@ -4,16 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.serialization.encodeToString
 import org.kiteio.punica.Preferences
 import org.kiteio.punica.Users
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.launchCatching
-import org.kiteio.punica.datastore.DefaultJson
 import org.kiteio.punica.datastore.Keys
+import org.kiteio.punica.datastore.set
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.api.campusNetPwd
@@ -39,11 +37,9 @@ class AppViewModel : ViewModel() {
             user.apply {
                 campusNetPwd.ifBlank { campusNetPwd = eduSystem.campusNetPwd() }
             }
-            Users.edit {
-                it[stringPreferencesKey(user.name)] = DefaultJson.encodeToString(user)
-            }
+            Users.edit { it.set(user) }
             Preferences.edit {
-                it[Keys.lastUser] = user.name
+                it[Keys.lastUsername] = user.name
                 catching { it[Keys.schoolStart] = eduSystem.schoolStart().toString() }
             }
         }

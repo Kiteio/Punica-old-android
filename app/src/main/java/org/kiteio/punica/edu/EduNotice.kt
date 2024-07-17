@@ -10,7 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.candy.API
-import org.kiteio.punica.candy.Log
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.request.fetch
 
@@ -35,10 +34,8 @@ object EduNotice : API {
      * @param index
      * @return [List]<[NoticeItem]>
      */
-    suspend fun list(index: Int) = withContext(Dispatchers.Default) {
+    suspend fun list(index: Int): List<NoticeItem> = withContext(Dispatchers.Default) {
         val response = fetch(route { listRoute(index) })
-
-        if (index == 10) Log.e(response.status)
 
         // 处理重定向
         val text = if (response.status == HttpStatusCode.MovedPermanently) {

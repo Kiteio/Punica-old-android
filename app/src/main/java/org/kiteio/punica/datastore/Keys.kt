@@ -17,5 +17,5 @@ object Keys {
     val campusId by lazy { intPreferencesKey("campusId") }
 
     /** 最后登录学号 */
-    val lastUser by lazy { stringPreferencesKey("lastUser") }
+    val lastUsername by lazy { stringPreferencesKey("lastUsername") }
 }

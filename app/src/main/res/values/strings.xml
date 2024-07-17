@@ -122,4 +122,18 @@
     <string name="class_hours">学时</string>
     <string name="exam_mode">考核方式</string>
     <string name="exam_sort">考试性质</string>
+
+    <string name="report">成绩单</string>
+    <string name="activity">活动</string>
+    <string name="log">日志</string>
+    <string name="online">线上</string>
+    <string name="offline">线下</string>
+    <string name="open_in_browser">在浏览器打开</string>
+    <string name="deadline">截止时间</string>
+    <string name="assignments_must_be_submitted">需要提交作业</string>
+    <string name="size">人数</string>
+    <string name="admin">管理员</string>
+    <string name="phone_number">手机号</string>
+    <string name="training_hours">培训时间</string>
+    <string name="organizers">主办方</string>
 </resources>

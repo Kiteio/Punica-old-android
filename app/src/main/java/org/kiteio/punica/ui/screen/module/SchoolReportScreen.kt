@@ -41,6 +41,8 @@ import org.kiteio.punica.SchoolReports
 import org.kiteio.punica.edu.system.api.SchoolReportItem
 import org.kiteio.punica.edu.system.api.schoolReport
 import org.kiteio.punica.getString
+import org.kiteio.punica.ui.LocalViewModel
+import org.kiteio.punica.ui.collectAsIdentified
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
@@ -54,7 +56,6 @@ import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.rememberTabPagerState
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
-import org.kiteio.punica.ui.rememberIdentified
 
 /**
  * 课程成绩
@@ -62,7 +63,8 @@ import org.kiteio.punica.ui.rememberIdentified
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SchoolReportScreen() {
-    val schoolReport = SchoolReports.rememberIdentified { schoolReport() }
+    val eduSystem = LocalViewModel.current.eduSystem
+    val schoolReport = SchoolReports.collectAsIdentified { eduSystem?.schoolReport() }
     var evaluationDialogVisible by remember { mutableStateOf(false) }
     val tabPagerState = rememberTabPagerState(R.string.newest, R.string.all)
     var detailBottomSheetVisible by remember { mutableStateOf(false) }
