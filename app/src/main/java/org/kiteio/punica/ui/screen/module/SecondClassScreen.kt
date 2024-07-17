@@ -249,7 +249,6 @@ private fun Activity(secondClass: SecondClass?, activities: List<SecondClassActi
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ActivityBottomSheet(
     visible: Boolean,
@@ -268,7 +267,7 @@ private fun ActivityBottomSheet(
         CompositionLocalProvider(value = LocalTextStyle provides MaterialTheme.typography.bodyMedium) {
             LazyColumn(modifier = Modifier.padding(dp4(4))) {
                 activity?.run {
-                    stickyHeader {
+                    item {
                         Title(text = name)
                         Spacer(modifier = Modifier.height(dp4(4)))
                     }

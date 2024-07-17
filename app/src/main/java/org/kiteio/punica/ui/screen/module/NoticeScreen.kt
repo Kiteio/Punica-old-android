@@ -28,8 +28,6 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavBackStackEntry
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.rajat.pdfviewer.compose.PdfRendererViewCompose
 import compose.icons.TablerIcons
@@ -47,6 +45,7 @@ import org.kiteio.punica.ui.LocalNavController
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.LazyPagingColumn
 import org.kiteio.punica.ui.component.NavBackTopAppBar
+import org.kiteio.punica.ui.component.Pager
 import org.kiteio.punica.ui.component.PagingSource
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
@@ -66,10 +65,7 @@ fun NoticeScreen() {
 
     // Pager 在切换页面时不能保留已加载内容，并且目前找不到解决方案
     val pager = remember {
-        Pager(
-            PagingConfig(14, initialLoadSize = 14),
-            initialKey = 0
-        ) { NoticePagingSource() }
+        Pager(14) { NoticePagingSource() }
     }
     val noticeItems = pager.flow.collectAsLazyPagingItems()
 
@@ -134,7 +130,7 @@ fun NoticeScreen() {
 /**
  * 教学通知 [PagingSource]
  */
-class NoticePagingSource : PagingSource<NoticeItem>() {
+private class NoticePagingSource : PagingSource<NoticeItem>() {
     override suspend fun loadCatching(params: LoadParams<Int>) =
         Page(EduNotice.list(params.key!!), params)
 }

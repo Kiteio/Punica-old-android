@@ -136,4 +136,25 @@
     <string name="phone_number">手机号</string>
     <string name="training_hours">培训时间</string>
     <string name="organizers">主办方</string>
+
+    <string name="job_number">工号</string>
+    <string name="department">部门</string>
+    <string name="no_more">没有更多了</string>
+    <string name="gender">性别</string>
+    <string name="politics">政治面貌</string>
+    <string name="nation">民族</string>
+    <string name="duty">职务</string>
+    <string name="title">职称</string>
+    <string name="faculty_category">教职工类别</string>
+    <string name="department_faculty_large">部门（院系）</string>
+    <string name="office_faculty">科室（系）</string>
+    <string name="qualification">最高学历</string>
+    <string name="degree">学位</string>
+    <string name="field">研究方向</string>
+    <string name="qq">QQ</string>
+    <string name="wechat">微信</string>
+    <string name="email">邮箱</string>
+    <string name="biography">个人简介</string>
+    <string name="teaching_history">近期开设课程</string>
+    <string name="teaching_future">计划开设课程</string>
 </resources>
