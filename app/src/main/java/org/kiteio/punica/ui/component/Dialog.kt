@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,29 +33,26 @@ import java.time.LocalDate
  * [AlertDialog]
  * @param title
  * @param text
- * @param onConfirm 确定按钮点击事件，会在结尾调用 [onDismiss]
- * @param onDismiss 取消事件（按钮或 [AlertDialog] 外侧的点击）
- * @param confirmButtonText 确定按钮文字
- * @param dismissButtonText 取消按钮文字
+ * @param onDismiss
+ * @param confirmButton
+ * @param dismissButton
+ * @param contentHorizontalAlignment 内容水平对齐
  */
 @Composable
 fun Dialog(
     title: @Composable (() -> Unit)? = null,
     text: @Composable ColumnScope.() -> Unit,
-    onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    confirmButtonText: @Composable RowScope.() -> Unit,
-    dismissButtonText: @Composable (RowScope.() -> Unit)? = null,
+    confirmButton: @Composable () -> Unit = {
+        TextButton(onClick = onDismiss) { Text(text = getString(R.string.close)) }
+    },
+    dismissButton: @Composable (() -> Unit)? = null,
     contentHorizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = { onConfirm(); onDismiss() }, content = confirmButtonText)
-        },
-        dismissButton = dismissButtonText?.let {
-            { TextButton(onClick = onDismiss, content = dismissButtonText) }
-        },
+        confirmButton = confirmButton,
+        dismissButton = dismissButton,
         title = title,
         text = {
             Column(
@@ -103,7 +99,7 @@ fun DatePickerDialog(
 ) {
     DialogVisibility(visible = visible) {
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = (initialDate?:LocalDate.now()).dateMillis
+            initialSelectedDateMillis = (initialDate ?: LocalDate.now()).dateMillis
         )
 
         DatePickerDialog(
@@ -138,5 +134,38 @@ fun DatePickerDialog(
                 }
             )
         }
+    }
+}
+
+
+/**
+ * 删除提示
+ * @param visible
+ * @param onDismiss
+ * @param onConfirm
+ * @param desc
+ */
+@Composable
+fun DeleteDialog(visible: Boolean, onDismiss: () -> Unit, onConfirm: () -> Unit, desc: String?) {
+    DialogVisibility(visible = visible) {
+        Dialog(
+            text = {
+                Text(
+                    text = getString(
+                        R.string.make_sure_to_delete, desc?.let { " $it " } ?: "")
+                )
+            },
+            onDismiss = onDismiss,
+            confirmButton = {
+                TextButton(onClick = onConfirm) {
+                    Text(text = getString(R.string.confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismiss) {
+                    Text(text = getString(R.string.cancel))
+                }
+            }
+        )
     }
 }

@@ -102,7 +102,7 @@
     <string name="copied">已复制</string>
     <string name="noting_to_evaluate">没有待评价项</string>
     <string name="evaluated">已评价%1$s</string>
-    <string name="saved">已保存%1$s</string>
+    <string name="saved">已保存</string>
 
     <string name="exam_plan_is_unavailable">暂无安排</string>
     <string name="start">开始</string>
@@ -157,4 +157,15 @@
     <string name="biography">个人简介</string>
     <string name="teaching_history">近期开设课程</string>
     <string name="teaching_future">计划开设课程</string>
+
+    <string name="connect_to_the_campus_net_to_get_ip">连接校园网以获取本机 ip</string>
+    <string name="account_editing">账号编辑</string>
+    <string name="required">（必填）</string>
+    <string name="campus_net_password">校园网密码</string>
+    <string name="default_is_last_8_of_id_card">默认为身份证号后 8 位</string>
+    <string name="device_ip">设备 ip</string>
+    <string name="description">描述</string>
+    <string name="make_sure_to_delete">您确定删除%1$s吗</string>
+    <string name="deleted">已删除</string>
+    <string name="connected">已连接</string>
 </resources>

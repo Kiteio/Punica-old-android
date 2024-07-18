@@ -46,11 +46,11 @@ import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.Icon
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.TabPager
-import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.rememberTabPagerState
 import org.kiteio.punica.ui.dp4
@@ -171,14 +171,8 @@ private fun SchoolReportItem(
 private fun EvaluationDialog(visible: Boolean, onDismiss: () -> Unit, evaluation: String?) {
     DialogVisibility(visible = visible) {
         Dialog(
-            text = {
-                evaluation?.let {
-                    Text(text = it)
-                }
-            },
-            onConfirm = {},
-            onDismiss = onDismiss,
-            confirmButtonText = { Text(text = getString(R.string.close)) }
+            text = { evaluation?.let { Text(text = it) } },
+            onDismiss = onDismiss
         )
     }
 }

@@ -77,9 +77,9 @@ import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.HorizontalPager
 import org.kiteio.punica.ui.component.Icon
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.ScaffoldColumn
 import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.TopAppBar
 import org.kiteio.punica.ui.dp4
@@ -538,9 +538,7 @@ private fun ItemsDialog(visible: Boolean, onDismiss: () -> Unit, items: List<Tim
                         }
                     }
                 },
-                onConfirm = onDismiss,
-                onDismiss = onDismiss,
-                confirmButtonText = { Text(text = getString(R.string.close)) }
+                onDismiss = onDismiss
             )
         }
     }

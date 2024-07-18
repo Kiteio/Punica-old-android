@@ -37,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -315,16 +316,23 @@ private fun AvatarDialog(
                     )
                 }
             },
-            onConfirm = {
-                coroutineScope.launchCatching {
-                    Preferences.edit {
-                        uri?.let { uri -> it[Keys.avatarUri] = uri } ?: it.remove(Keys.avatarUri)
-                    }
-                }
-            },
             onDismiss = onDismiss,
-            confirmButtonText = { Text(text = getString(R.string.save)) },
-            dismissButtonText = { Text(text = getString(R.string.cancel)) }
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        coroutineScope.launchCatching {
+                            Preferences.edit {
+                                uri?.let { uri -> it[Keys.avatarUri] = uri }
+                                    ?: it.remove(Keys.avatarUri)
+                            }
+                            onDismiss()
+                        }
+                    }
+                ) { Text(text = getString(R.string.save)) }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismiss) { Text(text = getString(R.string.cancel)) }
+            }
         )
     }
 }
@@ -528,9 +536,7 @@ private fun CampusDialog(visible: Boolean, onDismiss: () -> Unit, initialCampus:
                     )
                 }
             },
-            onConfirm = onDismiss,
             onDismiss = onDismiss,
-            confirmButtonText = { Text(text = getString(R.string.close)) },
             contentHorizontalAlignment = Alignment.Start
         )
     }

@@ -1,5 +1,6 @@
 package org.kiteio.punica.ui.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -80,25 +81,28 @@ fun IconText(
     text: String,
     leadingIcon: ImageVector,
     leadingText: String? = null,
+    modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
+    leadingColor: Color = Color.Unspecified,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    style: TextStyle = LocalTextStyle.current
 ) {
-    Row {
+    val myLeadingColor =
+        leadingColor.takeOrElse { MaterialTheme.colorScheme.secondary.applyLocalAlpha() }
+
+    Row(horizontalArrangement = horizontalArrangement, modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = leadingIcon,
-                tint = color.takeOrElse { MaterialTheme.colorScheme.secondary.applyLocalAlpha() },
-                modifier = Modifier.size(
-                    LocalTextStyle.current.fontSize.value.dp
-                )
+                tint = myLeadingColor,
+                modifier = Modifier.size(style.fontSize.value.dp)
             )
             Spacer(modifier = Modifier.width(dp4()))
-            leadingText?.run {
-                Text(text = "$leadingText  ", color = MaterialTheme.colorScheme.secondary.applyLocalAlpha())
-            }
+
+            leadingText?.run { Text(text = leadingText, color = myLeadingColor, style = style) }
         }
-        Text(
-            text = text,
-            color = color
-        )
+        Spacer(modifier = Modifier.width(dp4(3)))
+
+        Text(text = text, color = color, style = style)
     }
 }
