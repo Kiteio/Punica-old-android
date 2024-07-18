@@ -34,7 +34,7 @@ import org.kiteio.punica.getString
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
-import org.kiteio.punica.ui.component.Text
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
@@ -95,8 +95,8 @@ private fun Call(
             Column {
                 Title(text = getString(emergencyCall.nameResId))
                 Spacer(modifier = Modifier.height(dp4()))
-                Text(text = emergencyCall.workingHours(), leadingIcon = Icons.Rounded.Timelapse)
-                Text(text = emergencyCall.phoneNumber, leadingIcon = Icons.Rounded.PhoneInTalk)
+                IconText(text = emergencyCall.workingHours(), leadingIcon = Icons.Rounded.Timelapse)
+                IconText(text = emergencyCall.phoneNumber, leadingIcon = Icons.Rounded.PhoneInTalk)
             }
             Row {
                 IconButton(onClick = onCopy) {

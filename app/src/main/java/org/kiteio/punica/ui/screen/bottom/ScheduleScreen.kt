@@ -79,7 +79,7 @@ import org.kiteio.punica.ui.component.HorizontalPager
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.ScaffoldColumn
 import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.Text
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.TopAppBar
 import org.kiteio.punica.ui.dp4
@@ -92,7 +92,6 @@ import kotlin.math.floor
 /**
  * 日程
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScheduleScreen() {
     val eduSystem = LocalViewModel.current.eduSystem
@@ -157,7 +156,6 @@ fun ScheduleScreen() {
  * @param semester 选中学期
  * @param onSelectedSemester 学期选择事件
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TopAppBar(
     pagerState: PagerState,
@@ -513,25 +511,25 @@ private fun ItemsDialog(visible: Boolean, onDismiss: () -> Unit, items: List<Tim
                             ) {
                                 Title(text = it.name)
                                 Spacer(modifier = Modifier.height(dp4(2)))
-                                Text(
+                                IconText(
                                     text = it.teacher,
                                     leadingText = getString(R.string.teacher),
                                     leadingIcon = Icons.Rounded.Person
                                 )
                                 Spacer(modifier = Modifier.height(dp4()))
-                                Text(
+                                IconText(
                                     text = it.area,
                                     leadingText = getString(R.string.area),
                                     leadingIcon = Icons.Rounded.LocationOn
                                 )
                                 Spacer(modifier = Modifier.height(dp4()))
-                                Text(
+                                IconText(
                                     text = it.weeksStr,
                                     leadingText = getString(R.string.weeks),
                                     leadingIcon = Icons.Rounded.ViewWeek
                                 )
                                 Spacer(modifier = Modifier.height(dp4()))
-                                Text(
+                                IconText(
                                     text = it.section.joinToString("-"),
                                     leadingText = getString(R.string.section),
                                     leadingIcon = Icons.Rounded.Timeline

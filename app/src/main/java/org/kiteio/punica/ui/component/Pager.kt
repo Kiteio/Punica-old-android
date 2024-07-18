@@ -1,6 +1,5 @@
 package org.kiteio.punica.ui.component
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +27,7 @@ import org.kiteio.punica.ui.dp4
  * @param tabContent
  * @param pageContent
  */
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> TabPager(
     state: TabPagerState<T>,
@@ -69,7 +68,6 @@ fun <T> TabPager(
  * @property tabs
  * @property pageCount
  */
-@OptIn(ExperimentalFoundationApi::class)
 class TabPagerState<T>(
     initialPage: Int,
     val tabs: List<T>
@@ -103,7 +101,6 @@ inline fun <reified T : Any> rememberTabPagerState(
  * @param contentPadding
  * @param pageContent
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HorizontalPager(
     state: PagerState,
@@ -115,7 +112,7 @@ fun HorizontalPager(
         state = state,
         modifier = modifier,
         contentPadding = contentPadding,
-        beyondBoundsPageCount = 1,
+        beyondViewportPageCount = 1,
         pageContent = pageContent
     )
 }

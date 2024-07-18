@@ -2,7 +2,6 @@ package org.kiteio.punica.ui.screen.module
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -75,7 +74,7 @@ import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.TabPager
-import org.kiteio.punica.ui.component.Text
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.rememberTabPagerState
 import org.kiteio.punica.ui.dp4
@@ -86,7 +85,6 @@ import org.kiteio.punica.ui.rememberRemoteList
 /**
  * 第二课堂
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SecondClassScreen() {
     val lastUser = rememberLastUser()
@@ -283,17 +281,17 @@ private fun ActivityBottomSheet(
                     }
 
                     item {
-                        Text(
+                        IconText(
                             text = deadline,
                             leadingIcon = Icons.Rounded.AlarmOn,
                             leadingText = getString(R.string.deadline)
                         )
-                        Text(
+                        IconText(
                             text = "$num / $maxNum",
                             leadingIcon = Icons.Rounded.Person,
                             leadingText = getString(R.string.size)
                         )
-                        Text(
+                        IconText(
                             text = area,
                             leadingIcon = Icons.Rounded.LocationOn,
                             leadingText = getString(R.string.area)
@@ -302,27 +300,27 @@ private fun ActivityBottomSheet(
                     }
 
                     item {
-                        Text(
+                        IconText(
                             text = owner,
                             leadingIcon = Icons.Rounded.PermIdentity,
                             leadingText = getString(R.string.admin)
                         )
-                        Text(
+                        IconText(
                             text = phoneNumber,
                             leadingIcon = Icons.Rounded.Phone,
                             leadingText = getString(R.string.phone_number)
                         )
-                        Text(
+                        IconText(
                             text = teacher,
                             leadingIcon = Icons.Rounded.CoPresent,
                             leadingText = getString(R.string.teacher)
                         )
-                        Text(
+                        IconText(
                             text = trainingHours.toString(),
                             leadingIcon = Icons.Rounded.Timelapse,
                             leadingText = getString(R.string.training_hours)
                         )
-                        Text(
+                        IconText(
                             text = organization,
                             leadingIcon = Icons.Rounded.Groups,
                             leadingText = getString(R.string.organizers)

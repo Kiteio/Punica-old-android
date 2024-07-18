@@ -1,6 +1,5 @@
 package org.kiteio.punica.ui.screen.module
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -51,7 +50,7 @@ import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.TabPager
-import org.kiteio.punica.ui.component.Text
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.rememberTabPagerState
 import org.kiteio.punica.ui.dp4
@@ -60,7 +59,6 @@ import org.kiteio.punica.ui.navigation.Route
 /**
  * 课程成绩
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SchoolReportScreen() {
     val eduSystem = LocalViewModel.current.eduSystem
@@ -206,49 +204,49 @@ private fun DetailBottomSheet(
                 SubduedText(text = "$semester")
                 Spacer(modifier = Modifier.height(dp4(4)))
 
-                Text(text = id, leadingIcon = Icons.Rounded.Numbers, getString(R.string.id))
-                Text(
+                IconText(text = id, leadingIcon = Icons.Rounded.Numbers, getString(R.string.id))
+                IconText(
                     text = sort,
                     leadingIcon = Icons.AutoMirrored.Rounded.Sort,
                     getString(R.string.sort)
                 )
-                Text(
+                IconText(
                     text = type,
                     leadingIcon = Icons.AutoMirrored.Rounded.MergeType,
                     getString(R.string.type)
                 )
-                Text(text = point, leadingIcon = Icons.Rounded.Star, getString(R.string.point))
-                Text(text = score, leadingIcon = Icons.Rounded.Score, getString(R.string.score))
+                IconText(text = point, leadingIcon = Icons.Rounded.Star, getString(R.string.point))
+                IconText(text = score, leadingIcon = Icons.Rounded.Score, getString(R.string.score))
                 Spacer(modifier = Modifier.height(dp4(4)))
 
-                Text(
+                IconText(
                     text = usualScore,
                     leadingIcon = Icons.Rounded.Timelapse,
                     getString(R.string.usual)
                 )
-                Text(
+                IconText(
                     text = experimentScore,
                     leadingIcon = Icons.Rounded.Explicit,
                     getString(R.string.experiment)
                 )
-                Text(
+                IconText(
                     text = examScore,
                     leadingIcon = Icons.AutoMirrored.Rounded.ReceiptLong,
                     getString(R.string.exam)
                 )
                 Spacer(modifier = Modifier.height(dp4(4)))
 
-                Text(
+                IconText(
                     text = classHours,
                     leadingIcon = Icons.Rounded.HourglassBottom,
                     getString(R.string.class_hours)
                 )
-                Text(
+                IconText(
                     text = examMode,
                     leadingIcon = Icons.Rounded.AddChart,
                     getString(R.string.exam_mode)
                 )
-                Text(
+                IconText(
                     text = examSort,
                     leadingIcon = Icons.Rounded.AllOut,
                     getString(R.string.exam_sort)

@@ -32,7 +32,7 @@ import org.kiteio.punica.ui.collectAsIdentified
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.Text
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
@@ -109,17 +109,17 @@ private fun ExamPlanItem(examPlanItem: ExamPlanItem, enabled: Boolean) = with(ex
                 }
             }
             Spacer(modifier = Modifier.height(dp4()))
-            Text(
+            IconText(
                 text = time.first,
                 leadingIcon = Icons.Rounded.AccessTime,
                 leadingText = getString(R.string.start)
             )
-            Text(
+            IconText(
                 text = time.second,
                 leadingIcon = Icons.Rounded.MoreTime,
                 leadingText = getString(R.string.end)
             )
-            Text(
+            IconText(
                 text = area,
                 leadingIcon = Icons.Rounded.LocationOn,
                 leadingText = getString(R.string.area)

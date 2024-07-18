@@ -55,7 +55,7 @@ fun NavBackTopAppBar(
 ) {
     val navController = LocalNavController.current
 
-    org.kiteio.punica.ui.component.TopAppBar(
+    TopAppBar(
         title = title,
         modifier = modifier,
         shadowElevation = shadowElevation,
@@ -85,7 +85,7 @@ fun TopAppBar(
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    org.kiteio.punica.ui.component.TopAppBar(
+    TopAppBar(
         title = { Text(text = getString(route.nameResId)) },
         modifier = modifier,
         shadowElevation = shadowElevation,

@@ -11,7 +11,7 @@ import java.io.File
  * @param name
  * @return [String]
  */
-fun Context.uriToImages(uri: Uri, name: String) =
+fun Context.uriToImages(uri: Uri, name: String): String =
     contentResolver.openInputStream(uri).use { inputStream ->
         val dir = File(filesDir, "images").apply { mkdir() }
         val file = File(dir, name).apply { createNewFile() }
