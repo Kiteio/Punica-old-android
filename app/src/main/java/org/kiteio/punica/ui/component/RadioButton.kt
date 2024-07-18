@@ -2,8 +2,11 @@ package org.kiteio.punica.ui.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.buildAnnotatedString
+import org.kiteio.punica.candy.appendClickable
 
 /**
  * [RadioButton]
@@ -22,10 +25,7 @@ fun RadioButton(
     Row(verticalAlignment = Alignment.CenterVertically) {
         RadioButton(selected = selected, onClick = onClick, enabled = enabled)
         label?.let {
-            ClickableText(
-                text = label,
-                onClick = { if (enabled) onClick() }
-            )
+            Text(text = buildAnnotatedString { appendClickable(label, onClick = onClick) })
         }
     }
 }

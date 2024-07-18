@@ -5,8 +5,8 @@
 [![](https://img.shields.io/static/v1?label=最新版本&message=开发中&labelColor=F20C00&color=white)](https://github.com/Kiteio/Punica/releases)
 [![](https://img.shields.io/static/v1?label=Android%20版本支持&message=10%2B&labelColor=white&color=white&logo=android)](https://developer.android.google.cn/about/versions)
 [![](https://img.shields.io/github/stars/Kiteio/Punica.svg?style=flat&labelColor=white&color=white&logo=github&logoColor=black)](https://github.com/Kiteio/Punica/stargazers)
-[![](https://img.shields.io/static/v1?label=Kotlin&logo=kotlin&message=2.0.0&labelColor=white&color=white)](https://kotlinlang.org)
-[![](https://img.shields.io/static/v1?label=Jetpack%20Compose&logo=jetpackcompose&message=2024.06.00&labelColor=white&color=white)](https://developer.android.google.cn/develop/ui)
+[![](https://img.shields.io/static/v1?label=Kotlin&logo=kotlin&message=2.0.20-Beta2&labelColor=white&color=white)](https://kotlinlang.org)
+[![](https://img.shields.io/static/v1?label=Jetpack%20Compose&logo=jetpackcompose&message=1.7.0-beta05&labelColor=white&color=white)](https://developer.android.google.cn/develop/ui)
 
 </p>
 

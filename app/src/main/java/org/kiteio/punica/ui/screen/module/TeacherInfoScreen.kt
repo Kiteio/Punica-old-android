@@ -59,7 +59,7 @@ import org.kiteio.punica.ui.component.PagingSource
 import org.kiteio.punica.ui.component.ScaffoldColumn
 import org.kiteio.punica.ui.component.SearchBar
 import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.Text
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.items
 import org.kiteio.punica.ui.dp4
@@ -118,12 +118,12 @@ fun TeacherInfoScreen() {
                         CompositionLocalProvider(
                             value = LocalTextStyle provides MaterialTheme.typography.bodyMedium
                         ) {
-                            Text(
+                            IconText(
                                 text = it.id,
                                 leadingIcon = Icons.Rounded.Numbers,
                                 leadingText = getString(R.string.job_number)
                             )
-                            Text(
+                            IconText(
                                 text = it.department,
                                 leadingIcon = Icons.Rounded.AccountBalance,
                                 leadingText = getString(R.string.department)
@@ -200,17 +200,17 @@ fun TeacherBottomSheet(
                 }
 
                 item {
-                    Text(
+                    IconText(
                         text = gender,
                         leadingIcon = Icons.Rounded.Wc,
                         leadingText = getString(R.string.gender)
                     )
-                    Text(
+                    IconText(
                         text = nation,
                         leadingIcon = Icons.Rounded.AreaChart,
                         leadingText = getString(R.string.nation)
                     )
-                    Text(
+                    IconText(
                         text = politics,
                         leadingIcon = Icons.Rounded.Person,
                         leadingText = getString(R.string.politics)
@@ -221,17 +221,17 @@ fun TeacherBottomSheet(
 
 
                 item {
-                    Text(
+                    IconText(
                         text = degree,
                         leadingIcon = Icons.Rounded.School,
                         leadingText = getString(R.string.degree)
                     )
-                    Text(
+                    IconText(
                         text = qualifications,
                         leadingIcon = Icons.Rounded.Verified,
                         leadingText = getString(R.string.qualification)
                     )
-                    Text(
+                    IconText(
                         text = field,
                         leadingIcon = Icons.Rounded.Filter,
                         leadingText = getString(R.string.field)
@@ -240,22 +240,22 @@ fun TeacherBottomSheet(
                 }
 
                 item {
-                    Text(
+                    IconText(
                         text = phoneNumber,
                         leadingIcon = Icons.Rounded.PhoneAndroid,
                         leadingText = getString(R.string.phone_number)
                     )
-                    Text(
+                    IconText(
                         text = qQ,
                         leadingIcon = SimpleIcons.Tencentqq,
                         leadingText = getString(R.string.qq)
                     )
-                    Text(
+                    IconText(
                         text = weChat,
                         leadingIcon = SimpleIcons.Wechat,
                         leadingText = getString(R.string.wechat)
                     )
-                    Text(
+                    IconText(
                         text = email,
                         leadingIcon = Icons.Rounded.Mail,
                         leadingText = getString(R.string.email)
@@ -264,27 +264,27 @@ fun TeacherBottomSheet(
                 }
 
                 item {
-                    Text(
+                    IconText(
                         text = duty,
                         leadingIcon = Icons.Rounded.AssignmentInd,
                         leadingText = getString(R.string.duty)
                     )
-                    Text(
+                    IconText(
                         text = title,
                         leadingIcon = Icons.Rounded.Stars,
                         leadingText = getString(R.string.title)
                     )
-                    Text(
+                    IconText(
                         text = category,
                         leadingIcon = Icons.Rounded.Category,
                         leadingText = getString(R.string.faculty_category)
                     )
-                    Text(
+                    IconText(
                         text = department,
                         leadingIcon = Icons.Rounded.AccountBalance,
                         leadingText = getString(R.string.department_faculty_large)
                     )
-                    Text(
+                    IconText(
                         text = office,
                         leadingIcon = Icons.Rounded.DoorFront,
                         leadingText = getString(R.string.office_faculty)
@@ -293,7 +293,7 @@ fun TeacherBottomSheet(
                 }
 
                 item {
-                    Text(
+                    IconText(
                         text = "",
                         leadingIcon = Icons.Rounded.Description,
                         leadingText = getString(R.string.biography)

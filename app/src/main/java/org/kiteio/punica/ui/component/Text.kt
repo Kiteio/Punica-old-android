@@ -69,14 +69,14 @@ fun SubduedText(
 
 
 /**
- * [Icon] [Text]
+ * [Icon] [IconText]
  * @param text
  * @param leadingIcon
  * @param leadingText
  * @param color
  */
 @Composable
-fun Text(
+fun IconText(
     text: String,
     leadingIcon: ImageVector,
     leadingText: String? = null,

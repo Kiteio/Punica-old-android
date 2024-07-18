@@ -46,7 +46,7 @@ import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.RadioButton
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.Text
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
@@ -172,7 +172,7 @@ private fun EvaluateItem(
             Column(modifier = Modifier.weight(1f)) {
                 Title(text = evaluateItem.name)
                 Spacer(modifier = Modifier.height(dp4(2)))
-                Text(text = evaluateItem.teacher, leadingIcon = Icons.Rounded.Person)
+                IconText(text = evaluateItem.teacher, leadingIcon = Icons.Rounded.Person)
                 Spacer(modifier = Modifier.height(dp4()))
                 SubduedText(text = evaluateItem.sort)
             }
