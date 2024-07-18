@@ -34,6 +34,7 @@ private val Context.ExamPlans by preferencesDataStore("examPlans")
 private val Context.SchoolReports by preferencesDataStore("schoolReports")
 private val Context.LevelReports by preferencesDataStore("levelReports")
 private val Context.SecondClassReports by preferencesDataStore("secondClassReports")
+private val Context.CampusNetUsers by preferencesDataStore("campusNetUsers")
 
 /** 首选项（设置） */
 val Preferences get() = AppContext.Preferences
@@ -55,6 +56,9 @@ val LevelReports get() = AppContext.LevelReports
 
 /** 第二课堂 */
 val SecondClassReports get() = AppContext.SecondClassReports
+
+/** 校园网用户 */
+val CampusNetUsers get() = AppContext.CampusNetUsers
 
 
 class MainActivity : ComponentActivity() {

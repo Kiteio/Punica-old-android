@@ -69,12 +69,12 @@ import org.kiteio.punica.getString
 import org.kiteio.punica.ui.collectAsIdentified
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Icon
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Image
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.TabPager
-import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.rememberTabPagerState
 import org.kiteio.punica.ui.dp4
@@ -261,92 +261,90 @@ private fun ActivityBottomSheet(
         LaunchedEffect(key1 = secondClass, key2 = id) {
             id?.let { activity = secondClass?.activity(it) }
         }
+        
+        LazyColumn(modifier = Modifier.padding(dp4(4))) {
+            activity?.run {
+                item {
+                    Title(text = name)
+                    Spacer(modifier = Modifier.height(dp4(4)))
+                }
 
-        CompositionLocalProvider(value = LocalTextStyle provides MaterialTheme.typography.bodyMedium) {
-            LazyColumn(modifier = Modifier.padding(dp4(4))) {
-                activity?.run {
-                    item {
-                        Title(text = name)
-                        Spacer(modifier = Modifier.height(dp4(4)))
-                    }
+                item {
+                    Text(text = "$start - $end")
+                    Title(text = "$sort  $score", style = MaterialTheme.typography.bodyMedium)
+                    SubduedText(text = type)
+                    if (submit) SubduedText(
+                        text = getString(R.string.assignments_must_be_submitted)
+                    )
+                    Spacer(modifier = Modifier.height(dp4(4)))
+                }
 
-                    item {
-                        Text(text = "$start - $end")
-                        Title(text = "$sort  $score", style = MaterialTheme.typography.bodyMedium)
-                        SubduedText(text = type)
-                        if (submit) SubduedText(
-                            text = getString(R.string.assignments_must_be_submitted)
-                        )
-                        Spacer(modifier = Modifier.height(dp4(4)))
-                    }
+                item {
+                    IconText(
+                        text = deadline,
+                        leadingIcon = Icons.Rounded.AlarmOn,
+                        leadingText = getString(R.string.deadline)
+                    )
+                    IconText(
+                        text = "$num / $maxNum",
+                        leadingIcon = Icons.Rounded.Person,
+                        leadingText = getString(R.string.size)
+                    )
+                    IconText(
+                        text = area,
+                        leadingIcon = Icons.Rounded.LocationOn,
+                        leadingText = getString(R.string.area)
+                    )
+                    Spacer(modifier = Modifier.height(dp4(4)))
+                }
 
-                    item {
-                        IconText(
-                            text = deadline,
-                            leadingIcon = Icons.Rounded.AlarmOn,
-                            leadingText = getString(R.string.deadline)
-                        )
-                        IconText(
-                            text = "$num / $maxNum",
-                            leadingIcon = Icons.Rounded.Person,
-                            leadingText = getString(R.string.size)
-                        )
-                        IconText(
-                            text = area,
-                            leadingIcon = Icons.Rounded.LocationOn,
-                            leadingText = getString(R.string.area)
-                        )
-                        Spacer(modifier = Modifier.height(dp4(4)))
-                    }
+                item {
+                    IconText(
+                        text = owner,
+                        leadingIcon = Icons.Rounded.PermIdentity,
+                        leadingText = getString(R.string.admin)
+                    )
+                    IconText(
+                        text = phoneNumber,
+                        leadingIcon = Icons.Rounded.Phone,
+                        leadingText = getString(R.string.phone_number)
+                    )
+                    IconText(
+                        text = teacher,
+                        leadingIcon = Icons.Rounded.CoPresent,
+                        leadingText = getString(R.string.teacher)
+                    )
+                    IconText(
+                        text = trainingHours.toString(),
+                        leadingIcon = Icons.Rounded.Timelapse,
+                        leadingText = getString(R.string.training_hours)
+                    )
+                    IconText(
+                        text = organization,
+                        leadingIcon = Icons.Rounded.Groups,
+                        leadingText = getString(R.string.organizers)
+                    )
+                    Spacer(modifier = Modifier.height(dp4(4)))
+                }
 
-                    item {
-                        IconText(
-                            text = owner,
-                            leadingIcon = Icons.Rounded.PermIdentity,
-                            leadingText = getString(R.string.admin)
-                        )
-                        IconText(
-                            text = phoneNumber,
-                            leadingIcon = Icons.Rounded.Phone,
-                            leadingText = getString(R.string.phone_number)
-                        )
-                        IconText(
-                            text = teacher,
-                            leadingIcon = Icons.Rounded.CoPresent,
-                            leadingText = getString(R.string.teacher)
-                        )
-                        IconText(
-                            text = trainingHours.toString(),
-                            leadingIcon = Icons.Rounded.Timelapse,
-                            leadingText = getString(R.string.training_hours)
-                        )
-                        IconText(
-                            text = organization,
-                            leadingIcon = Icons.Rounded.Groups,
-                            leadingText = getString(R.string.organizers)
-                        )
-                        Spacer(modifier = Modifier.height(dp4(4)))
-                    }
-
-                    item {
-                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                            ElevatedButton(
-                                onClick = {
-                                    context.startActivity(
-                                        Intent(
-                                            Intent.ACTION_VIEW,
-                                            Uri.parse(SecondClass.route { "#/pages/acti/info?key=$id" })
-                                        )
+                item {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        ElevatedButton(
+                            onClick = {
+                                context.startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse(SecondClass.route { "#/pages/acti/info?key=$id" })
                                     )
-                                }
-                            ) { Text(text = getString(R.string.open_in_browser)) }
-                        }
-                        Spacer(modifier = Modifier.height(dp4(4)))
+                                )
+                            }
+                        ) { Text(text = getString(R.string.open_in_browser)) }
                     }
+                    Spacer(modifier = Modifier.height(dp4(4)))
+                }
 
-                    item {
-                        SubduedText(text = desc)
-                    }
+                item {
+                    SubduedText(text = desc)
                 }
             }
         }

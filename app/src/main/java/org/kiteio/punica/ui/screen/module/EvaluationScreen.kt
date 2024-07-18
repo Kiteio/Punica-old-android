@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,11 +43,11 @@ import org.kiteio.punica.ui.LocalViewModel
 import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.Icon
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.RadioButton
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
@@ -101,7 +102,9 @@ fun EvaluationScreen() {
                         stateSelectDialogVisible = true
                         selectedIndex = index
                     },
-                    modifier = Modifier.padding(dp4(2))
+                    modifier = Modifier
+                        .padding(dp4(2))
+                        .animateItem()
                 )
             }
         }
@@ -150,7 +153,7 @@ private fun EduSystem.evaluate(
             removeAt(index)
             add(tmp)
             Toast(getString(R.string.evaluated, tmp.name)).show()
-        } else Toast(getString(R.string.saved, get(index).name)).show()
+        } else Toast(getString(R.string.saved) + get(index).name).show()
     }
 }
 
@@ -214,10 +217,17 @@ private fun StateSelectDialog(
                     }
                 }
             },
-            onConfirm = { onSelect(selectedIndex == 1) },
             onDismiss = onDismiss,
-            confirmButtonText = { Text(text = getString(R.string.confirm)) },
-            dismissButtonText = { Text(text = getString(R.string.cancel)) }
+            confirmButton = {
+                TextButton(
+                    onClick = { onSelect(selectedIndex == 1); onDismiss() }
+                ) { Text(text = getString(R.string.confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismiss) {
+                    Text(text = getString(R.string.cancel))
+                }
+            }
         )
     }
 }

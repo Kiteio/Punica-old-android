@@ -31,6 +31,16 @@ inline fun <reified T : @Serializable Identified> MutablePreferences.set(value: 
 
 
 /**
+ * 移除 [value]
+ * @receiver [MutablePreferences]
+ * @param value
+ */
+fun <T: @Serializable Identified> MutablePreferences.remove(value: T) {
+    remove(stringPreferencesKey(value.id))
+}
+
+
+/**
  * 返回所有值
  * @receiver [Preferences]
  * @return [List]<[T]?>

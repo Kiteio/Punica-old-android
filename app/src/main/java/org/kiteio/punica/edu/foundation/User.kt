@@ -46,5 +46,20 @@ class CookieSerializer : KSerializer<Cookie> {
     override fun serialize(encoder: Encoder, value: Cookie) {
         encoder.encodeString("${value.name}=${value.value}")
     }
-
 }
+
+
+/**
+ * 校园网用户
+ * @property name 学号
+ * @property ip ip
+ * @property desc 描述
+ * @property id [name]
+ */
+@Serializable
+class CampusNetUser(
+    val name: String,
+    val ip: String,
+    val desc: String,
+    override val id: String
+) : Identified()

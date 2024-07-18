@@ -66,7 +66,7 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collect
     val list = remember { mutableStateListOf<T>() }
 
     LaunchedEffect(key1 = preferences) {
-        catching { preferences?.values<T>()?.let { list.addAll(it) } }
+        catching { preferences?.values<T>()?.let { list.clear(); list.addAll(it) } }
     }
 
     return list
@@ -119,11 +119,19 @@ inline fun <T> rememberRemoteList(
  * @return [User]?
  */
 @Composable
-fun rememberLastUser(): User? {
-    val lastUsername = rememberLastUsername()
+fun rememberLastUser(): User? = rememberUser(name = rememberLastUsername())
+
+
+/**
+ * 返回 [User.name] 为 [name] 的 [User]
+ * @param name
+ * @return [User]?
+ */
+@Composable
+fun rememberUser(name: String?): User? {
     val users by Users.data.collectAsState()
-    val user by remember(key1 = lastUsername, key2 = users) {
-        derivedStateOf { lastUsername?.let { username -> users?.get<User>(username) } }
+    val user by remember(key1 = name, key2 = users) {
+        derivedStateOf { name?.let { username -> users?.get<User>(username) } }
     }
 
     return user

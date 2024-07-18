@@ -11,6 +11,8 @@ import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.request.fetch
+import java.net.Inet4Address
+import java.net.NetworkInterface
 
 /**
  * 校园网
@@ -21,13 +23,25 @@ object CampusNet : API {
     private const val LOGIN = ":801/eportal/portal/login"  // 登录
     private const val LOGOUT = ":801/eportal/portal/logout"  // 退出
 
-    private const val CALLBACK = "Punica"
+    private const val CALLBACK_NAME = "Punica"
+
 
     /**
-     * 本机 ip
-     * @return [String]
+     * 返回本机 ip，未连接网络则返回 null
+     * @return [String]?
      */
-    suspend fun ip(): String = status().getString("v46ip")
+    fun ip(): String? {
+        NetworkInterface.getNetworkInterfaces().toList().forEach {
+            val inetAddresses = it.inetAddresses
+            for (inetAddress in inetAddresses.toList()) {
+                if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
+                    return inetAddress.hostAddress
+                }
+            }
+        }
+
+        return null
+    }
 
 
     /**
@@ -38,7 +52,7 @@ object CampusNet : API {
      */
     suspend fun login(name: String, pwd: String, ip: String) = withContext(Dispatchers.Default) {
         val json = fetch(route { LOGIN }) {
-            parameter("callback", CALLBACK)
+            parameter("callback", CALLBACK_NAME)
             parameter("user_account", ",0,$name")
             parameter("user_password", pwd)
             parameter("wlan_user_ip", ip)
@@ -46,7 +60,8 @@ object CampusNet : API {
 
         if (json.getInt("result") != 1) {
             catching({ error(json.getString("msg")) }) {
-                if (ip == status().getString("v4ip")) return@withContext
+                if (json.getInt("ret_code") == 2 || ip == status().getString("v4ip"))
+                    return@withContext
             }
         }
     }
@@ -57,7 +72,7 @@ object CampusNet : API {
      * @return [JSONObject]
      */
     private suspend fun status() =
-        fetch(route { STATUS }) { parameter("callback", CALLBACK) }.jsonString().json
+        fetch(route { STATUS }) { parameter("callback", CALLBACK_NAME) }.jsonString().json
 
 
     /**
@@ -66,7 +81,7 @@ object CampusNet : API {
      * @return [String]
      */
     private suspend fun HttpResponse.jsonString() = withContext(Dispatchers.Default) {
-        bodyAsText().trim().run { substring(CALLBACK.length + 1, length - 1) }
+        bodyAsText().trim().run { substring(CALLBACK_NAME.length + 1, length - 1) }
     }
 
 
@@ -76,7 +91,7 @@ object CampusNet : API {
      */
     suspend fun logout(ip: String) {
         fetch(route { LOGOUT }) {
-            parameter("callback", CALLBACK)
+            parameter("callback", CALLBACK_NAME)
             parameter("wlan_user_ip", ip)
         }
     }
