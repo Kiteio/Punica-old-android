@@ -36,7 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.kiteio.punica.R
-import org.kiteio.punica.SchoolReports
+import org.kiteio.punica.datastore.SchoolReports
 import org.kiteio.punica.edu.system.api.SchoolReportItem
 import org.kiteio.punica.edu.system.api.schoolReport
 import org.kiteio.punica.getString

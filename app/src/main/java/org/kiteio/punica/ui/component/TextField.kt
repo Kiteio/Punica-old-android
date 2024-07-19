@@ -89,9 +89,7 @@ fun TextField(
         onValueChange = onValueChange,
         modifier = modifier
             .run { if (this == Modifier) fillMaxWidth() else this }
-            .onFocusChanged {
-                isFocused = it.isFocused
-            },
+            .onFocusChanged { isFocused = it.isFocused },
         enabled = enabled,
         readOnly = readOnly,
         label = label?.run {

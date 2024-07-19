@@ -27,11 +27,9 @@ import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Timeline
 import androidx.compose.material.icons.rounded.ViewWeek
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -54,14 +52,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
-import org.kiteio.punica.Preferences
 import org.kiteio.punica.R
-import org.kiteio.punica.Timetables
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.daysUntil
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.datastore.Keys
+import org.kiteio.punica.datastore.Preferences
+import org.kiteio.punica.datastore.Timetables
 import org.kiteio.punica.edu.foundation.Campus
 import org.kiteio.punica.edu.foundation.Schedule
 import org.kiteio.punica.edu.foundation.Semester
@@ -75,6 +73,7 @@ import org.kiteio.punica.ui.LocalViewModel
 import org.kiteio.punica.ui.collectAsIdentified
 import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
+import org.kiteio.punica.ui.component.DropdownMenuItem
 import org.kiteio.punica.ui.component.HorizontalPager
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.IconText
@@ -119,7 +118,7 @@ fun ScheduleScreen() {
                 pagerState = pagerState,
                 week = week,
                 semester = semester,
-                onSelectedSemester = { semester = it }
+                onSemesterChange = { semester = it }
             )
         }
     ) {
@@ -154,14 +153,14 @@ fun ScheduleScreen() {
  * @param pagerState
  * @param week 当前周次
  * @param semester 选中学期
- * @param onSelectedSemester 学期选择事件
+ * @param onSemesterChange 学期选择事件
  */
 @Composable
 private fun TopAppBar(
     pagerState: PagerState,
     week: Int,
     semester: Semester,
-    onSelectedSemester: (Semester) -> Unit
+    onSemesterChange: (Semester) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val preferences by Preferences.data.collectAsState()
@@ -170,73 +169,66 @@ private fun TopAppBar(
 
     TopAppBar(
         title = { Text(text = getString(R.string.week_count, week)) },
-        shadowElevation = 0.dp
-    ) {
-        // 学期
-        TextButton(onClick = { semesterDropdownMenuExpanded = true }) {
-            Text(text = "$semester")
-            preferences?.get(Keys.lastUsername)?.let { username ->
-                DropdownMenu(
-                    expanded = semesterDropdownMenuExpanded,
-                    onDismissRequest = { semesterDropdownMenuExpanded = false }
-                ) {
-                    val grades = getStringArray(R.array.grades)
-                    val semesters = remember {
-                        with(Semester.enrolledOf(username)) {
-                            mutableStateListOf<Semester>().apply {
-                                for (i in 0..7) add(this@with + i)
+        shadowElevation = 0.dp,
+        actions = {
+            TextButton(onClick = { semesterDropdownMenuExpanded = true }) {
+                Text(text = "$semester")
+                preferences?.get(Keys.lastUsername)?.let { username ->
+                    DropdownMenu(
+                        expanded = semesterDropdownMenuExpanded,
+                        onDismissRequest = { semesterDropdownMenuExpanded = false }
+                    ) {
+                        val grades = getStringArray(R.array.grades)
+                        val semesters = remember {
+                            with(Semester.enrolledOf(username)) {
+                                mutableStateListOf<Semester>().apply {
+                                    for (i in 0..7) add(this@with + i)
+                                }
                             }
                         }
-                    }
-                    semesters.forEachIndexed { index, item ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    text = "${
-                                        grades.getOrElse(index / 2) { "" }
-                                    } $item",
-                                    style = if (item == semester) LocalTextStyle.current.copy(
-                                        color = MaterialTheme.colorScheme.primary,
-                                        fontWeight = FontWeight.Bold
-                                    ) else LocalTextStyle.current.copy(
-                                        color = subduedContentColor()
+                        semesters.forEachIndexed { index, item ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = "${grades.getOrElse(index / 2) { "" }} $item"
                                     )
-                                )
-                            },
+                                },
+                                onClick = {
+                                    onSemesterChange(item)
+                                    semesterDropdownMenuExpanded = false
+                                },
+                                selected = item == semester,
+                            )
+                        }
+                        DropdownMenuItem(
+                            text = { Text(text = getString(R.string.more)) },
                             onClick = {
-                                onSelectedSemester(item)
-                                semesterDropdownMenuExpanded = false
+                                semesters.add(semesters.last() + 1)
                             }
                         )
                     }
+                }
+            }
+
+            // 更多按钮
+            IconButton(onClick = { moreDropdownMenuExpanded = true }) {
+                Icon(imageVector = Icons.Rounded.MoreVert)
+                DropdownMenu(
+                    expanded = moreDropdownMenuExpanded,
+                    onDismissRequest = { moreDropdownMenuExpanded = false }) {
                     DropdownMenuItem(
-                        text = { Text(text = getString(R.string.more)) },
+                        text = { Text(text = getString(R.string.back_to_this_week)) },
                         onClick = {
-                            semesters.add(semesters.last() + 1)
+                            coroutineScope.launchCatching {
+                                pagerState.scrollToPage(pagerState.pageCount / 2)
+                                moreDropdownMenuExpanded = false
+                            }
                         }
                     )
                 }
             }
         }
-
-        // 更多按钮
-        IconButton(onClick = { moreDropdownMenuExpanded = true }) {
-            Icon(imageVector = Icons.Rounded.MoreVert)
-            DropdownMenu(
-                expanded = moreDropdownMenuExpanded,
-                onDismissRequest = { moreDropdownMenuExpanded = false }) {
-                DropdownMenuItem(
-                    text = { Text(text = getString(R.string.back_to_this_week)) },
-                    onClick = {
-                        coroutineScope.launchCatching {
-                            pagerState.scrollToPage(pagerState.pageCount / 2)
-                            moreDropdownMenuExpanded = false
-                        }
-                    }
-                )
-            }
-        }
-    }
+    )
 }
 
 

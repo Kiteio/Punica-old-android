@@ -32,10 +32,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.edit
-import org.kiteio.punica.CampusNetUsers
+import org.kiteio.punica.datastore.CampusNetUsers
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.Users
+import org.kiteio.punica.datastore.Users
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.launchCatching

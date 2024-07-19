@@ -9,6 +9,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -34,23 +35,18 @@ fun <T> TabPager(
     tabContent: @Composable (tab: T) -> Unit,
     pageContent: @Composable PagerScope.(page: Int) -> Unit
 ) = with(state) {
-    val coroutineScope = rememberCoroutineScope()
-
     Column {
         Surface(shadowElevation = 0.8.dp) {
-            PrimaryTabRow(
-                selectedTabIndex = currentPage,
-                divider = {}
-            ) {
-                tabs.forEachIndexed { index, tab ->
-                    Tab(
-                        selected = index == currentPage,
-                        onClick = { coroutineScope.launch { animateScrollToPage(index) } },
-                    ) {
-                        Box(modifier = Modifier.padding(vertical = dp4(2))) {
-                            tabContent(tab)
-                        }
-                    }
+            if (state.pageCount <= 5) {
+                PrimaryTabRow(
+                    selectedTabIndex = currentPage,
+                    divider = {}
+                ) {
+                    Tabs(tabContent = tabContent)
+                }
+            } else {
+                PrimaryScrollableTabRow(selectedTabIndex = currentPage, divider = {}) {
+                    Tabs(tabContent = tabContent)
                 }
             }
         }
@@ -58,6 +54,26 @@ fun <T> TabPager(
             state = state,
             pageContent = { Box(modifier = Modifier.fillMaxSize()) { pageContent(it) } }
         )
+    }
+}
+
+
+/**
+ * [Tab]s
+ * @receiver [TabPagerState]<[T]>
+ * @param tabContent
+ */
+@Composable
+private fun <T> TabPagerState<T>.Tabs(tabContent: @Composable (tab: T) -> Unit) {
+    val coroutineScope = rememberCoroutineScope()
+
+    tabs.forEachIndexed { index, tab ->
+        Tab(
+            selected = index == currentPage,
+            onClick = { coroutineScope.launch { animateScrollToPage(index) } },
+        ) {
+            Box(modifier = Modifier.padding(vertical = dp4(2))) { tabContent(tab) }
+        }
     }
 }
 

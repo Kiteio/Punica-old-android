@@ -5,6 +5,9 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import org.kiteio.punica.datastore.Identified
+import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.EduSystem.Companion.semester
 import java.util.regex.Pattern
@@ -12,7 +15,7 @@ import java.util.regex.Pattern
 /**
  * 全校课表
  * @receiver [EduSystem]
- * @return [HashMap]<[String], [List]<[List]<[TimetableAllItem]>?>>
+ * @return [TimetableAll]
  */
 suspend fun EduSystem.timetableAll() = withContext(Dispatchers.Default) {
     val text = session.post(
@@ -26,17 +29,17 @@ suspend fun EduSystem.timetableAll() = withContext(Dispatchers.Default) {
 
     matcher.apply { find(); find() }  // 去掉表头
     val regex = Regex("^(.+?)?\\s*\\((.*?)\\)$")  // 匹配教师和周次
-    val timetables = HashMap<String, List<List<TimetableAllItem>?>>()
+    val map = HashMap<String, List<TimetableAllItem>>()
 
     while (matcher.find()) {
         val document = Ksoup.parseBodyFragment(matcher.group())
         val elements = document.body().children()
 
-        val itemsList = arrayListOf<List<TimetableAllItem>?>()
+        val items = arrayListOf<TimetableAllItem>()
         for (index in 1..<elements.size) {
             // 空格子
             if (elements[index].childrenSize() == 0) {
-                itemsList.add(null); continue
+                continue
             }
 
             val texts = elements[index].child(0).textNodes().map { it.text().trim() }
@@ -44,7 +47,6 @@ suspend fun EduSystem.timetableAll() = withContext(Dispatchers.Default) {
             val dayOfWeek = (index - 1) / 6 + 1
 
             // 一个格子
-            val items = arrayListOf<TimetableAllItem>()
             for (itemIndex in texts.indices step 3) {
                 val destructed = regex.find(texts[itemIndex + 1])!!.destructured
                 val weeksStr = destructed.component2()
@@ -61,14 +63,26 @@ suspend fun EduSystem.timetableAll() = withContext(Dispatchers.Default) {
                     )
                 )
             }
-
-            itemsList.add(items)
         }
 
-        timetables[elements[0].text()] = itemsList
+        map[elements[0].text()] = items
     }
 
-    return@withContext timetables
+    return@withContext TimetableAll(semester, map)
+}
+
+
+/**
+ * 全校课表
+ * @property semester 学期
+ * @property map
+ */
+@Serializable
+class TimetableAll(
+    val semester: Semester,
+    val map: HashMap<String, List<TimetableAllItem>>
+) : Identified() {
+    override val id = semester.toString()
 }
 
 
@@ -82,6 +96,7 @@ suspend fun EduSystem.timetableAll() = withContext(Dispatchers.Default) {
  * @property dayOfWeek 星期几 1..7
  * @property clazz 班级名
  */
+@Serializable
 data class TimetableAllItem(
     override val teacher: String,
     override val weeksStr: String,

@@ -49,10 +49,10 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.kiteio.punica.Preferences
+import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.Users
+import org.kiteio.punica.datastore.Users
 import org.kiteio.punica.candy.Toast
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.candy.limit

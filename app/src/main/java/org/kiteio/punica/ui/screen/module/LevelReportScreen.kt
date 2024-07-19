@@ -14,7 +14,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.kiteio.punica.LevelReports
+import org.kiteio.punica.datastore.LevelReports
 import org.kiteio.punica.edu.system.api.levelReport
 import org.kiteio.punica.ui.LocalViewModel
 import org.kiteio.punica.ui.collectAsIdentified

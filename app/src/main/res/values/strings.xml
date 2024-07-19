@@ -59,6 +59,7 @@
     <string name="close">关闭</string>
 
     <string name="schedule_change_to">时间更换为%1$s</string>
+    <string name="day_of_week">星期%1$s</string>
     <string-array name="days_of_week">
         <item>一</item>
         <item>二</item>
@@ -168,4 +169,9 @@
     <string name="make_sure_to_delete">您确定删除%1$s吗</string>
     <string name="deleted">已删除</string>
     <string name="connected">已连接</string>
+
+    <string name="clazz">班级</string>
+    <string name="input">输入%1$s</string>
+    <string name="teacher_name">教师名</string>
+    <string name="course">课程</string>
 </resources>

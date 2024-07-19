@@ -20,21 +20,21 @@ import org.kiteio.punica.ui.navigation.Route
  * 可回退的 [TopAppBar]
  * @param route
  * @param modifier
- * @param shadowElevation
  * @param actions
+ * @param shadowElevation
  */
 @Composable
 fun NavBackTopAppBar(
     route: Route,
     modifier: Modifier = Modifier,
-    shadowElevation: Dp = 0.8.dp,
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
+    shadowElevation: Dp = 0.8.dp
 ) {
     NavBackTopAppBar(
         title = { Text(text = getString(route.nameResId)) },
         modifier = modifier,
-        shadowElevation = shadowElevation,
-        actions = actions
+        actions = actions,
+        shadowElevation = shadowElevation
     )
 }
 
@@ -43,28 +43,28 @@ fun NavBackTopAppBar(
  * 可回退的 [TopAppBar]
  * @param title
  * @param modifier
- * @param shadowElevation
  * @param actions
+ * @param shadowElevation
  */
 @Composable
 fun NavBackTopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    shadowElevation: Dp = 0.8.dp,
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
+    shadowElevation: Dp = 0.8.dp
 ) {
     val navController = LocalNavController.current
 
     TopAppBar(
         title = title,
         modifier = modifier,
-        shadowElevation = shadowElevation,
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(imageVector = Icons.AutoMirrored.Rounded.NavigateBefore)
             }
         },
-        actions = actions
+        actions = actions,
+        shadowElevation = shadowElevation
     )
 }
 
@@ -73,24 +73,24 @@ fun NavBackTopAppBar(
  * [TopAppBar]
  * @param route
  * @param modifier
- * @param shadowElevation
  * @param navigationIcon
  * @param actions
+ * @param shadowElevation
  */
 @Composable
 fun TopAppBar(
     route: Route,
     modifier: Modifier = Modifier,
-    shadowElevation: Dp = 0.8.dp,
     navigationIcon: @Composable () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
+    shadowElevation: Dp = 0.8.dp
 ) {
     TopAppBar(
         title = { Text(text = getString(route.nameResId)) },
         modifier = modifier,
-        shadowElevation = shadowElevation,
         navigationIcon = navigationIcon,
-        actions = actions
+        actions = actions,
+        shadowElevation = shadowElevation
     )
 }
 
@@ -99,18 +99,18 @@ fun TopAppBar(
  * [TopAppBar]
  * @param title
  * @param modifier
- * @param shadowElevation
  * @param navigationIcon
  * @param actions
+ * @param shadowElevation
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    shadowElevation: Dp = 0.8.dp,
     navigationIcon: @Composable () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
+    shadowElevation: Dp = 0.8.dp
 ) {
     Surface(shadowElevation = shadowElevation) {
         TopAppBar(
