@@ -43,3 +43,7 @@ private val Context.TimetableAlls by preferencesDataStore("timetableAlls")
 /** 执行计划 */
 val Plans get() = AppContext.Plans
 private val Context.Plans by preferencesDataStore("plans")
+
+/** 学业进度 */
+val Progresses get() = AppContext.Progresses
+private val Context.Progresses by preferencesDataStore("progresses")

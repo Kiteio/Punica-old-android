@@ -6,6 +6,8 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -29,7 +31,7 @@ suspend fun EduSystem.progress() = withContext(Dispatchers.Default) {
 
         val name = rows[0].child(0).textNodes()[0].text().trim()
         val requiredPoint = lastItems[1].text().trim()
-        val gotPoint = lastItems[2].text().trim()
+        val point = lastItems[2].text().trim()
 
         val progressItems = arrayListOf<ProgressItem>()
         for (rowIndex in 2..<rows.lastIndex) {
@@ -40,10 +42,10 @@ suspend fun EduSystem.progress() = withContext(Dispatchers.Default) {
                     id = elements[2].text(),
                     name = elements[3].text(),
                     module = elements[0].text(),
-                    point = elements[4].text(),
+                    requiredPoint = elements[4].text(),
                     term = elements[5].text(),
                     privilege = elements[6].text().ifBlank { null },
-                    gotPoint = elements[8].text()
+                    point = elements[8].text()
                 )
             )
         }
@@ -52,7 +54,7 @@ suspend fun EduSystem.progress() = withContext(Dispatchers.Default) {
             ProgressTable(
                 name = name,
                 requiredPoint = requiredPoint,
-                gotPoint = gotPoint,
+                point = point,
                 items = progressItems
             )
         )
@@ -67,23 +69,27 @@ suspend fun EduSystem.progress() = withContext(Dispatchers.Default) {
  * @property username 学号
  * @property tables
  */
+@Serializable
 class Progress(
     val username: String,
     val tables: List<ProgressTable>
-)
+) : Identified() {
+    override val id = username
+}
 
 
 /**
  * 学业进度表
  * @property name 表名
  * @property requiredPoint 要求学分
- * @property gotPoint 已获得学分
+ * @property point 已获得学分
  * @property items
  */
+@Serializable
 data class ProgressTable(
     val name: String,
     val requiredPoint: String,
-    val gotPoint: String,
+    val point: String,
     val items: List<ProgressItem>
 )
 
@@ -93,17 +99,18 @@ data class ProgressTable(
  * @property id 课程编号
  * @property name 课程名
  * @property module 模块
- * @property point 学分
+ * @property requiredPoint 学分
  * @property term 建议修读学期
  * @property privilege 免听、免修
- * @property gotPoint 已获得学分
+ * @property point 已获得学分
  */
+@Serializable
 data class ProgressItem(
     val id: String,
     val name: String,
     val module: String,
-    val point: String,
+    val requiredPoint: String,
     val term: String,
     val privilege: String?,
-    val gotPoint: String
+    val point: String
 )
