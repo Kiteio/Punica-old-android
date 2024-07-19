@@ -39,28 +39,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.http.Cookie
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.datastore.Users
 import org.kiteio.punica.candy.Toast
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.candy.limit
 import org.kiteio.punica.datastore.Keys
+import org.kiteio.punica.datastore.Preferences
+import org.kiteio.punica.datastore.Users
 import org.kiteio.punica.datastore.get
-import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.User
-import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.AppViewModel
 import org.kiteio.punica.ui.LocalNavController
@@ -231,15 +225,7 @@ class LoginViewModel(private val viewModel: AppViewModel) : ViewModel() {
         interactable = false
         val user = User(name, pwd, secondClassPwd, campusNetPwd, cookies)
         job = viewModelScope.launchCatching(onCatch = { Toast().show(); interactable = true }) {
-            flow {
-                emit(EduSystem.login(user, false))
-            }.cancellable().catch {
-                if (it is ConnectTimeoutException) {
-                    WebVPN.login(name, pwd, cookies)
-                    emit(EduSystem.login(user, true))
-                } else throw it
-            }.collect {
-                viewModel.onLoggedIn(it, user)
+            viewModel.login(user).collect {
                 Toast(getString(R.string.logged_in)).show()
                 interactable = true
                 onLoggedIn()

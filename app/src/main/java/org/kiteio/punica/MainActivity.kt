@@ -5,8 +5,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import org.kiteio.punica.candy.catching
+import org.kiteio.punica.datastore.Keys
+import org.kiteio.punica.datastore.Preferences
+import org.kiteio.punica.datastore.Users
+import org.kiteio.punica.datastore.get
+import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.ui.AppViewModel
 import org.kiteio.punica.ui.LocalNavController
 import org.kiteio.punica.ui.LocalViewModel
@@ -22,10 +31,29 @@ class MainActivity : ComponentActivity() {
         AppContext = applicationContext
         setContent {
             PunicaTheme {
+                val viewModel = viewModel { AppViewModel() }
+
+                // 自动登录
+                LaunchedEffect(key1 = Unit) {
+                    catching {
+                        flow {
+                            Preferences.data.collect {
+                                it[Keys.lastUsername]?.let { username -> emit(username) }
+                            }
+                        }.collect { username ->
+                            Users.data.collect {
+                                it.get<User>(username)?.let { user ->
+                                    viewModel.login(user).first()
+                                }
+                            }
+                        }
+                    }
+                }
+
                 val navController = rememberNavController()
 
                 CompositionLocalProvider(
-                    LocalViewModel provides viewModel { AppViewModel() },
+                    LocalViewModel provides viewModel,
                     LocalNavController provides navController
                 ) {
                     NavHost(navController = navController, startRoute = Route.Main) {
