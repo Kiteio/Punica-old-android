@@ -1,6 +1,7 @@
 package org.kiteio.punica
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.annotation.ArrayRes
@@ -76,3 +77,11 @@ fun getString(@StringRes redId: Int, vararg formatArgs: Any) =
  * @return [Array]<[String]>
  */
 fun getStringArray(@ArrayRes resId: Int): Array<String> = AppContext.resources.getStringArray(resId)
+
+
+/**
+ * 打开 Uri
+ * @receiver [Context]
+ * @param uri
+ */
+fun Context.openUri(uri: String) = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))

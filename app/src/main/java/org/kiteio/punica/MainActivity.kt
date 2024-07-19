@@ -63,8 +63,6 @@ class MainActivity : ComponentActivity() {
                         composable(Route.Version)
                         composable(Route.Settings)
                         composable(Route.Module.values)
-                        composable(Route.NoticeDetail)
-                        composable(Route.WebView)
                     }
                 }
             }

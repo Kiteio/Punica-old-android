@@ -1,6 +1,5 @@
 package org.kiteio.punica.ui.navigation
 
-import android.net.Uri
 import androidx.navigation.NavHostController
 
 /**
@@ -8,5 +7,4 @@ import androidx.navigation.NavHostController
  * @receiver [NavHostController]
  * @param route
  */
-fun NavHostController.navigate(route: Route, args: List<String>? = null) =
-    navigate(route.routeNotArgs + Route.argsOf(args) { Uri.encode(it) })
+fun NavHostController.navigate(route: Route) = navigate(route.id)

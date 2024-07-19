@@ -23,7 +23,6 @@ composeIcons = "1.1.0"
 coil = "2.6.0"
 palette = "1.0.0"
 paging = "3.3.0"
-webview = "1.9.20"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,7 +55,6 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 palette = { module = "androidx.palette:palette", version.ref = "palette" }
 paging = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
-webview = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "webview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
