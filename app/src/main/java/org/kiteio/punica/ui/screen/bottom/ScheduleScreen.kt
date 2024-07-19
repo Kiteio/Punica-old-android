@@ -178,21 +178,21 @@ private fun TopAppBar(
                         expanded = semesterDropdownMenuExpanded,
                         onDismissRequest = { semesterDropdownMenuExpanded = false }
                     ) {
-                        val grades = getStringArray(R.array.grades)
-                        val semesters = remember {
-                            with(Semester.enrolledOf(username)) {
-                                mutableStateListOf<Semester>().apply {
-                                    for (i in 0..7) add(this@with + i)
-                                }
+                        val firstHalf = getString(R.string.first_half)
+                        val lastHalf = getString(R.string.last_half)
+                        val grades = getStringArray(R.array.grades).flatMap {
+                            listOf(it + firstHalf, it + lastHalf)
+                        }
+
+                        val semesters = remember(username) {
+                            mutableStateListOf<Semester>().apply {
+                                addAll(Semester.listFor(username))
                             }
                         }
+
                         semesters.forEachIndexed { index, item ->
                             DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = "${grades.getOrElse(index / 2) { "" }} $item"
-                                    )
-                                },
+                                text = { Text(text = "${grades.getOrElse(index) { "" }} $item") },
                                 onClick = {
                                     onSemesterChange(item)
                                     semesterDropdownMenuExpanded = false

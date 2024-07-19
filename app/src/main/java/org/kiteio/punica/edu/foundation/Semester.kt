@@ -54,11 +54,23 @@ data class Semester(
 
 
         /**
+         * 返回 [username] 大学各个学期
+         * @param username
+         * @return [List]<[Semester]>
+         */
+        fun listFor(username: String): List<Semester> = with(enrolledOf(username)) {
+            mutableListOf<Semester>().apply {
+                for (i in 0..7) add(this@with + i)
+            }
+        }
+
+
+        /**
          * 获取 [username] 的入学学期
          * @param username 学号
          * @return [Semester]
          */
-        fun enrolledOf(username: String) =
+        private fun enrolledOf(username: String) =
             Semester(("20" + username.substring(0..1)).toInt(), 1)
     }
 }

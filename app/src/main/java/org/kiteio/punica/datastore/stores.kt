@@ -39,3 +39,7 @@ private val Context.CampusNetUsers by preferencesDataStore("campusNetUsers")
 /** 全校课表 */
 val TimetableAlls get() = AppContext.TimetableAlls
 private val Context.TimetableAlls by preferencesDataStore("timetableAlls")
+
+/** 执行计划 */
+val Plans get() = AppContext.Plans
+private val Context.Plans by preferencesDataStore("plans")
