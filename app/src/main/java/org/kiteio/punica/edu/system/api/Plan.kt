@@ -4,6 +4,8 @@ import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 
@@ -46,10 +48,13 @@ suspend fun EduSystem.plan() = withContext(Dispatchers.Default) {
  * @property username 学号
  * @property items
  */
+@Serializable
 class Plan(
     val username: String,
     val items: List<PlanItem>
-)
+): Identified() {
+    override val id = username
+}
 
 
 /**
@@ -63,6 +68,7 @@ class Plan(
  * @property examMode 考核方式
  * @property type 课程属性
  */
+@Serializable
 data class PlanItem(
     val id: String,
     val semester: Semester,

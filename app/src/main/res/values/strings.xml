@@ -174,4 +174,7 @@
     <string name="input">输入%1$s</string>
     <string name="teacher_name">教师名</string>
     <string name="course">课程</string>
+    
+    <string name="first_half">上</string>
+    <string name="last_half">下</string>
 </resources>
