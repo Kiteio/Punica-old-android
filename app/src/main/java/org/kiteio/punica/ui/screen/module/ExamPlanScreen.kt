@@ -47,8 +47,9 @@ import java.time.format.DateTimeFormatter
 fun ExamPlanScreen() {
     val now = remember { LocalDateTime.now() }
     val eduSystem = LocalViewModel.current.eduSystem
-    val examPlan =
-        ExamPlans.collectAsIdentified(id = rememberLastUsername(EduSystem.semester)) { eduSystem?.examPlan() }
+    val examPlan = ExamPlans.collectAsIdentified(id = rememberLastUsername(EduSystem.semester)) {
+            eduSystem?.examPlan()
+        }
 
     ScaffoldBox(
         topBar = {
