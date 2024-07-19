@@ -5,13 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import io.ktor.client.network.sockets.ConnectTimeoutException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import org.kiteio.punica.candy.catching
+import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.datastore.Users
-import org.kiteio.punica.candy.catching
-import org.kiteio.punica.candy.launchCatching
-import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.set
+import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.api.campusNetPwd
@@ -27,21 +31,33 @@ class AppViewModel : ViewModel() {
 
 
     /**
-     * 已登录教务系统
-     * @param eduSystem
+     * 登录
+     * @param user
+     * @return [Flow]<[EduSystem]>
      */
-    fun onLoggedIn(eduSystem: EduSystem, user: User) {
-        viewModelScope.launchCatching {
+    suspend fun login(user: User) = flow<EduSystem> {
+        flow {
+            emit(EduSystem.login(user, false))
+        }.cancellable().catch {
+            if (it is ConnectTimeoutException) {
+                WebVPN.login(user.name, user.pwd, user.cookies)
+                emit(EduSystem.login(user, true))
+            } else throw it
+        }.collect { eduSystem ->
             onLogout()
             this@AppViewModel.eduSystem = eduSystem
+
             user.apply {
                 campusNetPwd.ifBlank { campusNetPwd = eduSystem.campusNetPwd() }
             }
+
             Users.edit { it.set(user) }
             Preferences.edit {
                 it[Keys.lastUsername] = user.name
                 catching { it[Keys.schoolStart] = eduSystem.schoolStart().toString() }
             }
+
+            emit(eduSystem)
         }
     }
 
