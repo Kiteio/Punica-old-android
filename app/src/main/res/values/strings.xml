@@ -116,6 +116,7 @@
     <string name="sort">属性</string>
     <string name="type">性质</string>
     <string name="point">学分</string>
+    <string name="got_point">得分</string>
     <string name="score">成绩</string>
     <string name="usual">平时</string>
     <string name="experiment">实验</string>
@@ -177,4 +178,6 @@
     
     <string name="first_half">上</string>
     <string name="last_half">下</string>
+
+    <string name="recommended_term">建议修读学期</string>
 </resources>
