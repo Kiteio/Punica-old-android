@@ -51,9 +51,9 @@ private fun BottomBar(navController: NavHostController, routes: List<Route.Botto
     NavigationBar {
         routes.forEach { route ->
             NavigationBarItem(
-                selected = route.route == currentRouteId,
+                selected = route.id == currentRouteId,
                 onClick = {
-                    if (currentRouteId != route.route) {
+                    if (currentRouteId != route.id) {
                         navController.popBackStack()
                         navController.navigate(route)
                     }

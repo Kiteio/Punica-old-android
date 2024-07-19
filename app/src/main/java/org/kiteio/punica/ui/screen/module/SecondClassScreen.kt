@@ -1,7 +1,5 @@
 package org.kiteio.punica.ui.screen.module
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,10 +53,10 @@ import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import org.kiteio.punica.R
-import org.kiteio.punica.datastore.SecondClassReports
 import org.kiteio.punica.candy.LocalDateTime
 import org.kiteio.punica.candy.format
 import org.kiteio.punica.candy.route
+import org.kiteio.punica.datastore.SecondClassReports
 import org.kiteio.punica.edu.SecondClass
 import org.kiteio.punica.edu.SecondClassActivity
 import org.kiteio.punica.edu.SecondClassActivityItem
@@ -66,6 +64,7 @@ import org.kiteio.punica.edu.SecondClassLog
 import org.kiteio.punica.edu.SecondClassReport
 import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.getString
+import org.kiteio.punica.openUri
 import org.kiteio.punica.ui.collectAsIdentified
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Icon
@@ -261,7 +260,7 @@ private fun ActivityBottomSheet(
         LaunchedEffect(key1 = secondClass, key2 = id) {
             id?.let { activity = secondClass?.activity(it) }
         }
-        
+
         LazyColumn(modifier = Modifier.padding(dp4(4))) {
             activity?.run {
                 item {
@@ -330,14 +329,7 @@ private fun ActivityBottomSheet(
                 item {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                         ElevatedButton(
-                            onClick = {
-                                context.startActivity(
-                                    Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse(SecondClass.route { "#/pages/acti/info?key=$id" })
-                                    )
-                                )
-                            }
+                            onClick = { context.openUri(SecondClass.route { "#/pages/acti/info?key=$id" }) }
                         ) { Text(text = getString(R.string.open_in_browser)) }
                     }
                     Spacer(modifier = Modifier.height(dp4(4)))
