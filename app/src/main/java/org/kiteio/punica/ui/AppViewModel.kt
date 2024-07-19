@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import org.kiteio.punica.Preferences
-import org.kiteio.punica.Users
+import org.kiteio.punica.datastore.Preferences
+import org.kiteio.punica.datastore.Users
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.datastore.Keys

@@ -55,7 +55,7 @@ import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import org.kiteio.punica.R
-import org.kiteio.punica.SecondClassReports
+import org.kiteio.punica.datastore.SecondClassReports
 import org.kiteio.punica.candy.LocalDateTime
 import org.kiteio.punica.candy.format
 import org.kiteio.punica.candy.route

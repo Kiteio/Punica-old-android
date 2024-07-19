@@ -20,7 +20,6 @@ import androidx.navigation.navArgument
 import compose.icons.TablerIcons
 import compose.icons.tablericons.BellRinging
 import compose.icons.tablericons.Book
-import compose.icons.tablericons.Building
 import compose.icons.tablericons.ChartLine
 import compose.icons.tablericons.Click
 import compose.icons.tablericons.Clipboard
@@ -50,7 +49,6 @@ import org.kiteio.punica.ui.screen.module.EmergencyCallsScreen
 import org.kiteio.punica.ui.screen.module.EvaluationScreen
 import org.kiteio.punica.ui.screen.module.ExamPlanScreen
 import org.kiteio.punica.ui.screen.module.LevelReportScreen
-import org.kiteio.punica.ui.screen.module.NotEmptyRoomScreen
 import org.kiteio.punica.ui.screen.module.NoticeDetailScreen
 import org.kiteio.punica.ui.screen.module.NoticeScreen
 import org.kiteio.punica.ui.screen.module.PlanScreen
@@ -185,10 +183,6 @@ sealed class Route(
         /** 校园网 */
         data object CampusNet : Module({ CampusNetScreen() }, R.string.campus_net, TablerIcons.Wifi)
 
-        /** 非空教室 */
-        data object NotEmptyRoom :
-            Module({ NotEmptyRoomScreen() }, R.string.not_empty_room, TablerIcons.Building)
-
         /** 全校课表 */
         data object TimetableAll :
             Module({ TimetableAllScreen() }, R.string.timetable_all, TablerIcons.Book)
@@ -216,7 +210,6 @@ sealed class Route(
                     SecondClass,
                     TeacherInfo,
                     CampusNet,
-                    NotEmptyRoom,
                     TimetableAll,
                     Plan,
                     Progress

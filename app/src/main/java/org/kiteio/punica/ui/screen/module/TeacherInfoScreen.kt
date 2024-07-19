@@ -52,6 +52,7 @@ import org.kiteio.punica.edu.system.api.teacherList
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.LocalViewModel
 import org.kiteio.punica.ui.component.BottomSheet
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.LazyPagingColumn
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.Pager
@@ -59,7 +60,6 @@ import org.kiteio.punica.ui.component.PagingSource
 import org.kiteio.punica.ui.component.ScaffoldColumn
 import org.kiteio.punica.ui.component.SearchBar
 import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.items
 import org.kiteio.punica.ui.dp4
@@ -92,7 +92,12 @@ fun TeacherInfoScreen() {
                 onSearch = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(dp4(4))
+                    .padding(dp4(4)),
+                placeholder = {
+                    Text(
+                        text = getString(R.string.input, getString(R.string.teacher_name))
+                    )
+                }
             )
         }
 

@@ -20,7 +20,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import org.kiteio.punica.ExamPlans
+import org.kiteio.punica.datastore.ExamPlans
 import org.kiteio.punica.R
 import org.kiteio.punica.candy.minutesUntil
 import org.kiteio.punica.edu.system.EduSystem

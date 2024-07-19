@@ -28,7 +28,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.materialkolor.rememberDynamicColorScheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiteio.punica.Preferences
+import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.R
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.collectAsState
