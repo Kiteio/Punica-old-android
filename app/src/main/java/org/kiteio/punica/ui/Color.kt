@@ -19,6 +19,10 @@ fun Color.Companion.random() = Color(
 )
 
 
+/** 连接颜色 */
+val Color.Companion.Link get() = Color(0, 109, 204)
+
+
 /**
  * 颜色转十六进制
  * @receiver [Color]

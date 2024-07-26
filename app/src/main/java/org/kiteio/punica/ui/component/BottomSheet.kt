@@ -1,12 +1,15 @@
 package org.kiteio.punica.ui.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
+import org.kiteio.punica.ui.focusCleaner
 
 /**
  * [ModalBottomSheet]
@@ -32,7 +35,7 @@ fun BottomSheet(
                 coroutineScope.launch { sheetState.hide() }.invokeOnCompletion { onDismiss() }
             },
             sheetState = sheetState,
-            content = content
+            content = { Column(modifier = Modifier.focusCleaner(), content = content) }
         )
     }
 }

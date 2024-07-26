@@ -1,7 +1,5 @@
 package org.kiteio.punica.ui.component
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -13,11 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.platform.LocalFocusManager
+import org.kiteio.punica.ui.focusCleaner
 
 /**
  * [Scaffold] 嵌套 [Column]
@@ -96,18 +92,3 @@ fun ScaffoldBox(
         )
     }
 }
-
-
-/**
- * 点击可清除焦点
- * @receiver [Modifier]
- * @param focusManager
- * @return [Modifier]
- */
-@Composable
-private fun Modifier.focusCleaner(
-    focusManager: FocusManager = LocalFocusManager.current
-) = this.clickable(
-    interactionSource = remember{ MutableInteractionSource() },
-    indication = null
-) { focusManager.clearFocus() }

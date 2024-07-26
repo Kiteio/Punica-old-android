@@ -7,6 +7,7 @@
     <string name="course_system_closed">选课系统未开放</string>
     <string name="course_basic">必修课</string>
     <string name="course_optional">选修课</string>
+    <string name="course_pe">体育课</string>
     <string name="course_general">通识课</string>
     <string name="course_cross_year">跨年级</string>
     <string name="course_cross_major">跨专业</string>
@@ -27,6 +28,7 @@
     <string name="logout">退出登录</string>
     <string name="student_id">学号</string>
     <string name="portal_password">门户密码</string>
+    <string name="forget_password">忘记密码（前往一体化平台修改）</string>
     
     <string name="slogan">新一代广财教学信息查询工具</string>
     <string name="security_convenient_intelligent">安全 | 便捷 | 智能</string>
@@ -180,4 +182,23 @@
     <string name="last_half">下</string>
 
     <string name="recommended_term">建议修读学期</string>
+    <string name="time">时间</string>
+
+    <string name="filtering_no_seats">过滤已满</string>
+    <string name="filter_conflicting">过滤冲突</string>
+    <string name="course_select">选课</string>
+    <string name="course_delete">退课</string>
+    <string name="selected">已选择</string>
+    <string name="priority">志愿</string>
+    <string-array name="priorities">
+        <item>第一志愿</item>
+        <item>第二志愿</item>
+        <item>第三志愿</item>
+    </string-array>
+    <string name="list">列表</string>
+    <string name="table">表格</string>
+    <string name="input_to_delete">输入“%1$s”以确定删除</string>
+    <string name="input_does_not_match">输入名称不一致</string>
+    <string name="connect_to_campus_network_or_VPN">请连接校园网或开启 VPN</string>
+    <string name="token_input_tip">输入浏览器链接后的 jx0502zbid 值（等号后）以进入系统</string>
 </resources>

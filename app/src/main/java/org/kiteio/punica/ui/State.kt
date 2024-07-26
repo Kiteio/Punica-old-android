@@ -47,14 +47,14 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collect
     val preferences by data.collectAsState()
     var value by remember { mutableStateOf<T?>(null) }
 
-    LaunchedEffect(key1 = preferences) {
-        value = catching<T?> { id?.let { preferences?.get<T>(it) } }
-    }
-
     LaunchedEffect(key1 = id, key2 = key) {
         coroutineScope.launch {
-            if (id != null) catching<T?> { fromRemote() }?.let {
-                value = it.also { value -> edit { it.set(value) } }
+            if (id != null) value = catching<T?> {
+                fromRemote()
+            }?.also { value -> edit { it.set(value) } }
+
+            if (value == null) {
+                value = id?.let { preferences?.get<T>(it) }
             }
         }
     }
@@ -83,14 +83,15 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collect
 
 /**
  * 远端数据
+ * @param key
  * @param fromRemote
  * @return [T]?
  */
 @Composable
-inline fun <T> rememberRemote(crossinline fromRemote: suspend () -> T?): T? {
+fun <T> rememberRemote(key: Any? = null, fromRemote: suspend () -> T?): T? {
     var value by remember { mutableStateOf<T?>(null) }
 
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = key) {
         value = catching<T?> { fromRemote() }
     }
 
@@ -100,14 +101,14 @@ inline fun <T> rememberRemote(crossinline fromRemote: suspend () -> T?): T? {
 
 /**
  * 远端数据列表
+ * @param key
  * @param fromRemote
- * @param
  * @return [SnapshotStateList]<[T]>
  */
 @Composable
-inline fun <T> rememberRemoteList(
+fun <T> rememberRemoteList(
     key: Any? = null,
-    crossinline fromRemote: suspend () -> List<T>?
+    fromRemote: suspend () -> List<T>?
 ): SnapshotStateList<T> {
     val list = remember { mutableStateListOf<T>() }
 
@@ -154,8 +155,10 @@ fun rememberUser(name: String?): User? {
 @Composable
 fun rememberLastUsername(semester: Semester? = null): String? {
     val preferences by Preferences.data.collectAsState()
-    val username by remember {
-        derivedStateOf { preferences?.get(Keys.lastUsername)?.let { it + (semester ?: "") } }
+    var username by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(key1 = preferences, key2 = semester) {
+        username = preferences?.get(Keys.lastUsername)?.let { it + (semester ?: "") }
     }
 
     return username

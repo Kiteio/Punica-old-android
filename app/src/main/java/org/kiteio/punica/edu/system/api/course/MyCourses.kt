@@ -44,6 +44,8 @@ suspend fun CourseSystem.myCourses(): List<MyCourse> = withContext(Dispatchers.D
             myCourses.add(
                 MyCourse(
                     id =  it[0].text(),
+                    // TODO: 此处是后补，大概率会出现问题
+                    operateId = it[5].getElementsByTag("a").attr("href"),
                     name = it[1].text(),
                     point =  it[2].text(),
                     type =  it[3].text(),
@@ -60,6 +62,7 @@ suspend fun CourseSystem.myCourses(): List<MyCourse> = withContext(Dispatchers.D
 /**
  * 已选课程
  * @property id 课程编号
+ * @property operateId
  * @property name 课程名
  * @property point 学分
  * @property type 课程属性
@@ -68,6 +71,7 @@ suspend fun CourseSystem.myCourses(): List<MyCourse> = withContext(Dispatchers.D
  */
 data class MyCourse(
     val id: String,
+    val operateId: String,
     val name: String,
     val point: String,
     val type: String,

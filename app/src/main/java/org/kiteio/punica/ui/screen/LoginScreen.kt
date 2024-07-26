@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
@@ -48,15 +51,19 @@ import kotlinx.coroutines.launch
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.Toast
+import org.kiteio.punica.candy.appendClickable
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.candy.limit
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.datastore.Users
 import org.kiteio.punica.datastore.get
+import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.getString
+import org.kiteio.punica.openUri
 import org.kiteio.punica.ui.AppViewModel
+import org.kiteio.punica.ui.Link
 import org.kiteio.punica.ui.LocalNavController
 import org.kiteio.punica.ui.LocalViewModel
 import org.kiteio.punica.ui.component.Icon
@@ -73,6 +80,7 @@ import org.kiteio.punica.ui.dp4
  */
 @Composable
 fun LoginScreen() {
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val viewModel = LocalViewModel.current
     val navController = LocalNavController.current
@@ -150,6 +158,20 @@ fun LoginScreen() {
                     enabled = interactable,
                     label = { Text(text = getString(R.string.portal_password)) },
                     imeAction = ImeAction.Done
+                )
+                Spacer(modifier = Modifier.height(dp4(8)))
+                Text(
+                    text = buildAnnotatedString {
+                        appendClickable(
+                            getString(
+                                R.string.forget_password
+                            ),
+                            MaterialTheme.typography.bodySmall.copy(color = Color.Link)
+                        ) {
+                            context.openUri(WebVPN.root)
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.Start)
                 )
                 Spacer(modifier = Modifier.height(dp4(8)))
 

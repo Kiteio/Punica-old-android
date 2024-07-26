@@ -7,12 +7,14 @@ object URLs {
     /** Github */
     private const val GITHUB = "https://github.com"
 
-    /** Punica */
-    const val PUNICA = "$GITHUB/Kiteio/Punica"
+    /** Gitee */
+    private const val GITEE = "https://gitee.com"
 
-    /** Github 下载加速 */
-    private const val GITHUB_PROMOTE = "https://gitdl.cn"
+    private const val PUNICA_ROUTE = "/Kiteio/Punica"
+
+    /** Punica */
+    const val PUNICA = "$GITHUB$PUNICA_ROUTE"
 
     /** Tessdata 训练文件 */
-    const val TESSDATA = "$GITHUB_PROMOTE/$GITHUB/tesseract-ocr/tessdata_fast/blob/main/eng.traineddata"
+    const val TESSDATA = "$GITEE$PUNICA_ROUTE/raw/master/tessdata/eng.traineddata"
 }

@@ -14,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.kiteio.punica.ui.applyLocalAlpha
@@ -26,19 +28,23 @@ import org.kiteio.punica.ui.subduedContentColor
  * 标题
  * @param text
  * @param modifier
+ * @param maxLines
  * @param style
  */
 @Composable
 fun Title(
     text: String,
     modifier: Modifier = Modifier,
+    maxLines: Int = Int.MAX_VALUE,
     style: TextStyle = MaterialTheme.typography.titleMedium.copy(fontSize = 18.sp)
 ) {
     Text(
         text = text,
+        modifier = modifier,
         color = MaterialTheme.colorScheme.primary.applyLocalAlpha(),
-        style = style,
-        modifier = modifier
+        overflow = TextOverflow.Ellipsis,
+        maxLines = maxLines,
+        style = style
     )
 }
 
@@ -70,27 +76,63 @@ fun SubduedText(
 
 
 /**
- * [Icon] [IconText]
+ * 弱化文本
  * @param text
- * @param leadingIcon
- * @param leadingText
+ * @param modifier
  * @param color
+ * @param textAlign
+ * @param style
+ */
+@Composable
+fun SubduedText(
+    text: AnnotatedString,
+    modifier: Modifier = Modifier,
+    color: Color = subduedContentColor(),
+    textAlign: TextAlign? = null,
+    style: TextStyle = MaterialTheme.typography.bodySmall
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        color = color,
+        textAlign = textAlign,
+        style = style,
+    )
+}
+
+
+/**
+ * [Icon] [IconText]
+ * @param text 文本内容
+ * @param leadingIcon 首部图标
+ * @param modifier
+ * @param leadingText 首部文字
+ * @param color
+ * @param leadingColor
+ * @param horizontalArrangement
+ * @param maxLines
+ * @param style
  */
 @Composable
 fun IconText(
     text: String,
     leadingIcon: ImageVector,
-    leadingText: String? = null,
     modifier: Modifier = Modifier,
+    leadingText: String? = null,
     color: Color = Color.Unspecified,
     leadingColor: Color = Color.Unspecified,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    maxLines: Int = Int.MAX_VALUE,
     style: TextStyle = LocalTextStyle.current
 ) {
     val myLeadingColor =
         leadingColor.takeOrElse { MaterialTheme.colorScheme.secondary.applyLocalAlpha() }
 
-    Row(horizontalArrangement = horizontalArrangement, modifier = modifier) {
+    Row(
+        horizontalArrangement = horizontalArrangement,
+        verticalAlignment = if (leadingText == null) Alignment.CenterVertically else Alignment.Top,
+        modifier = modifier
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = leadingIcon,
@@ -99,10 +141,16 @@ fun IconText(
             )
             Spacer(modifier = Modifier.width(dp4()))
 
-            leadingText?.run { Text(text = leadingText, color = myLeadingColor, style = style) }
+            if (leadingText != null) Text(text = leadingText, color = myLeadingColor, style = style)
         }
-        Spacer(modifier = Modifier.width(dp4(3)))
+        if (leadingText != null) Spacer(modifier = Modifier.width(dp4(3)))
 
-        Text(text = text, color = color, style = style)
+        Text(
+            text = text,
+            color = color,
+            style = style,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = maxLines
+        )
     }
 }

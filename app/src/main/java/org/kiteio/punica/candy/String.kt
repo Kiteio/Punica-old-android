@@ -15,3 +15,12 @@ val String.json get() = JSONObject(this)
  * @return [String]
  */
 fun String.limit(size: Int) = if (length <= size) this else substring(0, size)
+
+
+/**
+ * 如果 [isNotBlank]，返回 [value] 的值，否则返回原值
+ * @receiver [String]
+ * @param value
+ * @return [String]
+ */
+inline fun String.ifNotBlank(value: (String) -> String) = if (isNotBlank()) value(this) else this
