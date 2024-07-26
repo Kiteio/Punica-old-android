@@ -198,52 +198,56 @@ private fun DetailBottomSheet(
                 SubduedText(text = "$semester")
                 Spacer(modifier = Modifier.height(dp4(4)))
 
-                IconText(text = id, leadingIcon = Icons.Rounded.Numbers, getString(R.string.id))
+                IconText(
+                    text = id,
+                    leadingIcon = Icons.Rounded.Numbers,
+                    leadingText = getString(R.string.id)
+                )
                 IconText(
                     text = sort,
                     leadingIcon = Icons.AutoMirrored.Rounded.Sort,
-                    getString(R.string.sort)
+                    leadingText = getString(R.string.sort)
                 )
                 IconText(
                     text = type,
                     leadingIcon = Icons.AutoMirrored.Rounded.MergeType,
-                    getString(R.string.type)
+                    leadingText = getString(R.string.type)
                 )
-                IconText(text = point, leadingIcon = Icons.Rounded.Star, getString(R.string.point))
-                IconText(text = score, leadingIcon = Icons.Rounded.Score, getString(R.string.score))
+                IconText(text = point, leadingIcon = Icons.Rounded.Star, leadingText = getString(R.string.point))
+                IconText(text = score, leadingIcon = Icons.Rounded.Score, leadingText = getString(R.string.score))
                 Spacer(modifier = Modifier.height(dp4(4)))
 
                 IconText(
                     text = usualScore,
                     leadingIcon = Icons.Rounded.Timelapse,
-                    getString(R.string.usual)
+                    leadingText = getString(R.string.usual)
                 )
                 IconText(
                     text = experimentScore,
                     leadingIcon = Icons.Rounded.Explicit,
-                    getString(R.string.experiment)
+                    leadingText = getString(R.string.experiment)
                 )
                 IconText(
                     text = examScore,
                     leadingIcon = Icons.AutoMirrored.Rounded.ReceiptLong,
-                    getString(R.string.exam)
+                    leadingText = getString(R.string.exam)
                 )
                 Spacer(modifier = Modifier.height(dp4(4)))
 
                 IconText(
                     text = classHours,
                     leadingIcon = Icons.Rounded.HourglassBottom,
-                    getString(R.string.class_hours)
+                    leadingText = getString(R.string.class_hours)
                 )
                 IconText(
                     text = examMode,
                     leadingIcon = Icons.Rounded.AddChart,
-                    getString(R.string.exam_mode)
+                    leadingText = getString(R.string.exam_mode)
                 )
                 IconText(
                     text = examSort,
                     leadingIcon = Icons.Rounded.AllOut,
-                    getString(R.string.exam_sort)
+                    leadingText = getString(R.string.exam_sort)
                 )
             }
         }

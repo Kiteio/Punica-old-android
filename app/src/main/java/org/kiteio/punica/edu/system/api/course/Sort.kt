@@ -1,34 +1,36 @@
 package org.kiteio.punica.edu.system.api.course
 
-import androidx.annotation.StringRes
-import org.kiteio.punica.R
-
 /**
  * 课程分类
- * @property resId
  * @property listRoute
  * @property selectRoute
  */
-sealed class Sort(@StringRes val resId: Int, val listRoute: String, val selectRoute: String) {
-    data object Basic : Unsearchable(R.string.course_basic, "Bx", "bx")
-    data object Optional : Unsearchable(R.string.course_optional, "Xx", "xx")
+sealed class Sort(val listRoute: String, val selectRoute: String) {
+    /** 必修课 */
+    data object Basic : Unsearchable("Bx", "bx")
 
-    data object General : Searchable(R.string.course_general, "Ggxxk", "ggxxk")
-    data object CrossYear : Searchable(R.string.course_cross_year, "Knj", "knj")
-    data object CrossMajor : Searchable(R.string.course_cross_major, "Faw", "faw")
-    data object Major : Searchable(R.string.course_major, "Bxqjh", "bxqjh")
+    /** 选修课 */
+    data object Optional : Unsearchable("Xx", "xx")
+
+    /** 通识课 */
+    data object General : Searchable("Ggxxk", "ggxxk")
+
+    /** 跨专业 */
+    data object CrossMajor : Searchable("Faw", "faw")
+
+    /** 跨年级 */
+    data object CrossYear : Searchable("Knj", "knj")
+
+    /** 专业内计划 */
+    data object Major : Searchable("Bxqjh", "bxqjh")
+
+
+    /** 可搜索课程 */
+    sealed class Searchable(listRoute: String, selectRoute: String) :
+        Sort(listRoute, selectRoute)
+
+
+    /** 不可搜索课程 */
+    sealed class Unsearchable(listRoute: String, selectRoute: String) :
+        Sort(listRoute, selectRoute)
 }
-
-
-/**
- * 可搜索课程
- */
-sealed class Searchable(@StringRes resId: Int, listRoute: String, selectRoute: String) :
-    Sort(resId, listRoute, selectRoute)
-
-
-/**
- * 不可搜索课程
- */
-sealed class Unsearchable(@StringRes resId: Int, listRoute: String, selectRoute: String) :
-    Sort(resId, listRoute, selectRoute)

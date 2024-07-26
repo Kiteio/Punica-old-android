@@ -16,21 +16,25 @@ val FilesDir: File get() = AppContext.filesDir
 
 
 /**
- * 将 [uri] 保存至 [Context.getFilesDir]/images/[name]
- * @receiver [Context]
+ * 将 [uri] 保存至 [Context.getFilesDir]/[directory]/[name]
+ * @receiver Context
  * @param uri
+ * @param directory
  * @param name
  * @return [String]
  */
-fun Context.uriToImages(uri: Uri, name: String): String =
+fun Context.copyToFiles(uri: Uri, directory: String, name: String): String? =
     contentResolver.openInputStream(uri).use { inputStream ->
-        val dir = File(filesDir, "images").apply { mkdir() }
-        val file = File(dir, name).apply { createNewFile() }
-        val outputStream = file.outputStream()
-        inputStream?.copyTo(outputStream)
+        inputStream?.run {
+            val dir = File(filesDir, directory).apply { mkdir() }
+            val file = File(dir, name).apply { createNewFile() }
+            val outputStream = file.outputStream()
+            inputStream.copyTo(outputStream)
 
-        file.absolutePath
+            file.absolutePath
+        }
     }
+
 
 
 /**

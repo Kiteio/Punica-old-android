@@ -44,6 +44,7 @@ import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.items
 import org.kiteio.punica.ui.dp4
+import org.kiteio.punica.ui.Link
 import org.kiteio.punica.ui.navigation.Route
 
 /**
@@ -145,7 +146,7 @@ private fun NoticeBottomSheet(visible: Boolean, onDismiss: () -> Unit, noticeIte
                     item {
                         MarkdownText(
                             markdown = markdown,
-                            linkColor = Color(0, 109, 204),
+                            linkColor = Color.Link,
                             isTextSelectable = true
                         )
                     }

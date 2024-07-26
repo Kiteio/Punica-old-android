@@ -65,13 +65,12 @@ import coil.compose.rememberAsyncImagePainter
 import compose.icons.TablerIcons
 import compose.icons.tablericons.CalendarEvent
 import kotlinx.coroutines.delay
-import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.launchCatching
-import org.kiteio.punica.uriToImages
 import org.kiteio.punica.datastore.Keys
+import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.edu.foundation.Campus
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.LocalNavController
@@ -90,6 +89,7 @@ import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.navigation.navigate
 import org.kiteio.punica.ui.rememberSchoolStart
+import org.kiteio.punica.copyToFiles
 
 /**
  * 我
@@ -258,7 +258,7 @@ private fun AvatarDialog(
 
         var uri by remember { mutableStateOf<String?>(null) }
         val launcher = rememberLauncherForActivityResult(contract = PickVisualMedia()) {
-            it?.let { uri = context.uriToImages(it, "avatar.webp");isReset = false }
+            it?.let { uri = context.copyToFiles(it, "images", "avatar.webp");isReset = false }
         }
 
         Dialog(

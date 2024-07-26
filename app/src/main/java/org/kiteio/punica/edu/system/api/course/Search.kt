@@ -8,6 +8,7 @@ import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import org.kiteio.punica.candy.ifNotBlank
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.edu.foundation.Campus
 import org.kiteio.punica.edu.system.CourseSystem
@@ -23,7 +24,7 @@ import java.time.DayOfWeek
  * @return [List]<[Course]>
  */
 suspend fun CourseSystem.list(
-    sort: Unsearchable,
+    sort: Sort.Unsearchable,
     pageIndex: Int = 0,
     count: Int = 15
 ) = withContext(Dispatchers.Default) {
@@ -38,6 +39,41 @@ suspend fun CourseSystem.list(
  * 课程搜索
  * @receiver [CourseSystem]
  * @param sort
+ * @param searchParams
+ * @param pageIndex
+ * @param count
+ * @return [List]<[Course]>
+ */
+suspend fun CourseSystem.search(
+    sort: Sort.Searchable,
+    searchParams: SearchParams,
+    pageIndex: Int = 0,
+    count: Int = 15
+) = withContext(Dispatchers.Default) {
+    with(searchParams) {
+        parse(
+            session.post(
+                route { courseListRoute(sort) },
+                form(pageIndex, count)
+            ) {
+                parameter("kcxx", name.encodeURLParameter())
+                parameter("skls", teacher.encodeURLParameter())
+                parameter("skxq", dayOfWeek?.value ?: "")
+                parameter("skjc", section.value.ifNotBlank { "$it-" })
+                parameter("sfym", emptyOnly)
+                parameter("sfct", filterConflicting)
+                if (sort is Sort.General) {
+                    parameter("xq", campus?.id ?: "")  // 校区
+                }
+            }.bodyAsText().json,
+            sort
+        )
+    }
+}
+
+
+/**
+ * 搜索参数
  * @param name 课程名
  * @param teacher 教师
  * @param dayOfWeek 星期几
@@ -45,55 +81,29 @@ suspend fun CourseSystem.list(
  * @param emptyOnly 过滤已满
  * @param filterConflicting 过滤冲突课程
  * @param campus 校区
- * @param pageIndex
- * @param count
- * @return [List]<[Course]>
  */
-suspend fun CourseSystem.search(
-    sort: Searchable,
-    name: String = "",
-    teacher: String = "",
-    dayOfWeek: DayOfWeek? = null,
-    section: Section? = null,
-    emptyOnly: Boolean = false,
-    filterConflicting: Boolean = false,
-    campus: Campus? = null,
-    pageIndex: Int = 0,
-    count: Int = 15
-) = withContext(Dispatchers.Default) {
-    parse(
-        session.post(
-            route { courseListRoute(sort) },
-            form(pageIndex, count)
-        ) {
-            parameter("kcxx", name.encodeURLParameter())
-            parameter("skls", teacher.encodeURLParameter())
-            parameter("skxq", dayOfWeek?.value ?: "")
-            parameter("skjc", section?.value ?: "")
-            parameter("sfym", emptyOnly)
-            parameter("sfct", filterConflicting)
-            if (sort is Sort.General) {
-                parameter("xq", campus?.id ?: "")  // 校区
-            }
-        }.bodyAsText().json,
-        sort
-    )
-}
+data class SearchParams(
+    val name: String = "",
+    val teacher: String = "",
+    val dayOfWeek: DayOfWeek? = null,
+    val section: Section = Section.Unspecified,
+    val emptyOnly: Boolean = false,
+    val filterConflicting: Boolean = false,
+    val campus: Campus? = null
+)
 
 
 /**
  * 节次
  * @property value
  */
-sealed class Section(pair: Pair<Int, Int>) {
-    val value = "${pair.first}-${pair.second}"
+enum class Section(pair: Pair<Int, Int>? = null) {
+    Unspecified,
+    First(1 to 2), Second(3 to 4),
+    Third(5 to 6), Fourth(7 to 8),
+    Fifth(9 to 10), Sixth(11 to 12);
 
-    data object First : Section(1 to 2)
-    data object Second : Section(3 to 4)
-    data object Third : Section(5 to 6)
-    data object Fourth : Section(7 to 8)
-    data object Fifth : Section(9 to 10)
-    data object Sixth : Section(11 to 12)
+    val value = pair?.run { "${pair.first}-${pair.second}" } ?: ""
 }
 
 
