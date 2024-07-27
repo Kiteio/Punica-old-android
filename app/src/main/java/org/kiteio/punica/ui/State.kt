@@ -13,7 +13,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.collectAsState
@@ -47,14 +46,15 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collect
     val preferences by data.collectAsState()
     var value by remember { mutableStateOf<T?>(null) }
 
-    LaunchedEffect(key1 = id, key2 = key) {
-        coroutineScope.launch {
-            if (id != null) value = catching<T?> {
-                fromRemote()
-            }?.also { value -> edit { it.set(value) } }
+    LaunchedEffect(key1 = id, key2 = preferences) {
+        value = id?.let { preferences?.get<T>(it) }
+    }
 
-            if (value == null) {
-                value = id?.let { preferences?.get<T>(it) }
+    LaunchedEffect(key1 = id, key2 = key) {
+        coroutineScope.launchCatching {
+            fromRemote()?.also { remoteValue ->
+                value = remoteValue
+                edit { it.set(remoteValue) }
             }
         }
     }

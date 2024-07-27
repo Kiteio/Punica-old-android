@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.kiteio.punica.R
+import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.LocalDate
 import org.kiteio.punica.candy.dateMillis
 import org.kiteio.punica.getString
@@ -157,7 +158,7 @@ fun DeleteDialog(visible: Boolean, onDismiss: () -> Unit, onConfirm: () -> Unit,
             },
             onDismiss = onDismiss,
             confirmButton = {
-                TextButton(onClick = onConfirm) {
+                TextButton(onClick = { onConfirm(); Toast(R.string.deleted).show(); onDismiss() }) {
                     Text(text = getString(R.string.confirm))
                 }
             },
@@ -165,7 +166,8 @@ fun DeleteDialog(visible: Boolean, onDismiss: () -> Unit, onConfirm: () -> Unit,
                 TextButton(onClick = onDismiss) {
                     Text(text = getString(R.string.cancel))
                 }
-            }
+            },
+            contentHorizontalAlignment = Alignment.Start
         )
     }
 }
