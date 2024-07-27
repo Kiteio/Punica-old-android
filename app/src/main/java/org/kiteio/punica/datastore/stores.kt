@@ -47,3 +47,7 @@ private val Context.Plans by preferencesDataStore("plans")
 /** 学业进度 */
 val Progresses get() = AppContext.Progresses
 private val Context.Progresses by preferencesDataStore("progresses")
+
+/** 待办 */
+val Todos get() = AppContext.Todos
+private val Context.Todos by preferencesDataStore("todos")

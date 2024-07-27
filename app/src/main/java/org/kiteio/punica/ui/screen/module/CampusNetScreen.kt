@@ -32,6 +32,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.edit
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.kiteio.punica.datastore.CampusNetUsers
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
@@ -154,12 +156,15 @@ fun CampusNetScreen() {
 
     DeleteDialog(
         visible = deleteDialogVisible,
-        onDismiss = { visibleCampusNetUser = null; deleteDialogVisible = false },
+        onDismiss = {
+            coroutineScope.launch {
+                deleteDialogVisible = false; delay(50); visibleCampusNetUser = null
+            }
+        },
         onConfirm = {
-            coroutineScope.launchCatching {
-                visibleCampusNetUser?.let { campusNetUser ->
+            visibleCampusNetUser?.let { campusNetUser ->
+                coroutineScope.launchCatching {
                     CampusNetUsers.edit { it.remove(campusNetUser) }
-                    Toast(R.string.deleted).show()
                 }
             }
         },

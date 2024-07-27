@@ -201,4 +201,9 @@
     <string name="input_does_not_match">输入名称不一致</string>
     <string name="connect_to_campus_network_or_VPN">请连接校园网或开启 VPN</string>
     <string name="token_input_tip">输入浏览器链接后的 jx0502zbid 值（等号后）以进入系统</string>
+
+    <string name="todo_editing">待办编辑</string>
+    <string name="name">名称</string>
+    <string name="done">已完成</string>
+    <string name="reset">已重置</string>
 </resources>
