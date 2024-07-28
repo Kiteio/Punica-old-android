@@ -1,11 +1,18 @@
 package org.kiteio.punica.candy
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 /**
  * [String] 的 [JSONObject] 对象
  */
 val String.json get() = JSONObject(this)
+
+
+/**
+ * [String] 的 [JSONArray] 对象
+ */
+val String.jsonArray get() = JSONArray(this)
 
 
 /**

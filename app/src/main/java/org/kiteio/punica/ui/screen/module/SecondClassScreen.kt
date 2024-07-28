@@ -45,7 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.ktor.client.network.sockets.ConnectTimeoutException
@@ -254,7 +253,6 @@ private fun ActivityBottomSheet(
     id: String?
 ) {
     BottomSheet(visible = visible, onDismiss = onDismiss, skipPartiallyExpanded = true) {
-        val context = LocalContext.current
         var activity by remember { mutableStateOf<SecondClassActivity?>(null) }
 
         LaunchedEffect(key1 = secondClass, key2 = id) {
@@ -329,7 +327,7 @@ private fun ActivityBottomSheet(
                 item {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                         ElevatedButton(
-                            onClick = { context.openUri(SecondClass.route { "#/pages/acti/info?key=$id" }) }
+                            onClick = { openUri(SecondClass.route { "#/pages/acti/info?key=$id" }) }
                         ) { Text(text = getString(R.string.open_in_browser)) }
                     }
                     Spacer(modifier = Modifier.height(dp4(4)))
