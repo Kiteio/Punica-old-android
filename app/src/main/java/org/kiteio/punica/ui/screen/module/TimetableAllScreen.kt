@@ -190,7 +190,7 @@ fun TimetableAllScreen() {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(dp4(2))
+                                .padding(dp4(4))
                         ) {
                             Title(text = key)
                             Spacer(modifier = Modifier.height(dp4()))

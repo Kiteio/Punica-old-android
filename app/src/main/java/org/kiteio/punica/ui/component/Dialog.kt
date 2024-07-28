@@ -16,14 +16,17 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import org.kiteio.punica.R
-import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.LocalDate
 import org.kiteio.punica.candy.dateMillis
 import org.kiteio.punica.getString
@@ -152,14 +155,20 @@ fun DeleteDialog(visible: Boolean, onDismiss: () -> Unit, onConfirm: () -> Unit,
         Dialog(
             text = {
                 Text(
-                    text = getString(
-                        R.string.make_sure_to_delete, desc?.let { " $it " } ?: "")
+                    text = buildAnnotatedString {
+                        append(getString(R.string.make_sure_to_delete))
+                        desc?.let {
+                            withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                                append(" $it ")
+                            }
+                        }
+                    }
                 )
             },
             onDismiss = onDismiss,
             confirmButton = {
-                TextButton(onClick = { onConfirm(); Toast(R.string.deleted).show(); onDismiss() }) {
-                    Text(text = getString(R.string.confirm))
+                TextButton(onClick = onConfirm) {
+                    Text(text = getString(R.string.confirm), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {

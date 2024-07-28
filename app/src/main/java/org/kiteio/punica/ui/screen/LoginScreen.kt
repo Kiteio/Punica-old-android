@@ -145,7 +145,7 @@ fun LoginScreen() {
 
                 TextField(
                     value = name,
-                    onValueChange = { value -> name = value.filter { it.isDigit() }.limit(11) },
+                    onValueChange = { value -> name = value.limit(11).filter { it.isDigit() } },
                     enabled = interactable,
                     label = { Text(text = getString(R.string.student_id)) },
                     keyboardType = KeyboardType.Number

@@ -169,7 +169,7 @@
     <string name="default_is_last_8_of_id_card">默认为身份证号后 8 位</string>
     <string name="device_ip">设备 ip</string>
     <string name="description">描述</string>
-    <string name="make_sure_to_delete">您确定删除%1$s吗</string>
+    <string name="make_sure_to_delete">您确定删除</string>
     <string name="deleted">已删除</string>
     <string name="connected">已连接</string>
 
@@ -206,4 +206,6 @@
     <string name="name">名称</string>
     <string name="done">已完成</string>
     <string name="reset">已重置</string>
+
+    <string name="second_class_password">第二课堂密码</string>
 </resources>
