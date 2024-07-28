@@ -208,4 +208,6 @@
     <string name="reset">已重置</string>
 
     <string name="second_class_password">第二课堂密码</string>
+    <string name="tip_current">（当前）</string>
+    <string name="punica_together">和我一起使用 Punica %1$s</string>
 </resources>

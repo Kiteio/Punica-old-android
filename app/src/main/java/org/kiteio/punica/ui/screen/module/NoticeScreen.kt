@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.rajat.pdfviewer.compose.PdfRendererViewCompose
 import dev.jeziellago.compose.markdowntext.MarkdownText
@@ -33,6 +32,7 @@ import org.kiteio.punica.edu.EduNotice
 import org.kiteio.punica.edu.Notice
 import org.kiteio.punica.edu.NoticeItem
 import org.kiteio.punica.openUri
+import org.kiteio.punica.ui.Link
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.LazyPagingColumn
@@ -44,7 +44,6 @@ import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.items
 import org.kiteio.punica.ui.dp4
-import org.kiteio.punica.ui.Link
 import org.kiteio.punica.ui.navigation.Route
 
 /**
@@ -52,8 +51,6 @@ import org.kiteio.punica.ui.navigation.Route
  */
 @Composable
 fun NoticeScreen() {
-    val context = LocalContext.current
-
     // Pager 在切换页面时不能保留已加载内容，并且目前找不到解决方案
     val pager = remember { Pager(14) { NoticePagingSource() } }
     val noticeItems = pager.flow.collectAsLazyPagingItems()
@@ -94,7 +91,7 @@ fun NoticeScreen() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             SubduedText(text = it.url, modifier = Modifier.weight(1f))
-                            IconButton(onClick = { context.openUri(it.url) }) {
+                            IconButton(onClick = { openUri(it.url) }) {
                                 Icon(imageVector = Icons.AutoMirrored.Rounded.OpenInNew)
                             }
                         }

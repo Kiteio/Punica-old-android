@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -80,7 +79,6 @@ import org.kiteio.punica.ui.dp4
  */
 @Composable
 fun LoginScreen() {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val viewModel = LocalViewModel.current
     val navController = LocalNavController.current
@@ -168,7 +166,7 @@ fun LoginScreen() {
                             ),
                             MaterialTheme.typography.bodySmall.copy(color = Color.Link)
                         ) {
-                            context.openUri(WebVPN.root)
+                            openUri(WebVPN.root)
                         }
                     },
                     modifier = Modifier.align(Alignment.Start)

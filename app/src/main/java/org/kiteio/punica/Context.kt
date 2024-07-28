@@ -2,6 +2,7 @@ package org.kiteio.punica
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.net.Uri
 import android.widget.Toast
 import androidx.annotation.ArrayRes
@@ -34,7 +35,6 @@ fun Context.copyToFiles(uri: Uri, directory: String, name: String): String? =
             file.absolutePath
         }
     }
-
 
 
 /**
@@ -85,7 +85,17 @@ fun getStringArray(@ArrayRes resId: Int): Array<String> = AppContext.resources.g
 
 /**
  * 打开 Uri
- * @receiver [Context]
  * @param uri
  */
-fun Context.openUri(uri: String) = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
+fun openUri(uri: String) = AppContext.startActivity(
+    Intent(Intent.ACTION_VIEW, Uri.parse(uri)).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
+)
+
+
+/**
+ * 获取包信息
+ * @return [PackageInfo]
+ */
+fun packageInfo(): PackageInfo = with(AppContext) {
+    packageManager.getPackageInfo(packageName, 0)
+}

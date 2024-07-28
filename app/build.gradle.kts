@@ -87,4 +87,5 @@ dependencies {
     implementation(libs.palette)
     implementation(libs.paging)
     implementation(libs.paging.compose)
+    implementation(libs.qrose)
 }

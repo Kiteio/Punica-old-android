@@ -55,6 +55,7 @@ fun Title(
  * @param modifier
  * @param color
  * @param textAlign
+ * @param maxLines
  * @param style
  */
 @Composable
@@ -63,6 +64,7 @@ fun SubduedText(
     modifier: Modifier = Modifier,
     color: Color = subduedContentColor(),
     textAlign: TextAlign? = null,
+    maxLines: Int = Int.MAX_VALUE,
     style: TextStyle = MaterialTheme.typography.bodySmall
 ) {
     Text(
@@ -70,6 +72,8 @@ fun SubduedText(
         modifier = modifier,
         color = color,
         textAlign = textAlign,
+        overflow = TextOverflow.Ellipsis,
+        maxLines = maxLines,
         style = style,
     )
 }
