@@ -32,16 +32,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.edit
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.kiteio.punica.datastore.CampusNetUsers
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.datastore.Users
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.candy.limit
+import org.kiteio.punica.datastore.CampusNetUsers
+import org.kiteio.punica.datastore.Users
 import org.kiteio.punica.datastore.get
 import org.kiteio.punica.datastore.remove
 import org.kiteio.punica.datastore.set
@@ -56,6 +54,7 @@ import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
+import org.kiteio.punica.ui.component.PasswordField
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.TextField
 import org.kiteio.punica.ui.component.Title
@@ -78,7 +77,9 @@ fun CampusNetScreen() {
     ScaffoldBox(
         topBar = { NavBackTopAppBar(route = Route.Module.CampusNet) },
         floatingActionButton = {
-            FloatingActionButton(onClick = { campusNetUserDialogVisible = true }) {
+            FloatingActionButton(
+                onClick = { visibleCampusNetUser = null; campusNetUserDialogVisible = true }
+            ) {
                 Icon(imageVector = Icons.Rounded.Add)
             }
         }
@@ -156,16 +157,14 @@ fun CampusNetScreen() {
 
     DeleteDialog(
         visible = deleteDialogVisible,
-        onDismiss = {
-            coroutineScope.launch {
-                deleteDialogVisible = false; delay(50); visibleCampusNetUser = null
-            }
-        },
+        onDismiss = { deleteDialogVisible = false },
         onConfirm = {
-            visibleCampusNetUser?.let { campusNetUser ->
-                coroutineScope.launchCatching {
+            coroutineScope.launchCatching {
+                visibleCampusNetUser?.let { campusNetUser ->
                     CampusNetUsers.edit { it.remove(campusNetUser) }
                 }
+                deleteDialogVisible = false
+                Toast(R.string.deleted).show()
             }
         },
         desc = visibleCampusNetUser?.desc
@@ -241,7 +240,7 @@ private fun CampusNetUserDialog(
                 )
                 Spacer(modifier = Modifier.height(dp4(2)))
 
-                TextField(
+                PasswordField(
                     value = pwd,
                     onValueChange = { pwd = it },
                     label = {

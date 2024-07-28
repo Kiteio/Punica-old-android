@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,8 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.edit
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
@@ -63,7 +63,7 @@ fun TodoScreen() {
 
     ScaffoldBox(
         floatingActionButton = {
-            FloatingActionButton(onClick = { todoDialogVisible = true }) {
+            FloatingActionButton(onClick = { visibleTodo = null; todoDialogVisible = true }) {
                 Icon(imageVector = Icons.Rounded.Add)
             }
         }
@@ -83,7 +83,7 @@ fun TodoScreen() {
                         Column(modifier = Modifier.weight(1f)) {
                             Title(text = todo.name)
                             SubduedText(text = todo.desc)
-                            SubduedText(text = todo.deadline.toString())
+                            SubduedText(text = todo.deadline)
                         }
 
                         Row {
@@ -124,22 +124,20 @@ fun TodoScreen() {
 
     TodoDialog(
         visible = todoDialogVisible,
-        onDismiss = { todoDialogVisible = false; visibleTodo = null },
+        onDismiss = { todoDialogVisible = false },
         todo = visibleTodo
     )
 
     DeleteDialog(
         visible = deleteDialogVisible,
-        onDismiss = {
-            coroutineScope.launch {
-                deleteDialogVisible = false; delay(50); visibleTodo = null
-            }
-        },
+        onDismiss = { deleteDialogVisible = false },
         onConfirm = {
-            visibleTodo?.let { todo ->
-                coroutineScope.launchCatching {
+            coroutineScope.launchCatching {
+                visibleTodo?.let { todo ->
                     Todos.edit { it.remove(todo) }
                 }
+                deleteDialogVisible = false
+                Toast(R.string.deleted).show()
             }
         },
         desc = visibleTodo?.name
@@ -170,14 +168,20 @@ private fun TodoDialog(visible: Boolean, onDismiss: () -> Unit, todo: Todo?) {
                     onValueChange = { name = it },
                     label = { Text(text = getString(R.string.name)) }
                 )
+                Spacer(modifier = Modifier.height(dp4(2)))
+
                 TextField(
                     value = desc,
                     onValueChange = { desc = it },
-                    label = { Text(text = getString(R.string.description)) })
+                    label = { Text(text = getString(R.string.description)) }
+                )
+                Spacer(modifier = Modifier.height(dp4(2)))
+
                 TextField(
                     value = deadline,
                     onValueChange = { deadline = it },
-                    label = { Text(text = getString(R.string.deadline)) })
+                    label = { Text(text = getString(R.string.deadline)) }
+                )
             },
             onDismiss = onDismiss,
             confirmButton = {
