@@ -18,4 +18,13 @@ object Keys {
 
     /** 最后登录学号 */
     val lastUsername by lazy { stringPreferencesKey("lastUsername") }
+
+    /** 主题色来源 */
+    val themeColorSource by lazy { intPreferencesKey("themeColorSource") }
+
+    /** 自定义主题色 */
+    val themeColor by lazy { stringPreferencesKey("themeColor") }
+
+    /** 主题风格 */
+    val themeStyle by lazy { intPreferencesKey("themeStyle") }
 }

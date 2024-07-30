@@ -69,6 +69,7 @@ import org.kiteio.punica.R
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.thisMonday
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.edu.foundation.Campus
@@ -436,7 +437,7 @@ private fun Settings(modifier: Modifier = Modifier) {
         onDismiss = { datePickerDialogVisible = false },
         onConfirm = { localDate ->
             coroutineScope.launchCatching {
-                Preferences.edit { it[Keys.schoolStart] = localDate.toString() }
+                Preferences.edit { it[Keys.schoolStart] = localDate.thisMonday.toString() }
             }
         },
         title = { Text(text = getString(R.string.school_start)) },

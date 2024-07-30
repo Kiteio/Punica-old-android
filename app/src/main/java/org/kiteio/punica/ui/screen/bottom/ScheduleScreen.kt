@@ -86,7 +86,6 @@ import org.kiteio.punica.ui.rememberLastUsername
 import org.kiteio.punica.ui.rememberSchoolStart
 import org.kiteio.punica.ui.subduedContentColor
 import java.time.LocalDate
-import kotlin.math.floor
 
 /**
  * 日程
@@ -103,7 +102,7 @@ fun ScheduleScreen() {
     val week by remember {
         derivedStateOf {
             preferences?.get(Keys.schoolStart)?.let {
-                floor(LocalDate.parse(it).daysUntil(LocalDate.now()) / 7.0).toInt() + 1
+                LocalDate.parse(it).daysUntil(LocalDate.now()).toInt() / 7 + 1
             } ?: 0
         }
     }

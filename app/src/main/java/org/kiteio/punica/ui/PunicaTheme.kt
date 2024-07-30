@@ -25,14 +25,15 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicColorScheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.R
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.datastore.Keys
+import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.ui.component.Image
 
 lateinit var avatarPainter: AsyncImagePainter
@@ -43,13 +44,11 @@ var avatarImageBitmap by mutableStateOf<Bitmap?>(null)
 /**
  * 小石榴主题
  * @param darkTheme 是否为暗色
- * @param dynamicColor 是否为动态主题（随系统主题变化）
  * @param content
  */
 @Composable
 fun PunicaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val preferences by Preferences.data.collectAsState()
@@ -68,16 +67,45 @@ fun PunicaTheme(
     // Painter 得使用才会请求图片
     Image(painter = avatarPainter, modifier = Modifier.alpha(0f))
 
+    val themeColorSource by remember {
+        derivedStateOf { preferences?.get(Keys.themeColorSource) ?: 0 }
+    }
+
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        themeColorSource == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
         else -> {
+            val themeStyle by remember {
+                derivedStateOf {
+                    val ordinal = preferences?.get(Keys.themeStyle) ?: 0
+                    (PaletteStyle.entries.firstOrNull { it.ordinal == ordinal }
+                        ?: PaletteStyle.TonalSpot)
+                }
+            }
+
+            val randomColor = remember { Color.random() }
+
+            val seedColor = when (themeColorSource) {
+                0 -> rememberBitmapTheme(bitmap = avatarImageBitmap, randomColor)
+                2 -> randomColor
+
+                else -> {
+                    val themeColor by remember {
+                        derivedStateOf {
+                            preferences?.get(Keys.themeColor)?.toColor() ?: randomColor
+                        }
+                    }
+                    themeColor
+                }
+            }
+
             rememberDynamicColorScheme(
-                seedColor = rememberBitmapTheme(bitmap = avatarImageBitmap),
-                isDark = darkTheme
+                seedColor = seedColor,
+                isDark = darkTheme,
+                style = themeStyle
             )
         }
     }
@@ -100,7 +128,7 @@ fun PunicaTheme(
 @Composable
 private fun rememberBitmapTheme(
     bitmap: Bitmap?,
-    init: Color = remember { Color.random() }
+    init: Color
 ): Color {
     var themeColor by remember { mutableStateOf(init) }
     LaunchedEffect(bitmap) {
