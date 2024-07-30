@@ -2,7 +2,7 @@
 
 <p>
 
-[![](https://img.shields.io/static/v1?label=最新版本&message=开发中&labelColor=F20C00&color=white)](https://github.com/Kiteio/Punica/releases)
+[![](https://img.shields.io/github/release/Kiteio/Punica?label=最新版本&labelColor=white&color=white)](https://github.com/Kiteio/Punica/releases)
 [![](https://img.shields.io/static/v1?label=Android%20版本支持&message=10%2B&labelColor=white&color=white&logo=android)](https://developer.android.google.cn/about/versions)
 [![](https://img.shields.io/github/stars/Kiteio/Punica.svg?style=flat&labelColor=white&color=white&logo=github&logoColor=black)](https://github.com/Kiteio/Punica/stargazers)
 [![](https://img.shields.io/static/v1?label=Kotlin&logo=kotlin&message=2.0.20-Beta2&labelColor=white&color=white)](https://kotlinlang.org)
@@ -14,27 +14,43 @@
     <img width="180" src="app/src/main/res/drawable/punica.png" alt="Punica Logo"/>
 </div>
 
-> [!IMPORTANT]
-> *Punica is coming soon.*
->
-> 在这个暑假（2024），我们将推出 **Punica 0.0.1**
->
-> 您可以在[提交日志](https://github.com/Kiteio/Punica/commits)查看 Punica 的更新日志
-
 ## 概览 🍥
 
-**Punica** 致力于打造更加 **完备**、**安全** 的 **广财教务系统工具**。
+Punica 致力于打造更加 **完备**、**安全** 的 **广财教务系统工具**。
 
 将近两年的尝试，我们有理由说这是一款 **现代化**、**便捷** 的教务系统工具。
 
 我们不是数据的创造者，一直以来我们都是与官方服务器 **直连**（尽管官方可能不太乐意）。
 我们希望用户能更加安心地使用 Punica，而不需要承担附加风险。
 
+## 截屏
+
+<p>
+
+<img src="readme/screenshot1.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot2.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot3.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot4.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot5.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot6.jpg" alt="screenshot" width="16%" />
+
+</p>
+
+<p>
+
+<img src="readme/screenshot7.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot8.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot9.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot10.jpg" alt="screenshot" width="16%" />
+<img src="readme/screenshot11.jpg" alt="screenshot" width="16%" />
+
+</p>
+
 ## 为什么选择 Punica 🎡
 
 ### ✨ 近乎全量功能复刻
 
-您所能见到的大部分教务系统功能已经打包进 Punica，请参考我们的[功能列表](#功能列表-)。
+您所能见到的大部分教务系统功能已经打包进 Punica。
 
 ### 🧣 更加舒适的操作体验
 
@@ -47,38 +63,6 @@ Punica 优化了原本繁复的操作。
 ### 🔥 本地持久化数据
 
 Punica 支持数据本地化，断网也能正常使用。
-
-## 路线 🎯
-
-- [x] 网络 API 请求
-- [ ] UI
-
-## 功能列表 📱
-
-- 选课
-- 紧急电话
-- 四六级时间
-- 课表
-- 考试安排
-- 课程成绩
-- 等级成绩
-- 教师信息
-- 评教
-- 学业进度
-- 执行计划
-- 全校课表
-- 校园网
-- 第二课堂
-- 教务通知
-
-## 提前体验
-最近一段时间在制作 UI，如果希望提前使用部分功能，您可以参照以下步骤。
-> 有时候 Push 后发现有不足，会在本地还原并强制 Push，非常抱歉给您带来不便。
-
-1. 下载 [Android Studio](https://developer.android.google.cn/studio?hl=zh-cn) 并安装 Android SDK。
-2. 将项目克隆到本地（可以使用 Android Studio 的克隆功能、Git 或者直接下载压缩包）。
-3. 使用 Android Studio 打开项目。
-4. 运行项目。
 
 ## 支持 🦢
 我们的项目开发没有任何启动资金，全靠爱发电，我们需要一些反馈来维持项目的运营。

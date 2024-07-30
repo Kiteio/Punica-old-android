@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -30,6 +32,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+    applicationVariants.all {
+        outputs.all {
+            if (this is ApkVariantOutputImpl) {
+                // punica-[Build]-[Version].apk
+                outputFileName =
+                    "punica-${defaultConfig.versionCode}-${defaultConfig.versionName}.apk"
+            }
         }
     }
     splits {
