@@ -98,6 +98,7 @@
     <string name="notice">教学通知</string>
     <string name="campus_net">校园网</string>
     <string name="not_empty_room">非空教室</string>
+    <string name="timetable">课表</string>
     <string name="timetable_all">全校课表</string>
     <string name="plan">执行计划</string>
     <string name="progress">学业进度</string>
@@ -210,4 +211,16 @@
     <string name="second_class_password">第二课堂密码</string>
     <string name="tip_current">（当前）</string>
     <string name="punica_together">和我一起使用 Punica %1$s</string>
+
+    <string name="theme">主题</string>
+    <string name="color">色彩</string>
+    <string name="style">风格</string>
+    <string name="material_you">Material You（12+）</string>
+    <string name="random_color">随机颜色</string>
+    <string name="from_avatar">由头像生成</string>
+    <string name="from_color">自定义颜色</string>
+    <string name="storage">存储</string>
+    <string name="key_editing">存储键编辑</string>
+    <string name="contact">联系方式</string>
+    <string name="hex_color">颜色十六进制</string>
 </resources>

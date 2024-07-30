@@ -88,4 +88,5 @@ dependencies {
     implementation(libs.paging)
     implementation(libs.paging.compose)
     implementation(libs.qrose)
+    implementation(libs.colorPicker)
 }

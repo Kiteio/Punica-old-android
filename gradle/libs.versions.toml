@@ -15,7 +15,7 @@ tesseract4android = "4.7.0"
 ksoup = "0.1.2"
 markdown = "0.5.0"
 pdfViewer = "2.1.1"
-material-icons-extended = "1.7.0-beta05"
+material-icons-extended = "1.7.0-beta06"
 navigation = "2.7.7"
 datastore = "1.1.1"
 serialization = "1.6.3"
@@ -24,6 +24,7 @@ coil = "2.6.0"
 palette = "1.0.0"
 paging = "3.3.0"
 qrose = "1.0.1"
+colorPicker = "0.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -57,6 +58,7 @@ palette = { module = "androidx.palette:palette", version.ref = "palette" }
 paging = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 qrose = { module = "io.github.alexzhirkevich:qrose", version.ref = "qrose" }
+colorPicker = { module = "com.godaddy.android.colorpicker:compose-color-picker", version.ref = "colorPicker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
