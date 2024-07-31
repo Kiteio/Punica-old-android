@@ -15,7 +15,7 @@ val LocalDate.dateMillis
 val LocalDate.thisMonday: LocalDate
     get() = dayOfWeek.ordinal.let {
         if (it == 0) this
-        else plusDays(it.toLong())
+        else minusDays(it.toLong())
     }
 
 
