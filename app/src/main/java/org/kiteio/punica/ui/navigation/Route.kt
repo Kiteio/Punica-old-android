@@ -10,6 +10,7 @@ import androidx.compose.material.icons.rounded.NewReleases
 import androidx.compose.material.icons.rounded.Numbers
 import androidx.compose.material.icons.rounded.SentimentSatisfied
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -52,6 +53,7 @@ import org.kiteio.punica.ui.screen.module.SchoolReportScreen
 import org.kiteio.punica.ui.screen.module.SecondClassScreen
 import org.kiteio.punica.ui.screen.module.TeacherInfoScreen
 import org.kiteio.punica.ui.screen.module.TimetableAllScreen
+import org.kiteio.punica.ui.screen.module.WebSiteScreen
 
 /**
  * 路由
@@ -170,6 +172,12 @@ sealed class Route(
         data object Progress :
             Module({ ProgressScreen() }, R.string.progress, TablerIcons.ChartLine)
 
+        /** 常用网站 */
+        data object Website : Module(
+            { WebSiteScreen() },
+            R.string.frequently_used_websites,
+            Icons.Rounded.StarOutline
+        )
 
         companion object {
             /** [Module] 所有值 */
@@ -188,7 +196,8 @@ sealed class Route(
                     CampusNet,
                     TimetableAll,
                     Plan,
-                    Progress
+                    Progress,
+                    Website
                 )
             }
         }

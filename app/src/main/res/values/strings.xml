@@ -102,6 +102,7 @@
     <string name="timetable_all">全校课表</string>
     <string name="plan">执行计划</string>
     <string name="progress">学业进度</string>
+    <string name="frequently_used_websites">常用网站</string>
 
     <string name="copied">已复制</string>
     <string name="noting_to_evaluate">没有待评价项</string>
@@ -223,4 +224,14 @@
     <string name="key_editing">存储键编辑</string>
     <string name="contact">联系方式</string>
     <string name="hex_color">颜色十六进制</string>
+
+    <string name="gdufe_all">一体化平台</string>
+    <string name="gdufe_all_app">广财通</string>
+    <string name="gdufe_portal">融合门户</string>
+    <string name="gdufe_finance">财务系统</string>
+    <string name="gdufe_edu_system">教务系统</string>
+    <string name="gdufe_blackboard">毕博平台</string>
+    <string name="gdufe_second_class">第二课堂</string>
+    <string name="gdufe_mooc">广财慕课（雨课堂）</string>
+    <string name="library">图书馆</string>
 </resources>
