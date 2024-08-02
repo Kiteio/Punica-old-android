@@ -12,9 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Circle
-import androidx.compose.material.icons.rounded.Done
-import androidx.compose.material.icons.rounded.DoneAll
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.IconButton
@@ -87,7 +86,7 @@ fun EvaluationScreen() {
                             }
                         }
                     ) {
-                        Icon(imageVector = Icons.Rounded.DoneAll)
+                        Icon(imageVector = Icons.Rounded.EditNote)
                     }
                 }
             )
@@ -158,13 +157,19 @@ private fun EduSystem.evaluate(
 }
 
 
+/**
+ * 评价项
+ * @param evaluateItem
+ * @param onEvaluate
+ * @param modifier
+ */
 @Composable
 private fun EvaluateItem(
     evaluateItem: EvaluateItem,
     onEvaluate: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ElevatedCard(onClick = {}, modifier = modifier) {
+    ElevatedCard(onClick = {}, modifier = modifier, enabled = evaluateItem.route != null) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -179,17 +184,26 @@ private fun EvaluateItem(
                 Spacer(modifier = Modifier.height(dp4()))
                 SubduedText(text = evaluateItem.sort)
             }
-            Spacer(modifier = Modifier.width(dp4(4)))
 
-            val icon = with(Icons.Rounded) { if (evaluateItem.route == null) Circle else Done }
-            IconButton(onClick = onEvaluate, enabled = evaluateItem.route != null) {
-                Icon(imageVector = icon)
+            if (evaluateItem.route != null) {
+                Spacer(modifier = Modifier.width(dp4(4)))
+
+                IconButton(onClick = onEvaluate) {
+                    Icon(imageVector = Icons.Rounded.Edit)
+                }
             }
         }
     }
 }
 
 
+/**
+ * 选取提交状态
+ * @param visible
+ * @param onDismiss
+ * @param onSelect
+ * @param isAll 是否为列表所有项
+ */
 @Composable
 private fun StateSelectDialog(
     visible: Boolean,
