@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -56,7 +60,14 @@ class MainActivity : ComponentActivity() {
                     LocalViewModel provides viewModel,
                     LocalNavController provides navController
                 ) {
-                    NavHost(navController = navController, startRoute = Route.Main) {
+                    NavHost(
+                        navController = navController,
+                        startRoute = Route.Main,
+                        enterTransition = { fadeIn() + slideInHorizontally { it / 2 } },
+                        exitTransition = { fadeOut() + slideOutHorizontally { -it / 2 } },
+                        popEnterTransition = { fadeIn() + slideInHorizontally { -it / 2 } },
+                        popExitTransition = { fadeOut() + slideOutHorizontally { it / 2 } },
+                    ) {
                         composable(Route.Main)
                         composable(Route.Login)
                         composable(Route.Account)

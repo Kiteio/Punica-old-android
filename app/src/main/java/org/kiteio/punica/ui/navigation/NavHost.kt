@@ -3,7 +3,6 @@ package org.kiteio.punica.ui.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
@@ -29,10 +28,8 @@ private typealias NavAnimateScope = AnimatedContentTransitionScope<NavBackStackE
 fun NavHost(
     navController: NavHostController,
     startRoute: Route,
-    enterTransition: NavAnimateScope.() -> EnterTransition =
-        { fadeIn(animationSpec = tween(700)) },
-    exitTransition: NavAnimateScope.() -> ExitTransition =
-        { fadeOut(animationSpec = tween(700)) },
+    enterTransition: NavAnimateScope.() -> EnterTransition = { fadeIn() },
+    exitTransition: NavAnimateScope.() -> ExitTransition = { fadeOut() },
     popEnterTransition: NavAnimateScope.() -> EnterTransition = enterTransition,
     popExitTransition: NavAnimateScope.() -> ExitTransition = exitTransition,
     builder: NavGraphBuilder.() -> Unit
