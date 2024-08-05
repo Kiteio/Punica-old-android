@@ -26,6 +26,7 @@ import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Timelapse
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,7 +49,8 @@ import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
-import org.kiteio.punica.ui.component.ScaffoldBox
+import org.kiteio.punica.ui.component.ScaffoldColumn
+import org.kiteio.punica.ui.component.SearchBar
 import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.TabPager
 import org.kiteio.punica.ui.component.Title
@@ -68,7 +70,9 @@ fun SchoolReportScreen() {
     var detailBottomSheetVisible by remember { mutableStateOf(false) }
     var visibleSchoolReportItem by remember { mutableStateOf<SchoolReportItem?>(null) }
 
-    ScaffoldBox(
+    var query by remember { mutableStateOf("") }
+
+    ScaffoldColumn(
         topBar = {
             NavBackTopAppBar(
                 route = Route.Module.SchoolReport,
@@ -81,19 +85,48 @@ fun SchoolReportScreen() {
             )
         }
     ) {
+        Surface(shadowElevation = 1.dp) {
+            SearchBar(
+                value = query,
+                onValueChange = { query = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dp4(4)),
+                placeholder = {
+                    Text(
+                        text = getString(
+                            R.string.input,
+                            buildString {
+                                append(getString(R.string.course))
+                                append(getString(R.string.id), "、")
+                                append(getString(R.string.name))
+                            }
+                        )
+                    )
+                }
+            )
+        }
         schoolReport?.run {
             TabPager(state = tabPagerState, tabContent = { Text(text = getString(it)) }) { page ->
                 val schoolReportItems = when (page) {
-                    0 -> {
+                    0 -> mutableListOf<SchoolReportItem>().apply {
                         val semester = items.firstOrNull()?.semester
-                        items.filter { it.semester == semester }
+
+                        for (index in items.indices)
+                            if (items[index].semester == semester) add(items[index])
+                            else break
                     }
 
                     else -> items
                 }
 
                 LazyColumn(contentPadding = PaddingValues(dp4(2))) {
-                    items(schoolReportItems) {
+                    items(
+                        if (query.isBlank()) schoolReportItems
+                        else schoolReportItems.filter {
+                            it.name.contains(query) || it.id.contains(query)
+                        }
+                    ) {
                         SchoolReportItem(
                             schoolReportItem = it,
                             onClick = {
@@ -213,8 +246,16 @@ private fun DetailBottomSheet(
                     leadingIcon = Icons.AutoMirrored.Rounded.MergeType,
                     leadingText = getString(R.string.type)
                 )
-                IconText(text = point, leadingIcon = Icons.Rounded.Star, leadingText = getString(R.string.point))
-                IconText(text = score, leadingIcon = Icons.Rounded.Score, leadingText = getString(R.string.score))
+                IconText(
+                    text = point,
+                    leadingIcon = Icons.Rounded.Star,
+                    leadingText = getString(R.string.point)
+                )
+                IconText(
+                    text = score,
+                    leadingIcon = Icons.Rounded.Score,
+                    leadingText = getString(R.string.score)
+                )
                 Spacer(modifier = Modifier.height(dp4(4)))
 
                 IconText(

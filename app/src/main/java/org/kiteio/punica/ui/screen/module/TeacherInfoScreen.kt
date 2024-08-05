@@ -89,14 +89,11 @@ fun TeacherInfoScreen() {
             SearchBar(
                 value = teacherName,
                 onValueChange = { teacherName = it },
-                onSearch = {},
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dp4(4)),
                 placeholder = {
-                    Text(
-                        text = getString(R.string.input, getString(R.string.teacher_name))
-                    )
+                    Text(text = getString(R.string.input, getString(R.string.teacher_name)))
                 }
             )
         }

@@ -160,7 +160,6 @@ fun TimetableAllScreen() {
             SearchBar(
                 value = query,
                 onValueChange = { query = it },
-                onSearch = {},
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(dp4(4)),
