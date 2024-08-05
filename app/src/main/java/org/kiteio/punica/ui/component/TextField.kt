@@ -191,8 +191,8 @@ fun PasswordField(
  * 搜索栏
  * @param value
  * @param onValueChange
- * @param onSearch
  * @param modifier
+ * @param onSearch
  * @param placeholder
  * @param leadingIcon
  * @param trailingIcon
@@ -201,8 +201,8 @@ fun PasswordField(
 fun SearchBar(
     value: String,
     onValueChange: (String) -> Unit,
-    onSearch: () -> Unit,
     modifier: Modifier = Modifier,
+    onSearch: () -> Unit = {},
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = {
         IconButton(onClick = onSearch) {
