@@ -54,7 +54,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -72,6 +71,7 @@ import org.kiteio.punica.candy.URLs
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.setText
 import org.kiteio.punica.datastore.ExamPlans
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.LevelReports
@@ -192,9 +192,7 @@ fun SettingsScreen() {
                 Setting(
                     text = { Text(text = getString(R.string.email)) },
                     onClick = {
-                        clipboardManager.setText(
-                            buildAnnotatedString { append("17875765201@163.com") }
-                        )
+                        clipboardManager.setText("17875765201@163.com")
                         Toast(R.string.copied).show()
                     },
                     leadingIcon = { Icon(imageVector = Icons.Rounded.MailOutline) },

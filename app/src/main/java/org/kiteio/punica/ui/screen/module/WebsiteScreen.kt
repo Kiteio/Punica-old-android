@@ -27,12 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.buildAnnotatedString
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Copy
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.route
+import org.kiteio.punica.candy.setText
 import org.kiteio.punica.edu.CampusNet
 import org.kiteio.punica.edu.SecondClass
 import org.kiteio.punica.edu.WebVPN
@@ -76,7 +76,7 @@ fun WebSiteScreen() {
                 WebsiteItem(
                     website = it,
                     onCopy = {
-                        clipboardManager.setText(buildAnnotatedString { append(it.url) })
+                        clipboardManager.setText(it.url)
                         Toast(R.string.copied).show()
                     },
                     modifier = Modifier.padding(dp4(2))

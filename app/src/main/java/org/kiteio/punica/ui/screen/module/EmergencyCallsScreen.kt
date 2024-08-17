@@ -24,17 +24,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.buildAnnotatedString
 import compose.icons.TablerIcons
 import compose.icons.tablericons.Copy
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
+import org.kiteio.punica.candy.setText
 import org.kiteio.punica.edu.EmergencyCall
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.component.Icon
+import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
-import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
@@ -53,7 +53,7 @@ fun EmergencyCallsScreen() {
                 Call(
                     emergencyCall = it,
                     onCopy = {
-                        clipboardManager.setText(buildAnnotatedString { append(it.phoneNumber) })
+                        clipboardManager.setText(it.phoneNumber)
                         Toast(R.string.copied).show()
                     },
                     onOpenInPhoneBook = {
