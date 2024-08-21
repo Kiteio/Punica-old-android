@@ -76,7 +76,7 @@ fun VersionScreen() {
     val releases = rememberRemoteList { Gitee.releases() }
     val versionName = remember { packageInfo().versionName }
     val currentRelease by remember {
-        derivedStateOf { releases.firstOrNull() { it.name == versionName } }
+        derivedStateOf { releases.firstOrNull { it.name == versionName } }
     }
 
     var releaseDescDialogVisible by remember { mutableStateOf(false) }
