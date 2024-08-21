@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Punica</string>
+    <string name="app_name">小石榴</string>
     <string name="punica_poem">却是石榴知立夏，年年此日一花开</string>
 
     <string name="campus_canton">广州校区</string>
@@ -97,7 +97,6 @@
     <string name="teacher_info">教师信息</string>
     <string name="notice">教学通知</string>
     <string name="campus_net">校园网</string>
-    <string name="not_empty_room">非空教室</string>
     <string name="timetable">课表</string>
     <string name="timetable_all">全校课表</string>
     <string name="plan">执行计划</string>
@@ -157,7 +156,7 @@
     <string name="qualification">最高学历</string>
     <string name="degree">学位</string>
     <string name="field">研究方向</string>
-    <string name="qq">QQ</string>
+    <string name="qq" translatable="false">QQ</string>
     <string name="wechat">微信</string>
     <string name="email">邮箱</string>
     <string name="biography">个人简介</string>
@@ -211,12 +210,12 @@
 
     <string name="second_class_password">第二课堂密码</string>
     <string name="tip_current">（当前）</string>
-    <string name="punica_together">和我一起使用 Punica %1$s</string>
+    <string name="punica_together">和我一起使用小石榴 %1$s</string>
 
     <string name="theme">主题</string>
     <string name="color">色彩</string>
     <string name="style">风格</string>
-    <string name="material_you">Material You（12+）</string>
+    <string name="material_you" translatable="false">Material You（12+）</string>
     <string name="random_color">随机颜色</string>
     <string name="from_avatar">由头像生成</string>
     <string name="from_color">自定义颜色</string>
@@ -231,7 +230,6 @@
     <string name="gdufe_finance">财务系统</string>
     <string name="gdufe_edu_system">教务系统</string>
     <string name="gdufe_blackboard">毕博平台</string>
-    <string name="gdufe_second_class">第二课堂</string>
     <string name="gdufe_mooc">广财慕课（雨课堂）</string>
     <string name="library">图书馆</string>
 </resources>

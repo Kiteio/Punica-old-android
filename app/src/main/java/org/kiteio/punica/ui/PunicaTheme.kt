@@ -53,9 +53,7 @@ fun PunicaTheme(
 ) {
     val preferences by Preferences.data.collectAsState()
     val avatarUri by remember {
-        derivedStateOf {
-            preferences?.get(Keys.avatarUri)?.let { Uri.parse(it) }
-        }
+        derivedStateOf { preferences?.get(Keys.avatarUri)?.let { Uri.parse(it) } }
     }
     avatarPainter = rememberAsyncImagePainter(
         model = avatarUri,
@@ -67,9 +65,7 @@ fun PunicaTheme(
     // Painter 得使用才会请求图片
     Image(painter = avatarPainter, modifier = Modifier.alpha(0f))
 
-    val themeColorSource by remember {
-        derivedStateOf { preferences?.get(Keys.themeColorSource) ?: 0 }
-    }
+    val themeColorSource by remember { derivedStateOf { preferences?.get(Keys.themeColorSource) ?: 0 } }
 
     val colorScheme = when {
         themeColorSource == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
