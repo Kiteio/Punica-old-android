@@ -83,7 +83,6 @@ import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.TopAppBar
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.rememberLastUsername
-import org.kiteio.punica.ui.rememberSchoolStart
 import org.kiteio.punica.ui.subduedContentColor
 import java.time.LocalDate
 
@@ -99,10 +98,20 @@ fun ScheduleScreen() {
     }
 
     val preferences by Preferences.data.collectAsState()
+
+    val schoolStart by remember {
+        derivedStateOf {
+            preferences?.get(Keys.schoolStart)?.let { text ->
+                LocalDate.parse(text).run {
+                    dayOfWeek.ordinal.let { if (it == 0) this else minusDays(it.toLong()) }
+                }
+            }
+        }
+    }
     val week by remember {
         derivedStateOf {
-            preferences?.get(Keys.schoolStart)?.let {
-                LocalDate.parse(it).daysUntil(LocalDate.now()).toInt() / 7 + 1
+            schoolStart?.run {
+                (daysUntil(LocalDate.now()).toInt() / 7).let { if (it >= 0) it + 1 else it }
             } ?: 0
         }
     }
@@ -123,6 +132,7 @@ fun ScheduleScreen() {
     ) {
         Timetable(
             pagerState = pagerState,
+            schoolStart = schoolStart,
             week = week,
             semester = semester,
             timetable = timetable,
@@ -234,6 +244,7 @@ private fun TopAppBar(
 /**
  * 课表
  * @param pagerState
+ * @param schoolStart
  * @param week 当前周次
  * @param semester
  * @param timetable
@@ -244,6 +255,7 @@ private fun TopAppBar(
 @Composable
 private fun Timetable(
     pagerState: PagerState,
+    schoolStart: LocalDate?,
     week: Int,
     semester: Semester,
     timetable: Timetable?,
@@ -253,7 +265,6 @@ private fun Timetable(
     val height = dp4(14)
     val timeBarWidth = dp4(9)
     val daysOfWeek = getStringArray(R.array.days_of_week)
-    val schoolStart = rememberSchoolStart()
     val now = LocalDate.now()
 
     HorizontalPager(state = pagerState, modifier = modifier) { page ->
