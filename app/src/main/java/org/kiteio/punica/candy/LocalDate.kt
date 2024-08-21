@@ -11,13 +11,6 @@ import java.time.temporal.ChronoUnit
 val LocalDate.dateMillis
     get() = toEpochDay() * 24 * 60 * 60 * 1000L
 
-/** 本周一 */
-val LocalDate.thisMonday: LocalDate
-    get() = dayOfWeek.ordinal.let {
-        if (it == 0) this
-        else minusDays(it.toLong())
-    }
-
 
 /**
  * [LocalDate]

@@ -26,7 +26,6 @@ import org.kiteio.punica.datastore.set
 import org.kiteio.punica.datastore.values
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.foundation.User
-import java.time.LocalDate
 
 /**
  * 本地或远端数据收集为 [Identified]
@@ -162,20 +161,4 @@ fun rememberLastUsername(semester: Semester? = null): String? {
     }
 
     return username
-}
-
-
-/**
- * 如果本地有数据，返回开学日期，否则返回 null
- * @return [LocalDate]
- */
-@Composable
-fun rememberSchoolStart(): LocalDate? {
-    val preferences by Preferences.data.collectAsState()
-
-    val schoolStart by remember {
-        derivedStateOf { preferences?.get(Keys.schoolStart)?.let { LocalDate.parse(it) } }
-    }
-
-    return schoolStart
 }

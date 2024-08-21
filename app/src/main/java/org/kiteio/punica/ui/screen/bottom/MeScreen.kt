@@ -40,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -69,7 +70,7 @@ import org.kiteio.punica.R
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.launchCatching
-import org.kiteio.punica.candy.thisMonday
+import org.kiteio.punica.copyToFiles
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.edu.foundation.Campus
@@ -89,8 +90,7 @@ import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.navigation.navigate
-import org.kiteio.punica.ui.rememberSchoolStart
-import org.kiteio.punica.copyToFiles
+import java.time.LocalDate
 
 /**
  * 我
@@ -370,7 +370,9 @@ private fun Tip(leadingText: String, text: String) {
 private fun Settings(modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val preferences by Preferences.data.collectAsState()
-    val schoolStart = rememberSchoolStart()
+    val schoolStart by remember {
+        derivedStateOf { preferences?.get(Keys.schoolStart)?.let { LocalDate.parse(it) } }
+    }
 
     var datePickerDialogVisible by remember { mutableStateOf(false) }
     var campusDialogVisible by remember { mutableStateOf(false) }
@@ -437,7 +439,7 @@ private fun Settings(modifier: Modifier = Modifier) {
         onDismiss = { datePickerDialogVisible = false },
         onConfirm = { localDate ->
             coroutineScope.launchCatching {
-                Preferences.edit { it[Keys.schoolStart] = localDate.thisMonday.toString() }
+                Preferences.edit { it[Keys.schoolStart] = localDate.toString() }
             }
         },
         title = { Text(text = getString(R.string.school_start)) },
