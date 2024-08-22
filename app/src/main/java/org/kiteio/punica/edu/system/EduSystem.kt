@@ -94,8 +94,6 @@ class EduSystem private constructor(
             count: Int = 15
         ): EduSystem = withContext(Dispatchers.Default) {
             with(user) {
-                session.fetch(route(proxied) { BASE })
-
                 val captcha = session.fetch(route(proxied) { CAPTCHA }).readBytes().text()
                 val text = session.post(
                     route(proxied) { LOGIN },
