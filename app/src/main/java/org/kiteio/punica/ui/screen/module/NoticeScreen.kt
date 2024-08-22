@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material3.ElevatedCard
@@ -23,19 +22,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.rajat.pdfviewer.compose.PdfRendererViewCompose
-import dev.jeziellago.compose.markdowntext.MarkdownText
 import org.kiteio.punica.candy.launchCatching
 import org.kiteio.punica.edu.EduNotice
 import org.kiteio.punica.edu.Notice
 import org.kiteio.punica.edu.NoticeItem
 import org.kiteio.punica.openUri
-import org.kiteio.punica.ui.Link
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.LazyPagingColumn
+import org.kiteio.punica.ui.component.MarkdownText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.Pager
 import org.kiteio.punica.ui.component.PagingSource
@@ -130,25 +127,13 @@ private fun NoticeBottomSheet(visible: Boolean, onDismiss: () -> Unit, noticeIte
         var notice by remember { mutableStateOf<Notice?>(null) }
 
         LaunchedEffect(key1 = Unit) {
-            launchCatching {
-                noticeItem?.let { notice = EduNotice.notice(it) }
-            }
+            launchCatching { noticeItem?.let { notice = EduNotice.notice(it) } }
         }
 
         notice?.run {
-            if (pdf != null) {
-                PdfRendererViewCompose(url = pdf)
-            } else if (markdown != null) {
-                LazyColumn(contentPadding = PaddingValues(dp4(4))) {
-                    item {
-                        MarkdownText(
-                            markdown = markdown,
-                            linkColor = Color.Link,
-                            isTextSelectable = true
-                        )
-                    }
-                }
-            }
+            if (pdf != null) PdfRendererViewCompose(url = pdf)
+            else if (markdown != null)
+                MarkdownText(markdown = markdown, contentPadding = PaddingValues(dp4(4)))
         }
     }
 }

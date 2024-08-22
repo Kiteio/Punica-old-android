@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -58,6 +59,7 @@ import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.Icon
 import org.kiteio.punica.ui.component.Image
+import org.kiteio.punica.ui.component.MarkdownText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldColumn
 import org.kiteio.punica.ui.component.SubduedText
@@ -169,7 +171,12 @@ private fun ReleaseDescDialog(visible: Boolean, onDismiss: () -> Unit, release: 
         release?.run {
             Dialog(
                 title = { Text(text = name) },
-                text = { Text(text = desc) },
+                text = {
+                    MarkdownText(
+                        markdown = desc,
+                        modifier = Modifier.heightIn(max = dp4(90))
+                    )
+                },
                 onDismiss = onDismiss,
                 contentHorizontalAlignment = Alignment.Start
             )
