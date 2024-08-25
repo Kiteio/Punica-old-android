@@ -249,7 +249,7 @@ private object Gitee : API {
         val jsonArray = fetch(route { RELEASES }).bodyAsText().jsonArray
         val releases = arrayListOf<Release>()
 
-        for (index in 0..<jsonArray.length()) {
+        for (index in jsonArray.length() - 1 downTo 0) {
             val json = jsonArray.getJSONObject(index)
 
             val url = json.getJSONArray("assets").run {
