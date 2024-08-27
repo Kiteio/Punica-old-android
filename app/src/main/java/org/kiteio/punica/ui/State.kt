@@ -14,6 +14,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import kotlinx.serialization.Serializable
+import org.kiteio.punica.candy.ProxiedAPIOwner
 import org.kiteio.punica.candy.catching
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.launchCatching
@@ -26,20 +27,39 @@ import org.kiteio.punica.datastore.set
 import org.kiteio.punica.datastore.values
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.foundation.User
+import org.kiteio.punica.edu.system.EduSystem
+
+/**
+ * 本地或远端教务系统数据收集为 [Identified]
+ * @receiver [DataStore]<[Preferences]>
+ * @param id [Identified.id]，用于从本地加载数据
+ * @param fromRemote 从远端加载数据
+ * @return [T]?
+ */
+@Composable
+inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collectAsEduSystemIdentified(
+    id: String? = rememberLastUsername(),
+    crossinline fromRemote: suspend EduSystem.() -> T?
+): T? {
+    val eduSystem = LocalViewModel.current.eduSystem
+    val value = collectAsIdentified(proxiedAPIOwner = eduSystem, id = id, fromRemote = fromRemote)
+
+    return value
+}
 
 /**
  * 本地或远端数据收集为 [Identified]
  * @receiver [DataStore]<[Preferences]>
- * @param id [Identified.id]
- * @param key
- * @param fromRemote
+ * @param proxiedAPIOwner [fromRemote] 需要重加载的标志
+ * @param id [Identified.id]，用于从本地加载数据
+ * @param fromRemote 从远端加载数据
  * @return [T]?
  */
 @Composable
-inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collectAsIdentified(
+inline fun <reified T : @Serializable Identified, U : ProxiedAPIOwner<*>> DataStore<Preferences>.collectAsIdentified(
+    proxiedAPIOwner: U?,
     id: String? = rememberLastUsername(),
-    key: Any? = null,
-    crossinline fromRemote: suspend () -> T?
+    crossinline fromRemote: suspend U.() -> T?
 ): T? {
     val coroutineScope = rememberCoroutineScope()
     val preferences by data.collectAsState()
@@ -49,11 +69,13 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collect
         value = id?.let { preferences?.get<T>(it) }
     }
 
-    LaunchedEffect(key1 = id, key2 = key) {
-        coroutineScope.launchCatching {
-            fromRemote()?.also { remoteValue ->
-                value = remoteValue
-                edit { it.set(remoteValue) }
+    LaunchedEffect(key1 = proxiedAPIOwner) {
+        proxiedAPIOwner?.run {
+            coroutineScope.launchCatching {
+                fromRemote()?.also { remoteValue ->
+                    value = remoteValue
+                    edit { it.set(remoteValue) }
+                }
             }
         }
     }
@@ -147,7 +169,7 @@ fun rememberUser(name: String?): User? {
 
 
 /**
- * 返回最近登录 [User.name]
+ * 返回最近登录 [User.name]，若 [semester] 不为 null 则会拼接上 [Semester.toString]
  * @param semester
  * @return [String]?
  */

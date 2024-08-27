@@ -41,8 +41,7 @@ import org.kiteio.punica.edu.system.api.TimetableAll
 import org.kiteio.punica.edu.system.api.timetableAll
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
-import org.kiteio.punica.ui.LocalViewModel
-import org.kiteio.punica.ui.collectAsIdentified
+import org.kiteio.punica.ui.collectAsEduSystemIdentified
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.DropdownMenuItem
 import org.kiteio.punica.ui.component.IconText
@@ -58,10 +57,9 @@ import org.kiteio.punica.ui.navigation.Route
  */
 @Composable
 fun TimetableAllScreen() {
-    val eduSystem = LocalViewModel.current.eduSystem
-    val timetableAll = TimetableAlls.collectAsIdentified(id = EduSystem.semester.toString()) {
-        eduSystem?.timetableAll()
-    }
+    val timetableAll = TimetableAlls.collectAsEduSystemIdentified(
+        id = EduSystem.semester.toString()
+    ) { timetableAll() }
 
     val daysOfWeek = getStringArray(R.array.days_of_week)
     val sections = listOf("1-2", "3-4", "5-6", "7-8", "9-10", "11-12")

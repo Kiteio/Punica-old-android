@@ -87,8 +87,9 @@ import org.kiteio.punica.ui.rememberRemoteList
 fun SecondClassScreen() {
     val lastUser = rememberLastUser()
     var secondClass by remember { mutableStateOf<SecondClass?>(null) }
-    val secondClassReport =
-        SecondClassReports.collectAsIdentified(key = secondClass) { secondClass?.report() }
+    val secondClassReport = SecondClassReports.collectAsIdentified(proxiedAPIOwner = secondClass) {
+        report()
+    }
     val activities = rememberRemoteList(key = secondClass) { secondClass?.activities() }
     val logs = rememberRemoteList(key = secondClass) { secondClass?.log() }
 
