@@ -98,18 +98,13 @@ fun ScheduleScreen() {
     val preferences by Preferences.data.collectAsState()
 
     val schoolStart by remember {
-        derivedStateOf {
-            preferences?.get(Keys.schoolStart)?.let { text ->
-                LocalDate.parse(text).run {
-                    dayOfWeek.ordinal.let { if (it == 0) this else minusDays(it.toLong()) }
-                }
-            }
-        }
+        derivedStateOf { preferences?.get(Keys.schoolStart)?.let { LocalDate.parse(it) } }
     }
     val week by remember {
         derivedStateOf {
             schoolStart?.run {
-                (daysUntil(LocalDate.now()).toInt() / 7).let { if (it >= 0) it + 1 else it }
+                val now = LocalDate.now()
+                (daysUntil(now) + dayOfWeek.value - now.dayOfWeek.value).toInt() / 7 + 1
             } ?: 0
         }
     }
