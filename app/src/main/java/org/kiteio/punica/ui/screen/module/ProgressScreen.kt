@@ -31,8 +31,7 @@ import org.kiteio.punica.datastore.Progresses
 import org.kiteio.punica.edu.system.api.ProgressTable
 import org.kiteio.punica.edu.system.api.progress
 import org.kiteio.punica.getString
-import org.kiteio.punica.ui.LocalViewModel
-import org.kiteio.punica.ui.collectAsIdentified
+import org.kiteio.punica.ui.collectAsEduSystemIdentified
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
@@ -48,8 +47,7 @@ import org.kiteio.punica.ui.subduedContentColor
  */
 @Composable
 fun ProgressScreen() {
-    val eduSystem = LocalViewModel.current.eduSystem
-    val progress = Progresses.collectAsIdentified { eduSystem?.progress() }
+    val progress = Progresses.collectAsEduSystemIdentified { progress() }
 
     var progressBottomSheetVisible by remember { mutableStateOf(false) }
     var visibleTable by remember { mutableStateOf<ProgressTable?>(null) }

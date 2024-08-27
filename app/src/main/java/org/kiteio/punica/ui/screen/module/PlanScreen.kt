@@ -28,8 +28,7 @@ import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.api.plan
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
-import org.kiteio.punica.ui.LocalViewModel
-import org.kiteio.punica.ui.collectAsIdentified
+import org.kiteio.punica.ui.collectAsEduSystemIdentified
 import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
@@ -46,8 +45,7 @@ import org.kiteio.punica.ui.rememberLastUsername
  */
 @Composable
 fun PlanScreen() {
-    val eduSystem = LocalViewModel.current.eduSystem
-    val plan = Plans.collectAsIdentified { eduSystem?.plan() }
+    val plan = Plans.collectAsEduSystemIdentified { plan() }
 
     val lastUsername = rememberLastUsername()
     val firstHalf = getString(R.string.first_half)

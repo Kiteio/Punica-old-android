@@ -69,8 +69,7 @@ import org.kiteio.punica.edu.system.api.TimetableItem
 import org.kiteio.punica.edu.system.api.timetable
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
-import org.kiteio.punica.ui.LocalViewModel
-import org.kiteio.punica.ui.collectAsIdentified
+import org.kiteio.punica.ui.collectAsEduSystemIdentified
 import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.DropdownMenuItem
@@ -91,11 +90,10 @@ import java.time.LocalDate
  */
 @Composable
 fun ScheduleScreen() {
-    val eduSystem = LocalViewModel.current.eduSystem
     var semester by remember { mutableStateOf(EduSystem.semester) }
-    val timetable = Timetables.collectAsIdentified(id = rememberLastUsername(semester)) {
-        eduSystem?.timetable(semester)
-    }
+    val timetable = Timetables.collectAsEduSystemIdentified(
+        id = rememberLastUsername(semester)
+    ) { timetable(semester) }
 
     val preferences by Preferences.data.collectAsState()
 

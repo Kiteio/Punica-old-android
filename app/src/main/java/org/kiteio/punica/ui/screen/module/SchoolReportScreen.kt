@@ -41,8 +41,7 @@ import org.kiteio.punica.datastore.SchoolReports
 import org.kiteio.punica.edu.system.api.SchoolReportItem
 import org.kiteio.punica.edu.system.api.schoolReport
 import org.kiteio.punica.getString
-import org.kiteio.punica.ui.LocalViewModel
-import org.kiteio.punica.ui.collectAsIdentified
+import org.kiteio.punica.ui.collectAsEduSystemIdentified
 import org.kiteio.punica.ui.component.BottomSheet
 import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
@@ -63,8 +62,7 @@ import org.kiteio.punica.ui.navigation.Route
  */
 @Composable
 fun SchoolReportScreen() {
-    val eduSystem = LocalViewModel.current.eduSystem
-    val schoolReport = SchoolReports.collectAsIdentified { eduSystem?.schoolReport() }
+    val schoolReport = SchoolReports.collectAsEduSystemIdentified { schoolReport() }
     var evaluationDialogVisible by remember { mutableStateOf(false) }
     val tabPagerState = rememberTabPagerState(R.string.newest, R.string.all)
     var detailBottomSheetVisible by remember { mutableStateOf(false) }
