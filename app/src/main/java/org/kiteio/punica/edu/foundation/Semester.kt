@@ -35,7 +35,7 @@ data class Semester(
          * @return [Semester]
          */
         fun of(localDate: LocalDate) = with(localDate) {
-            when (month.value) {
+            when (monthValue) {
                 1 -> Semester(year - 1, 1)
                 in 2..7 -> Semester(year - 1, 2)
                 else -> Semester(year, 1)
