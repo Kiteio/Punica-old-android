@@ -8,24 +8,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Numbers
-import androidx.compose.material.icons.rounded.Score
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import org.kiteio.punica.R
 import org.kiteio.punica.datastore.Progresses
 import org.kiteio.punica.edu.system.api.ProgressTable
@@ -33,14 +27,12 @@ import org.kiteio.punica.edu.system.api.progress
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.collectAsEduSystemIdentified
 import org.kiteio.punica.ui.component.BottomSheet
-import org.kiteio.punica.ui.component.IconText
 import org.kiteio.punica.ui.component.NavBackTopAppBar
 import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
-import org.kiteio.punica.ui.subduedContentColor
 
 /**
  * 学业进度
@@ -105,47 +97,36 @@ private fun ProgressBottomSheet(visible: Boolean, onDismiss: () -> Unit, table: 
                 item {
                     Column(modifier = Modifier.padding(dp4(2))) {
                         Title(text = name)
-                        SubduedText(text = "$point / $requiredPoint")
+                        SubduedText(
+                            text = "$point / $requiredPoint",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
 
                 items(items) {
-                    ElevatedCard(onClick = {}, modifier = Modifier.padding(dp4(2))) {
-                        Column(
+                    val had = it.point.ifBlank { "0" }
+                        .toDouble() / it.requiredPoint.toDouble() == 1.0
+
+                    ElevatedCard(onClick = {}, enabled = had, modifier = Modifier.padding(dp4(2))) {
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(dp4(4))
                         ) {
-                            Title(text = it.name)
-                            SubduedText(text = it.module)
-                            SubduedText(text = "${getString(R.string.recommended_term)} ${it.term}")
-                            Spacer(modifier = Modifier.height(dp4()))
-
-                            CompositionLocalProvider(
-                                value = LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                            Column(
+                                modifier = Modifier.weight(1f)
                             ) {
-                                IconText(
-                                    text = it.id,
-                                    leadingIcon = Icons.Rounded.Numbers,
-                                    leadingText = getString(R.string.id)
-                                )
-                                IconText(
-                                    text = it.requiredPoint,
-                                    leadingIcon = Icons.Rounded.Star,
-                                    leadingText = getString(R.string.point)
-                                )
-                                IconText(
-                                    text = it.point,
-                                    leadingIcon = Icons.Rounded.Score,
-                                    leadingText = getString(R.string.got_point),
-                                    leadingColor = if (it.point.ifBlank { "0" }
-                                            .toDouble() / it.requiredPoint.toDouble() == 1.0)
-                                        Color.Unspecified else subduedContentColor(0.3f)
-                                )
+                                Title(text = it.name)
+                                SubduedText(text = getString(R.string.id) + " ${it.id}")
+                                SubduedText(text = it.module)
+                                SubduedText(text = "${getString(R.string.recommended_term)} ${it.term}")
+                                Spacer(modifier = Modifier.height(dp4()))
+                                it.privilege?.let { privilege -> SubduedText(text = privilege) }
                             }
-                            Spacer(modifier = Modifier.height(dp4()))
+                            Spacer(modifier = Modifier.width(dp4(2)))
 
-                            it.privilege?.let { privilege -> SubduedText(text = privilege) }
+                            Title(text = it.requiredPoint)
                         }
                     }
                 }
