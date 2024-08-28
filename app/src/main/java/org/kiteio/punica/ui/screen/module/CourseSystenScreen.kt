@@ -860,7 +860,7 @@ private fun PriorityDialog(visible: Boolean, onDismiss: () -> Unit, onConfirm: (
                         onConfirm(
                             when (priority) {
                                 0 -> Priority.First
-                                1 -> Priority.First
+                                1 -> Priority.Second
                                 else -> Priority.Third
                             }
                         )
