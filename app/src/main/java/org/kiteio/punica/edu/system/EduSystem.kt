@@ -44,6 +44,14 @@ class EduSystem private constructor(
     }
 
 
+    /**
+     * 重新登录账号
+     */
+    suspend fun reLogin() {
+        login(user, proxied)
+    }
+
+
     companion object : ProxiedAPI {
         override val agent = WebVPN
         override val root = "http://jwxt.gdufe.edu.cn"

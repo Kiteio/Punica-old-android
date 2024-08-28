@@ -42,10 +42,27 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collect
     crossinline fromRemote: suspend EduSystem.() -> T?
 ): T? {
     val eduSystem = LocalViewModel.current.eduSystem
-    val value = collectAsIdentified(proxiedAPIOwner = eduSystem, id = id, fromRemote = fromRemote)
+    val value = collectAsIdentified(
+        proxiedAPIOwner = eduSystem, id = id, fromRemote = { runWithReLogin { fromRemote() } }
+    )
 
     return value
 }
+
+
+/**
+ * 运行 [block] 并以 try...catch 环绕，若捕获异常则重新登录后再运行一次 [block]
+ * @receiver [EduSystem]
+ * @param block
+ * @return [T]
+ */
+suspend inline fun <T> EduSystem.runWithReLogin(block: EduSystem.() -> T) = try {
+    block()
+} catch (e: Throwable) {
+    reLogin()
+    block()
+}
+
 
 /**
  * 本地或远端数据收集为 [Identified]

@@ -44,6 +44,7 @@ import compose.icons.SimpleIcons
 import compose.icons.simpleicons.Tencentqq
 import compose.icons.simpleicons.Wechat
 import org.kiteio.punica.R
+import org.kiteio.punica.candy.catching
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.api.Teacher
 import org.kiteio.punica.edu.system.api.TeacherItem
@@ -64,6 +65,7 @@ import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.component.items
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
+import org.kiteio.punica.ui.runWithReLogin
 
 /**
  * 教师信息
@@ -155,9 +157,14 @@ private class TeacherInfoPagingSource(
     private val teacherName: String,
     private val eduSystem: EduSystem?
 ) : PagingSource<TeacherItem>() {
-    override suspend fun loadCatching(params: LoadParams<Int>) =
-        eduSystem?.teacherList(teacherName, params.key!!)?.let { Page(it, params) }
-            ?: error(getString(R.string.not_logged_in))
+    override suspend fun loadCatching(params: LoadParams<Int>) = eduSystem?.run {
+        try {
+            teacherList(teacherName, params.key!!)
+        } catch (e: Throwable) {
+            reLogin()
+            teacherList(name, params.key!!)
+        }.let { Page(it, params) }
+    } ?: error(getString(R.string.not_logged_in))
 }
 
 
@@ -179,7 +186,9 @@ fun TeacherBottomSheet(
         var teacher by remember { mutableStateOf<Teacher?>(null) }
 
         LaunchedEffect(key1 = eduSystem, key2 = id) {
-            id?.let { teacher = eduSystem?.teacher(it) }
+            id?.let {
+                teacher = catching<Teacher?> { eduSystem?.runWithReLogin { teacher(it) } }
+            }
         }
 
         LazyColumn(contentPadding = PaddingValues(dp4(4))) {
