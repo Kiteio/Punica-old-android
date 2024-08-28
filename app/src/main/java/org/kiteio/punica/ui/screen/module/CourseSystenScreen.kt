@@ -108,6 +108,7 @@ import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.rememberRemote
 import org.kiteio.punica.ui.rememberRemoteList
+import org.kiteio.punica.ui.runWithReLogin
 import java.time.DayOfWeek
 
 /**
@@ -135,7 +136,7 @@ fun CourseSystemScreen() {
     var visibleSearchParams by remember { mutableStateOf<SearchParams?>(null) }
 
     LaunchedEffect(key1 = eduSystem, key2 = token) {
-        eduSystem?.let { eduSystem ->
+        eduSystem?.runWithReLogin {
             courseSystem = catching<CourseSystem> { CourseSystem.from(eduSystem) }
 
             if (courseSystem == null) token?.let { token ->

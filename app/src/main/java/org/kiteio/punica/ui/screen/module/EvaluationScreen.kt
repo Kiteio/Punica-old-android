@@ -51,6 +51,7 @@ import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.rememberRemoteList
+import org.kiteio.punica.ui.runWithReLogin
 
 /**
  * 教学评价
@@ -60,7 +61,7 @@ fun EvaluationScreen() {
     val eduSystem = LocalViewModel.current.eduSystem
     val coroutineScope = rememberCoroutineScope()
     val evaluateItems = rememberRemoteList(key = eduSystem) {
-        eduSystem?.evaluateList()?.sortedBy { it.route == null }
+        eduSystem?.runWithReLogin { evaluateList().sortedBy { it.route == null } }
     }
     var stateSelectDialogVisible by remember { mutableStateOf(false) }
     var isAll by remember { mutableStateOf(false) }
@@ -113,12 +114,14 @@ fun EvaluationScreen() {
         visible = stateSelectDialogVisible,
         onDismiss = { stateSelectDialogVisible = false },
         onSelect = { submit ->
-            eduSystem?.run {
-                if (selectedIndex == -1)
-                    for (index in evaluateItems.indices.reversed())
-                        evaluate(evaluateItems, coroutineScope, submit, index)
-                else evaluate(evaluateItems, coroutineScope, submit, selectedIndex)
-            } ?: Toast(R.string.not_logged_in).show()
+            coroutineScope.launchCatching {
+                eduSystem?.runWithReLogin {
+                    if (selectedIndex == -1)
+                        for (index in evaluateItems.indices.reversed())
+                            evaluate(evaluateItems, coroutineScope, submit, index)
+                    else evaluate(evaluateItems, coroutineScope, submit, selectedIndex)
+                } ?: Toast(R.string.not_logged_in).show()
+            }
         },
         isAll = selectedIndex == -1
     )
