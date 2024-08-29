@@ -170,7 +170,12 @@ private fun TopAppBar(
     var moreDropdownMenuExpanded by remember { mutableStateOf(false) }
 
     TopAppBar(
-        title = { Text(text = getString(R.string.week_count, week)) },
+        title = {
+            Text(
+                text = getString(R.string.week_count, week),
+                style = MaterialTheme.typography.bodyLarge
+            )
+        },
         shadowElevation = 0.dp,
         actions = {
             TextButton(onClick = { semesterDropdownMenuExpanded = true }) {
@@ -283,7 +288,12 @@ private fun Timetable(
                                 .fillMaxHeight(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = getString(R.string.week_number, offsetWeek))
+                            Title(
+                                text = getString(R.string.week_number, offsetWeek),
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
                         }
                         daysOfWeek.forEachIndexed { index, item ->
                             val date = mondayDate?.plusDays(index.toLong())
