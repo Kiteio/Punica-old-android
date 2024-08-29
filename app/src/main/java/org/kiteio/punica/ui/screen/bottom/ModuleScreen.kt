@@ -19,7 +19,7 @@ import org.kiteio.punica.ui.component.ScaffoldColumn
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
-import org.kiteio.punica.ui.navigation.navigate
+import org.kiteio.punica.ui.navigation.navigateTo
 
 /**
  * 模块
@@ -33,7 +33,7 @@ fun ModuleScreen() {
             itemsIndexed(Route.Module.values) { index, item ->
                 Module(
                     route = item,
-                    onClick = { navController.navigate(item) },
+                    onClick = { navController.navigateTo(item) },
                     modifier = Modifier.padding(dp4(2))
                 )
             }

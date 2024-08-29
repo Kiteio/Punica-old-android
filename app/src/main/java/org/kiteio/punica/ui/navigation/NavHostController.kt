@@ -7,4 +7,4 @@ import androidx.navigation.NavHostController
  * @receiver [NavHostController]
  * @param route
  */
-fun NavHostController.navigate(route: Route) = navigate(route.id)
+fun NavHostController.navigateTo(route: Route) = navigate(route.id)

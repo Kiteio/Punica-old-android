@@ -76,7 +76,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun VersionScreen() {
     val releases = rememberRemoteList { Gitee.releases() }
-    val versionName = remember { packageInfo().versionName }
+    val versionName = remember { packageInfo().versionName!! }
     val currentRelease by remember {
         derivedStateOf { releases.firstOrNull { it.name == versionName } }
     }

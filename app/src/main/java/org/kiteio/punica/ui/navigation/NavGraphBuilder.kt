@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
  * @param route
  */
 fun NavGraphBuilder.composable(route: Route) =
-    composable(route.id) { route.content(it) }
+    composable(route.id) { route.content() }
 
 
 /**

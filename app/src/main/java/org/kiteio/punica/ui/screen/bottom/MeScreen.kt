@@ -89,7 +89,7 @@ import org.kiteio.punica.ui.component.SubduedText
 import org.kiteio.punica.ui.component.Title
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
-import org.kiteio.punica.ui.navigation.navigate
+import org.kiteio.punica.ui.navigation.navigateTo
 import java.time.LocalDate
 
 /**
@@ -117,7 +117,7 @@ fun MeScreen() {
         ) {
             UserCard(
                 painter = avatarPainter,
-                onClick = { navController.navigate(Route.Login) },
+                onClick = { navController.navigateTo(Route.Login) },
                 onAvatarClick = { avatarDialogVisible = true }
             )
         }
@@ -464,7 +464,7 @@ private fun SettingItem(route: Route) {
         SettingItem(
             nameResId = nameResId,
             icon = icon,
-            onClick = { navController.navigate(this) }
+            onClick = { navController.navigateTo(this) }
         )
     }
 }

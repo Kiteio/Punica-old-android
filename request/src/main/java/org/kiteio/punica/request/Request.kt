@@ -48,5 +48,5 @@ suspend fun post(
  * @param cookie
  */
 fun HttpRequestBuilder.cookie(cookie: Cookie) = with(cookie) {
-    cookie(name, value, maxAge, expires, domain, path, secure, httpOnly, extensions)
+    cookie(name, value, maxAge ?: 0, expires, domain, path, secure, httpOnly, extensions)
 }

@@ -18,7 +18,7 @@ import org.kiteio.punica.ui.component.ScaffoldBox
 import org.kiteio.punica.ui.navigation.NavHost
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.navigation.composable
-import org.kiteio.punica.ui.navigation.navigate
+import org.kiteio.punica.ui.navigation.navigateTo
 
 /**
  * 主页面
@@ -55,7 +55,7 @@ private fun BottomBar(navController: NavHostController, routes: List<Route.Botto
                 onClick = {
                     if (currentRouteId != route.id) {
                         navController.popBackStack()
-                        navController.navigate(route)
+                        navController.navigateTo(route)
                     }
                 },
                 icon = { Icon(imageVector = route.icon) },
