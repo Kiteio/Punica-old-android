@@ -1,6 +1,6 @@
 package org.kiteio.punica.ui.screen.module
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material.icons.rounded.OpenInBrowser
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -61,36 +62,28 @@ fun NoticeScreen() {
             contentPadding = PaddingValues(dp4(2))
         ) {
             items(noticeItems) {
-                ElevatedCard(modifier = Modifier.padding(dp4(2))) {
-                    Surface(
-                        onClick = {
-                            visibleNoticeItem = it
-                            noticeBottomSheetVisible = true
-                        }
+                ElevatedCard(
+                    onClick = {
+                        visibleNoticeItem = it
+                        noticeBottomSheetVisible = true
+                    },
+                    modifier = Modifier.padding(dp4(2))
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(dp4(4)),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(dp4(2))
-                        ) {
-                            Title(text = it.title)
+                        Column(modifier = Modifier.weight(1f)) {
+                            Title(text = it.title, style = MaterialTheme.typography.bodyLarge)
                             Spacer(modifier = Modifier.height(dp4()))
                             SubduedText(text = it.time)
                         }
-                    }
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = dp4()))
-                    Surface {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(dp4(2)),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            SubduedText(text = it.url, modifier = Modifier.weight(1f))
-                            IconButton(onClick = { openUri(it.url) }) {
-                                Icon(imageVector = Icons.AutoMirrored.Rounded.OpenInNew)
-                            }
+                        Spacer(modifier = Modifier.width(dp4()))
+
+                        IconButton(onClick = { openUri(it.url) }) {
+                            Icon(imageVector = Icons.Rounded.OpenInBrowser)
                         }
                     }
                 }
@@ -130,10 +123,19 @@ private fun NoticeBottomSheet(visible: Boolean, onDismiss: () -> Unit, noticeIte
             launchCatching { noticeItem?.let { notice = EduNotice.notice(it) } }
         }
 
-        notice?.run {
+        if (notice == null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = dp4(6)),
+                contentAlignment = Alignment.Center
+            ) { LinearProgressIndicator() }
+        } else notice?.run {
             if (pdf != null) PdfRendererViewCompose(url = pdf)
-            else if (markdown != null)
-                MarkdownText(markdown = markdown, contentPadding = PaddingValues(dp4(4)))
+            else if (markdown != null) MarkdownText(
+                markdown = markdown,
+                contentPadding = PaddingValues(dp4(4))
+            )
         }
     }
 }
