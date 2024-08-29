@@ -95,7 +95,7 @@ object EduNotice : API {
             appendParagraph("## ${noticeItem.title}")
             appendParagraph(
                 "> ${
-                    info.children().apply { removeLast() }.joinToString { it.text() }
+                    info.children().apply { removeLastOrNull() }.joinToString { it.text() }
                 }"
             )
 

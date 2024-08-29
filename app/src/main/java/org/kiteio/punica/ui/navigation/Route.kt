@@ -14,7 +14,6 @@ import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavBackStackEntry
 import compose.icons.TablerIcons
 import compose.icons.tablericons.BellRinging
 import compose.icons.tablericons.Book
@@ -63,7 +62,7 @@ import org.kiteio.punica.ui.screen.module.WebSiteScreen
  * @property id 路由标识
  */
 sealed class Route(
-    val content: @Composable NavBackStackEntry.() -> Unit,
+    val content: @Composable () -> Unit,
     @StringRes val nameResId: Int = R.string.app_name,
     val icon: ImageVector = Icons.Rounded.Numbers
 ) {
@@ -87,7 +86,7 @@ sealed class Route(
 
     /** 底部导航路由 */
     sealed class Bottom(
-        composable: @Composable NavBackStackEntry.() -> Unit,
+        composable: @Composable () -> Unit,
         @StringRes nameResId: Int,
         icon: ImageVector
     ) : Route(composable, nameResId, icon) {
@@ -116,7 +115,7 @@ sealed class Route(
 
     /** 功能模块 */
     sealed class Module(
-        composable: @Composable NavBackStackEntry.() -> Unit,
+        composable: @Composable () -> Unit,
         @StringRes nameResId: Int,
         icon: ImageVector
     ) : Route(composable, nameResId, icon) {
