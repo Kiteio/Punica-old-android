@@ -12,10 +12,10 @@
     <string name="course_cross_year">跨年級</string>
     <string name="course_cross_major">跨專業</string>
     <string name="course_major">專業內計劃</string>
-    <string name="clinic">門診部急救（廣州）</string>
-    <string name="campus_alarm">校園報警（廣州）</string>
-    <string name="campus_police_office">校園警務室（廣州）</string>
-    <string name="guanzhou_police_station">官洲派出所（廣州）</string>
+    <string name="clinic">門診部急救</string>
+    <string name="campus_alarm">校園報警</string>
+    <string name="campus_police_office">校園警務室</string>
+    <string name="guanzhou_police_station">官洲派出所</string>
     <string name="number_of_hours">%1$d 小時</string>
     <string name="evaluation_closed">教評未開放</string>
     <string name="login">登錄</string>
