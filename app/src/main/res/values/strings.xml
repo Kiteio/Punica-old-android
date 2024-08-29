@@ -76,8 +76,8 @@
         <item>大三</item>
         <item>大四</item>
     </string-array>
-    <string name="week_count">第%1$d周</string>
-    <string name="week_number">%1$d周</string>
+    <string name="week_count">第 %1$d 周</string>
+    <string name="week_number">%1$d 周</string>
     <string name="more">更多</string>
     <string name="back_to_this_week">回到本周</string>
     <string name="teacher">教师</string>

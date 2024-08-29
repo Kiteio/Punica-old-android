@@ -54,7 +54,7 @@
     <string name="close">關閉</string>
     <string name="schedule_change_to">時間更換為%1$s</string>
     <string name="day_of_week">星期%1$s</string>
-    <string name="week_count">第%1$d周</string>
+    <string name="week_count">第 %1$d 周</string>
     <string name="week_number">%1$d周</string>
     <string name="more">更多</string>
     <string name="back_to_this_week">回到本周</string>
