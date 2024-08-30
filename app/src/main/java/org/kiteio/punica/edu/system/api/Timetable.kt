@@ -69,7 +69,7 @@ suspend fun EduSystem.timetable(semester: Semester) = withContext(Dispatchers.De
                 )
             )
         }
-        itemsList.add(items)
+        itemsList.add(items.ifEmpty { null })
     }
 
     return@withContext Timetable(

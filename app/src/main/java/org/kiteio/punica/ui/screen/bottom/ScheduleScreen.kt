@@ -51,6 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
@@ -70,6 +71,7 @@ import org.kiteio.punica.edu.system.api.timetable
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
 import org.kiteio.punica.ui.collectAsEduSystemIdentified
+import org.kiteio.punica.ui.component.CheckBox
 import org.kiteio.punica.ui.component.Dialog
 import org.kiteio.punica.ui.component.DialogVisibility
 import org.kiteio.punica.ui.component.DropdownMenuItem
@@ -92,7 +94,8 @@ import java.time.LocalDate
 fun ScheduleScreen() {
     var semester by remember { mutableStateOf(EduSystem.semester) }
     val timetable = Timetables.collectAsEduSystemIdentified(
-        id = rememberLastUsername(semester)
+        id = rememberLastUsername(semester),
+        key = semester
     ) { timetable(semester) }
 
     val preferences by Preferences.data.collectAsState()
@@ -117,6 +120,7 @@ fun ScheduleScreen() {
         topBar = {
             TopAppBar(
                 pagerState = pagerState,
+                preferences = preferences,
                 week = week,
                 semester = semester,
                 onSemesterChange = { semester = it }
@@ -130,6 +134,7 @@ fun ScheduleScreen() {
             semester = semester,
             timetable = timetable,
             onItemClick = { visibleItems = it; itemsDialogVisible = true },
+            showOtherWeeks = preferences?.get(Keys.showOtherWeeks) ?: false,
             modifier = Modifier.weight(1f)
         )
         // 课表备注
@@ -153,6 +158,7 @@ fun ScheduleScreen() {
 /**
  * 导航栏
  * @param pagerState
+ * @param preferences
  * @param week 当前周次
  * @param semester 选中学期
  * @param onSemesterChange 学期选择事件
@@ -160,12 +166,12 @@ fun ScheduleScreen() {
 @Composable
 private fun TopAppBar(
     pagerState: PagerState,
+    preferences: Preferences?,
     week: Int,
     semester: Semester,
     onSemesterChange: (Semester) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val preferences by Preferences.data.collectAsState()
     var semesterDropdownMenuExpanded by remember { mutableStateOf(false) }
     var moreDropdownMenuExpanded by remember { mutableStateOf(false) }
 
@@ -227,9 +233,32 @@ private fun TopAppBar(
                         text = { Text(text = getString(R.string.back_to_this_week)) },
                         onClick = {
                             coroutineScope.launchCatching {
+                                onSemesterChange(EduSystem.semester)
                                 pagerState.scrollToPage(pagerState.pageCount / 2)
                                 moreDropdownMenuExpanded = false
                             }
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(text = "展示其他周次课程") },
+                        onClick = {
+                            coroutineScope.launchCatching {
+                                Preferences.edit {
+                                    it[Keys.showOtherWeeks] = !(it[Keys.showOtherWeeks] ?: false)
+                                }
+                                moreDropdownMenuExpanded = false
+                            }
+                        },
+                        trailingIcon = {
+                            CheckBox(
+                                checked = preferences?.get(Keys.showOtherWeeks) ?: false,
+                                onCheckedChange = { value ->
+                                    coroutineScope.launchCatching {
+                                        Preferences.edit { it[Keys.showOtherWeeks] = value }
+                                        moreDropdownMenuExpanded = false
+                                    }
+                                }
+                            )
                         }
                     )
                 }
@@ -247,6 +276,7 @@ private fun TopAppBar(
  * @param semester
  * @param timetable
  * @param onItemClick
+ * @param showOtherWeeks
  * @param modifier
  */
 @OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
@@ -258,6 +288,7 @@ private fun Timetable(
     semester: Semester,
     timetable: Timetable?,
     onItemClick: (List<TimetableItem>?) -> Unit,
+    showOtherWeeks: Boolean,
     modifier: Modifier = Modifier
 ) {
     val height = dp4(14)
@@ -338,10 +369,15 @@ private fun Timetable(
                 Row {
                     TimeBar(width = timeBarWidth, itemHeight = height * 2)
                     FlowColumn(maxItemsInEachColumn = 6, modifier = Modifier.weight(1f)) {
+                        var lastWeight = 0
+
                         timetable?.items?.forEach {
                             it.Plaid(
                                 week = offsetWeek,
                                 onClick = { onItemClick(it) },
+                                lastWeight = lastWeight,
+                                onLastWeightChange = { value -> lastWeight = value },
+                                showOtherWeeks = showOtherWeeks,
                                 height = height
                             )
                         }
@@ -411,57 +447,85 @@ private fun TimeBar(width: Dp, itemHeight: Dp) {
  * @receiver [List]<[TimetableItem]>?
  * @param week 当前周次
  * @param onClick
+ * @param lastWeight
+ * @param onLastWeightChange
+ * @param showOtherWeeks
  * @param height
  */
 @Composable
-private fun List<TimetableItem>?.Plaid(week: Int, onClick: () -> Unit, height: Dp) {
-    var lastWeight = 0
+private fun List<TimetableItem>?.Plaid(
+    week: Int,
+    onClick: () -> Unit,
+    lastWeight: Int,
+    onLastWeightChange: (Int) -> Unit,
+    showOtherWeeks: Boolean,
+    height: Dp
+) {
+    if (isNullOrEmpty()) {
+        Blank(lastWeight = lastWeight, onLastWeightChange = onLastWeightChange, height = height)
+    } else {
+        val firstContainsWeek = firstOrNull { it.weeks.contains(week) }
+        val alpha = if (firstContainsWeek != null) 1f else 0.35f
 
-    this?.firstOrNull { it.weeks.contains(week) }?.apply {
-        ElevatedCard(
-            onClick = onClick,
-            shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth(1f / 7)
-        ) {
-            Box {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(height * section.size.also { lastWeight = it })
-                ) {
-                    PlaidText(text = name, maxLines = 2, color = MaterialTheme.colorScheme.primary)
-                    Spacer(modifier = Modifier.height(dp4(2)))
-                    PlaidText(
-                        text = area.replace(Regex("[(（].*?[）)]"), ""),
-                        maxLines = 3,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.Black
+        (firstContainsWeek ?: if (showOtherWeeks) first() else null)?.apply {
+            ElevatedCard(
+                onClick = onClick,
+                shape = MaterialTheme.shapes.small,
+                modifier = Modifier.fillMaxWidth(1f / 7)
+            ) {
+                Box {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(height * section.size.also { onLastWeightChange(it) })
+                    ) {
+                        PlaidText(
+                            text = name,
+                            maxLines = 2,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
+                        )
+                        Spacer(modifier = Modifier.height(dp4(2)))
+                        PlaidText(
+                            text = area.replace(Regex("[(（].*?[）)]"), ""),
+                            maxLines = 3,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = alpha),
+                            fontWeight = FontWeight.Black
+                        )
+                    }
+
+                    if (size > 1) SubduedText(
+                        text = "+${size - 1}",
+                        modifier = Modifier.align(Alignment.BottomEnd),
+                        color = subduedContentColor(alpha = alpha),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
-
-                if (size > 1) SubduedText(
-                    text = "+${size - 1}",
-                    modifier = Modifier.align(Alignment.BottomEnd),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall
-                )
             }
-        }
-    } ?: run {
-        val weight = when (lastWeight) {
-            1, 3 -> 1
-            4 -> 0
-            else -> 2
-        }.also { lastWeight = it }
-
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth(1f / 7)
-                .height(height * weight)
+        } ?: Blank(
+            lastWeight = lastWeight,
+            onLastWeightChange = onLastWeightChange,
+            height = height
         )
     }
+}
+
+
+@Composable
+private fun Blank(lastWeight: Int, onLastWeightChange: (Int) -> Unit, height: Dp) {
+    val weight = when (lastWeight) {
+        1, 3 -> 1
+        4 -> 0
+        else -> 2
+    }.also { onLastWeightChange(it) }
+
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth(1f / 7)
+            .height(height * weight)
+    )
 }
 
 
