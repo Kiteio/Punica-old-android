@@ -33,17 +33,19 @@ import org.kiteio.punica.edu.system.EduSystem
  * 本地或远端教务系统数据收集为 [Identified]
  * @receiver [DataStore]<[Preferences]>
  * @param id [Identified.id]，用于从本地加载数据
+ * @param key 加载远端的 key
  * @param fromRemote 从远端加载数据
  * @return [T]?
  */
 @Composable
 inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collectAsEduSystemIdentified(
     id: String? = rememberLastUsername(),
+    key: Any? = null,
     crossinline fromRemote: suspend EduSystem.() -> T?
 ): T? {
     val eduSystem = LocalViewModel.current.eduSystem
     val value = collectAsIdentified(
-        proxiedAPIOwner = eduSystem, id = id, fromRemote = { runWithReLogin { fromRemote() } }
+        proxiedAPIOwner = eduSystem, id = id, key = key, fromRemote = { runWithReLogin { fromRemote() } }
     )
 
     return value
@@ -69,6 +71,7 @@ suspend inline fun <T> EduSystem.runWithReLogin(block: EduSystem.() -> T) = try 
  * @receiver [DataStore]<[Preferences]>
  * @param proxiedAPIOwner [fromRemote] 需要重加载的标志
  * @param id [Identified.id]，用于从本地加载数据
+ * @param key 加载远端的 key
  * @param fromRemote 从远端加载数据
  * @return [T]?
  */
@@ -76,6 +79,7 @@ suspend inline fun <T> EduSystem.runWithReLogin(block: EduSystem.() -> T) = try 
 inline fun <reified T : @Serializable Identified, U : ProxiedAPIOwner<*>> DataStore<Preferences>.collectAsIdentified(
     proxiedAPIOwner: U?,
     id: String? = rememberLastUsername(),
+    key: Any? = null,
     crossinline fromRemote: suspend U.() -> T?
 ): T? {
     val coroutineScope = rememberCoroutineScope()
@@ -86,7 +90,7 @@ inline fun <reified T : @Serializable Identified, U : ProxiedAPIOwner<*>> DataSt
         value = id?.let { preferences?.get<T>(it) }
     }
 
-    LaunchedEffect(key1 = proxiedAPIOwner) {
+    LaunchedEffect(key1 = proxiedAPIOwner, key2 = key) {
         proxiedAPIOwner?.run {
             coroutineScope.launchCatching {
                 fromRemote()?.also { remoteValue ->

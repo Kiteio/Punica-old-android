@@ -1,5 +1,6 @@
 package org.kiteio.punica.datastore
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
@@ -15,6 +16,9 @@ object Keys {
 
     /** 校区 id */
     val campusId by lazy { intPreferencesKey("campusId") }
+
+    /** 课表展示其他周次 */
+    val showOtherWeeks by lazy { booleanPreferencesKey("showOtherWeeks") }
 
     /** 最后登录学号 */
     val lastUsername by lazy { stringPreferencesKey("lastUsername") }

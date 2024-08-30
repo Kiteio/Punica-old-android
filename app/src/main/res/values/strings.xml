@@ -80,6 +80,7 @@
     <string name="week_number">%1$d 周</string>
     <string name="more">更多</string>
     <string name="back_to_this_week">回到本周</string>
+    <string name="show_other_weeks">显示其他周次课程</string>
     <string name="teacher">教师</string>
     <string name="area">地点</string>
     <string name="weeks">周次</string>
