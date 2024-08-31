@@ -44,14 +44,14 @@ suspend fun EduSystem.evaluateList(): List<EvaluateItem> = withContext(Dispatche
                         name = infos[2].text(),
                         teacher = infos[3].text(),
                         sort = sort,
-                        route = route.ifBlank { null }
+                        route = route.ifBlank { null }?.run { substring(7, length - 12) }
                     )
                 )
             }
         }
 
         return@withContext items
-    }else error(getString(R.string.evaluation_closed))
+    } else error(getString(R.string.evaluation_closed))
 }
 
 
@@ -73,7 +73,7 @@ suspend fun EduSystem.evaluate(evaluateItem: EvaluateItem, submit: Boolean, isNe
 
     val parametersBuilder = ParametersBuilder()
 
-    for (index in 0 ..< elements.size - 2) {
+    for (index in 0..<elements.size - 2) {
         val key = elements[index].attr("name")
         val value = if (key == "issubmit") (if (submit) "1" else "0") else
             elements[index].attr("value")
@@ -112,7 +112,7 @@ suspend fun EduSystem.evaluate(evaluateItem: EvaluateItem, submit: Boolean, isNe
  * @param element
  */
 private fun ParametersBuilder.append(element: Element) =
-    with(element) { append(attr("key"), attr("value")) }
+    with(element) { append(attr("name"), attr("value")) }
 
 
 /**
