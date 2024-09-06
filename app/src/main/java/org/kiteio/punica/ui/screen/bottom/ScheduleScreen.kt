@@ -129,7 +129,6 @@ fun ScheduleScreen() {
     ) {
         Timetable(
             pagerState = pagerState,
-            schoolStart = schoolStart,
             week = week,
             semester = semester,
             timetable = timetable,
@@ -271,7 +270,6 @@ private fun TopAppBar(
 /**
  * 课表
  * @param pagerState
- * @param schoolStart
  * @param week 当前周次
  * @param semester
  * @param timetable
@@ -283,7 +281,6 @@ private fun TopAppBar(
 @Composable
 private fun Timetable(
     pagerState: PagerState,
-    schoolStart: LocalDate?,
     week: Int,
     semester: Semester,
     timetable: Timetable?,
@@ -297,11 +294,9 @@ private fun Timetable(
     val now = LocalDate.now()
 
     HorizontalPager(state = pagerState, modifier = modifier) { page ->
-        val offsetWeek = page - (pagerState.pageCount / 2 - week)
-        val mondayDate = remember(offsetWeek, semester) {
-            if (semester != EduSystem.semester) null else (schoolStart
-                ?: now).plusWeeks(offsetWeek.toLong() - 1)
-        }
+        val offset = page - (pagerState.pageCount / 2)
+        val offsetWeek = week + offset
+        val offsetNow = if (semester != EduSystem.semester) null else now.plusWeeks(offset.toLong())
 
         LazyColumn {
             // 顶部周次和星期几
@@ -327,7 +322,9 @@ private fun Timetable(
                             )
                         }
                         daysOfWeek.forEachIndexed { index, item ->
-                            val date = mondayDate?.plusDays(index.toLong())
+                            val date = offsetNow?.plusDays(
+                                index.toLong() + 1 - offsetNow.dayOfWeek.value
+                            )
 
                             Surface(
                                 modifier = Modifier
