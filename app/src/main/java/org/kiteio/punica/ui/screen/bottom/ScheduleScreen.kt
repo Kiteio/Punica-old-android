@@ -1,22 +1,8 @@
 package org.kiteio.punica.ui.screen.bottom
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowColumn
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -26,14 +12,7 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Timeline
 import androidx.compose.material.icons.rounded.ViewWeek
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -50,7 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import org.kiteio.punica.R
@@ -71,17 +52,7 @@ import org.kiteio.punica.edu.system.api.timetable
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
 import org.kiteio.punica.ui.collectAsEduSystemIdentified
-import org.kiteio.punica.ui.component.CheckBox
-import org.kiteio.punica.ui.component.Dialog
-import org.kiteio.punica.ui.component.DialogVisibility
-import org.kiteio.punica.ui.component.DropdownMenuItem
-import org.kiteio.punica.ui.component.HorizontalPager
-import org.kiteio.punica.ui.component.Icon
-import org.kiteio.punica.ui.component.IconText
-import org.kiteio.punica.ui.component.ScaffoldColumn
-import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.Title
-import org.kiteio.punica.ui.component.TopAppBar
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.rememberLastUsername
 import org.kiteio.punica.ui.subduedContentColor
@@ -289,7 +260,7 @@ private fun Timetable(
     modifier: Modifier = Modifier
 ) {
     val height = dp4(14)
-    val timeBarWidth = dp4(9)
+    val timeBarWidth = dp4(10)
     val daysOfWeek = getStringArray(R.array.days_of_week)
     val now = LocalDate.now()
 
@@ -329,11 +300,10 @@ private fun Timetable(
                             Surface(
                                 modifier = Modifier
                                     .fillMaxWidth(1f / (7 - index))
-                                    .fillMaxHeight(),
+                                    .fillMaxHeight()
+                                    .padding(1.dp),
                                 shadowElevation = if (date == now) 1.dp else 0.dp,
-                                shape = MaterialTheme.shapes.medium,
-                                color = if (date == now) MaterialTheme.colorScheme.surfaceVariant
-                                else MaterialTheme.colorScheme.surface
+                                shape = MaterialTheme.shapes.medium
                             ) {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -425,13 +395,17 @@ private fun TimeBar(width: Dp, itemHeight: Dp) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    PlaidText(text = "${index * 2 + 1}", color = subduedContentColor())
-                    PlaidText(text = "${section.first.first}")
-                    PlaidText(text = "${section.first.second}")
-                    Spacer(modifier = Modifier.height(dp4()))
-                    PlaidText(text = "${index * 2 + 2}", color = subduedContentColor())
-                    PlaidText(text = "${section.second.first}")
-                    PlaidText(text = "${section.second.second}")
+                    CompositionLocalProvider(LocalContentColor provides subduedContentColor()) {
+                        val fontSize = 10.sp
+
+                        PlaidText(text = "${index * 2 + 1}-${index * 2 + 2}", fontSize = fontSize)
+                        Spacer(modifier = Modifier.height(dp4()))
+                        PlaidText(text = "${section.first.first}", fontSize = fontSize)
+                        PlaidText(text = "${section.first.second}", fontSize = fontSize)
+                        Spacer(modifier = Modifier.height(dp4()))
+                        PlaidText(text = "${section.second.first}", fontSize = fontSize)
+                        PlaidText(text = "${section.second.second}", fontSize = fontSize)
+                    }
                 }
             }
         }
@@ -465,39 +439,47 @@ private fun List<TimetableItem>?.Plaid(
         val alpha = if (firstContainsWeek != null) 1f else 0.35f
 
         (firstContainsWeek ?: if (showOtherWeeks) first() else null)?.apply {
-            ElevatedCard(
+            OutlinedCard(
                 onClick = onClick,
                 shape = MaterialTheme.shapes.small,
+                border = BorderStroke(
+                    0.6.dp,
+                    MaterialTheme.colorScheme.outlineVariant.copy(if (firstContainsWeek != null) 0.7f else 0.4f)
+                ),
                 modifier = Modifier.fillMaxWidth(1f / 7)
             ) {
-                Box {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(height * section.size.also { onLastWeightChange(it) })
+                        .padding(dp4() / 2)
+                ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(height * section.size.also { onLastWeightChange(it) })
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         PlaidText(
                             text = name,
-                            maxLines = 2,
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
+                            maxLines = 3,
+                            color = MaterialTheme.colorScheme.primary.copy(alpha),
+                            fontSize = 11.sp
                         )
                         Spacer(modifier = Modifier.height(dp4(2)))
                         PlaidText(
                             text = area.replace(Regex("[(（].*?[）)]"), ""),
                             maxLines = 3,
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = alpha),
-                            fontWeight = FontWeight.Black
+                            color = MaterialTheme.colorScheme.primary.copy(alpha),
+                            fontWeight = FontWeight.Bold
                         )
                     }
 
                     if (size > 1) SubduedText(
                         text = "+${size - 1}",
                         modifier = Modifier.align(Alignment.BottomEnd),
-                        color = subduedContentColor(alpha = alpha),
+                        color = subduedContentColor(if (firstContainsWeek != null) 0.4f else 0.2f),
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelSmall
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp)
                     )
                 }
             }
@@ -530,6 +512,7 @@ private fun Blank(lastWeight: Int, onLastWeightChange: (Int) -> Unit, height: Dp
  * 格子中的文字
  * @param text
  * @param color
+ * @param fontSize
  * @param fontWeight
  * @param textAlign
  * @param maxLines
@@ -538,6 +521,7 @@ private fun Blank(lastWeight: Int, onLastWeightChange: (Int) -> Unit, height: Dp
 private fun PlaidText(
     text: String,
     color: Color = LocalContentColor.current,
+    fontSize: TextUnit = TextUnit.Unspecified,
     fontWeight: FontWeight? = null,
     textAlign: TextAlign = TextAlign.Center,
     maxLines: Int = Int.MAX_VALUE
@@ -545,6 +529,7 @@ private fun PlaidText(
     Text(
         text = text,
         color = color,
+        fontSize = fontSize,
         fontWeight = fontWeight,
         textAlign = textAlign,
         maxLines = maxLines,
@@ -567,13 +552,11 @@ private fun ItemsDialog(visible: Boolean, onDismiss: () -> Unit, items: List<Tim
             Dialog(
                 text = {
                     items.forEach {
-                        ElevatedCard(
-                            modifier = Modifier.padding(dp4())
-                        ) {
+                        Card(onClick = {}, modifier = Modifier.padding(dp4())) {
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(dp4(2))
+                                    .padding(dp4(4))
                             ) {
                                 Title(text = it.name)
                                 Spacer(modifier = Modifier.height(dp4(2)))
