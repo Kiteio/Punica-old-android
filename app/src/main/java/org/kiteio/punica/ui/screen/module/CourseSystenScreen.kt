@@ -608,7 +608,7 @@ private fun TokenDialog(
         Dialog(
             text = {
                 TextField(value = tokenValue, onValueChange = { tokenValue = it })
-                SubduedText(text = getString(R.string.token_input_tip))
+                SubduedText(text = getString(R.string.tip_token_input))
             },
             onDismiss = onDismiss,
             confirmButton = {

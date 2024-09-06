@@ -20,6 +20,8 @@
     <string name="number_of_hours">%1$d 小时</string>
 
     <string name="evaluation_closed">教评未开放</string>
+    <string name="evaluate_all">评价所有课程</string>
+    <string name="tip_evaluate">您希望保存还是直接提交（我们推荐您先保存并前往教务系统检查后再提交）</string>
 
     <string name="login">登录</string>
     <string name="not_logged_in">未登录</string>
@@ -58,6 +60,7 @@
     <string name="save">保存</string>
     <string name="confirm">确定</string>
     <string name="close">关闭</string>
+    <string name="commit">提交</string>
 
     <string name="schedule_change_to">时间更换为%1$s</string>
     <string name="day_of_week">星期%1$s</string>
@@ -200,7 +203,7 @@
     <string name="input_to_delete">输入“%1$s”以确定删除</string>
     <string name="input_does_not_match">输入名称不一致</string>
     <string name="connect_to_campus_network_or_VPN">请连接校园网或开启 VPN</string>
-    <string name="token_input_tip">输入浏览器链接后的 jx0502zbid 值（等号后）以进入系统</string>
+    <string name="tip_token_input">输入浏览器链接后的 jx0502zbid 值（等号后）以进入系统</string>
 
     <string name="todo_editing">待办编辑</string>
     <string name="name">名称</string>

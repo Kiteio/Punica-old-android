@@ -215,21 +215,21 @@ private fun StateSelectDialog(
     isAll: Boolean
 ) {
     DialogVisibility(visible = visible) {
-        val options = listOf("保存", "提交")
+        val options = listOf(R.string.save, R.string.commit)
         var selectedIndex by remember { mutableIntStateOf(0) }
 
         Dialog(
             title = if (isAll) {
-                { Text(text = "评价所有课程") }
+                { Text(text = getString(R.string.evaluate_all)) }
             } else null,
             text = {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(text = "您希望保存还是直接提交（我们推荐您先保存并检查后再提交）")
+                    Text(text = getString(R.string.tip_evaluate))
                     options.forEachIndexed { index, option ->
                         RadioButton(
                             selected = selectedIndex == index,
                             onClick = { selectedIndex = index },
-                            label = option
+                            label = getString(option)
                         )
                     }
                 }
