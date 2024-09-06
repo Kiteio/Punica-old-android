@@ -57,7 +57,5 @@ fun subduedContentColor(alpha: Float = 0.7f) = LocalContentColor.current.copy(al
  */
 @Composable
 fun Color.applyLocalAlpha() = LocalContentColor.current.alpha.let { alpha ->
-    if (alpha != 1f) {
-        copy(alpha = alpha)
-    } else this
+    if (alpha != 1f) copy(alpha) else this
 }
