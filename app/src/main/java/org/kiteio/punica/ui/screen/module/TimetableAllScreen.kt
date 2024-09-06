@@ -1,27 +1,11 @@
 package org.kiteio.punica.ui.screen.module
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Class
-import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.LocationOn
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Timeline
-import androidx.compose.material.icons.rounded.ViewWeek
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -32,6 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import compose.icons.TablerIcons
+import compose.icons.tablericons.Calendar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.kiteio.punica.R
@@ -42,13 +28,7 @@ import org.kiteio.punica.edu.system.api.timetableAll
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
 import org.kiteio.punica.ui.collectAsEduSystemIdentified
-import org.kiteio.punica.ui.component.BottomSheet
-import org.kiteio.punica.ui.component.DropdownMenuItem
-import org.kiteio.punica.ui.component.IconText
-import org.kiteio.punica.ui.component.NavBackTopAppBar
-import org.kiteio.punica.ui.component.ScaffoldColumn
-import org.kiteio.punica.ui.component.SearchBar
-import org.kiteio.punica.ui.component.Title
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 
@@ -209,13 +189,13 @@ fun TimetableAllScreen() {
                                 IconText(
                                     text = list.map { it.dayOfWeek }.toSet()
                                         .joinToString("、") { daysOfWeek[it - 1] },
-                                    leadingIcon = Icons.Rounded.DateRange,
+                                    leadingIcon = TablerIcons.Calendar,
                                     leadingText = getString(R.string.day_of_week, "")
                                 )
                                 IconText(
                                     text = list.map { it.section.joinToString("-") }.toSet()
                                         .sorted().joinToString("、"),
-                                    leadingIcon = Icons.Rounded.DateRange,
+                                    leadingIcon = Icons.Rounded.Timeline,
                                     leadingText = getString(R.string.section)
                                 )
                                 IconText(
