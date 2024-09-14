@@ -75,7 +75,7 @@ fun AccountScreen() {
             items(users) {
                 ElevatedCard(
                     onClick = { visibleUser = it; userDialogVisible = true },
-                    modifier = Modifier.padding(dp4(2))
+                    modifier = Modifier.padding(dp4(2)).animateItem()
                 ) {
                     Row(
                         modifier = Modifier.padding(dp4(4)),

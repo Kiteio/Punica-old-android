@@ -1,6 +1,7 @@
 package org.kiteio.punica.edu.foundation
 
 import androidx.annotation.StringRes
+import kotlinx.serialization.Serializable
 import org.kiteio.punica.R
 
 /**
@@ -8,12 +9,13 @@ import org.kiteio.punica.R
  * @property nameResId 名称
  * @property id
  */
+@Serializable
 sealed class Campus(@StringRes val nameResId: Int, val id: Int) {
     /** 广州 */
-    data object Canton : Campus(R.string.campus_canton, 1)
+    @Serializable data object Canton : Campus(R.string.campus_canton, 1)
 
     /** 佛山 */
-    data object Foshan : Campus(R.string.campus_foshan, 2)
+    @Serializable data object Foshan : Campus(R.string.campus_foshan, 2)
 
 
     companion object {

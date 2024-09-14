@@ -51,3 +51,11 @@ private val Context.Progresses by preferencesDataStore("progresses")
 /** 待办 */
 val Todos get() = AppContext.Todos
 private val Context.Todos by preferencesDataStore("todos")
+
+/** 选课系统 Token */
+val Tokens get() = AppContext.Tokens
+private val Context.Tokens by preferencesDataStore("tokens")
+
+/** 课程收藏 */
+val Courses get() = AppContext.Courses
+private val Context.Courses by preferencesDataStore("courses")

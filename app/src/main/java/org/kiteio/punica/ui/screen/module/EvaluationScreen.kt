@@ -60,7 +60,7 @@ import org.kiteio.punica.ui.runWithReLogin
 fun EvaluationScreen() {
     val eduSystem = LocalViewModel.current.eduSystem
     val coroutineScope = rememberCoroutineScope()
-    val evaluateItems = rememberRemoteList(key = eduSystem) {
+    val evaluateItems = rememberRemoteList(key1 = eduSystem) {
         eduSystem?.runWithReLogin { evaluateList().sortedBy { it.route == null } }
     }
     var stateSelectDialogVisible by remember { mutableStateOf(false) }

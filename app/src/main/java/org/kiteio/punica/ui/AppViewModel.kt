@@ -38,7 +38,7 @@ class AppViewModel : ViewModel() {
      * @param user
      * @return [Flow]<[EduSystem]>
      */
-    suspend fun login(user: User) = flow {
+    fun login(user: User) = flow {
         flow {
             emit(EduSystem.login(user, false))
         }.cancellable().catch {

@@ -26,6 +26,7 @@ import org.kiteio.punica.ui.dp4
  * [PrimaryTabRow] 与 [HorizontalPager] 的有机结合
  * @param state
  * @param tabContent
+ * @param modifier
  * @param pageContent
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,9 +34,10 @@ import org.kiteio.punica.ui.dp4
 fun <T> TabPager(
     state: TabPagerState<T>,
     tabContent: @Composable (tab: T) -> Unit,
+    modifier: Modifier = Modifier,
     pageContent: @Composable PagerScope.(page: Int) -> Unit
 ) = with(state) {
-    Column {
+    Column(modifier = modifier) {
         Surface(shadowElevation = 0.8.dp) {
             if (state.pageCount <= 5) {
                 PrimaryTabRow(

@@ -1,10 +1,6 @@
 package org.kiteio.punica.ui.component
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -155,6 +151,40 @@ fun IconText(
             style = style,
             overflow = TextOverflow.Ellipsis,
             maxLines = maxLines
+        )
+    }
+}
+
+
+/**
+ * 含键值的 [Text]
+ * @param key
+ * @param value
+ * @param maxLines
+ * @param modifier
+ * @param style
+ */
+@Composable
+fun KVText(
+    key: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    maxLines: Int = Int.MAX_VALUE,
+    style: TextStyle = MaterialTheme.typography.bodySmall
+) {
+    Row(modifier = modifier) {
+        Text(
+            text = key,
+            color = MaterialTheme.colorScheme.secondary.applyLocalAlpha(),
+            style = style
+        )
+        Spacer(modifier = Modifier.width(dp4(1)))
+
+        Text(
+            text = value,
+            style = style,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

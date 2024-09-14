@@ -93,7 +93,7 @@ fun TodoScreen() {
                                         val newTodo = !todo
                                         Todos.edit { it.set(newTodo) }
                                         Toast(
-                                            if (newTodo.done) R.string.done else R.string.reset
+                                            if (newTodo.done) R.string.done else R.string.reset_complete
                                         ).show()
                                     }
                                 },

@@ -17,7 +17,7 @@ object Keys {
     /** 校区 id */
     val campusId by lazy { intPreferencesKey("campusId") }
 
-    /** 课表展示其他周次 */
+    /** 课表显示其他周次 */
     val showOtherWeeks by lazy { booleanPreferencesKey("showOtherWeeks") }
 
     /** 最后登录学号 */

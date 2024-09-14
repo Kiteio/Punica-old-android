@@ -7,7 +7,6 @@
     <string name="course_system_closed">选课系统未开放</string>
     <string name="course_basic">必修课</string>
     <string name="course_optional">选修课</string>
-    <string name="course_pe">体育课</string>
     <string name="course_general">通识课</string>
     <string name="course_cross_year">跨年级</string>
     <string name="course_cross_major">跨专业</string>
@@ -138,7 +137,7 @@
     <string name="open_in_browser">在浏览器打开</string>
     <string name="deadline">截止时间</string>
     <string name="assignments_must_be_submitted">需要提交作业</string>
-    <string name="size">人数</string>
+    <string name="limit">名额</string>
     <string name="admin">管理员</string>
     <string name="phone_number">手机号</string>
     <string name="training_hours">培训时间</string>
@@ -191,7 +190,8 @@
     <string name="filter_conflicting">过滤冲突</string>
     <string name="course_select">选课</string>
     <string name="course_delete">退课</string>
-    <string name="selected">已选择</string>
+    <string name="selected_">已选</string>
+    <string name="unselected">已退</string>
     <string name="priority">志愿</string>
     <string-array name="priorities">
         <item>第一志愿</item>
@@ -199,16 +199,15 @@
         <item>第三志愿</item>
     </string-array>
     <string name="list">列表</string>
-    <string name="table">表格</string>
     <string name="input_to_delete">输入“%1$s”以确定删除</string>
     <string name="input_does_not_match">输入名称不一致</string>
     <string name="connect_to_campus_network_or_VPN">请连接校园网或开启 VPN</string>
-    <string name="tip_token_input">输入浏览器链接后的 jx0502zbid 值（等号后）以进入系统</string>
 
     <string name="todo_editing">待办编辑</string>
     <string name="name">名称</string>
     <string name="done">已完成</string>
-    <string name="reset">已重置</string>
+    <string name="reset">重置</string>
+    <string name="reset_complete">已重置</string>
 
     <string name="second_class_password">第二课堂密码</string>
     <string name="tip_current">（当前）</string>
@@ -234,4 +233,5 @@
     <string name="gdufe_blackboard">毕博平台</string>
     <string name="gdufe_mooc">广财慕课（雨课堂）</string>
     <string name="library">图书馆</string>
+    <string name="favorites">收藏</string>
 </resources>

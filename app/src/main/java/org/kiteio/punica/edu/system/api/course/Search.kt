@@ -1,15 +1,21 @@
 package org.kiteio.punica.edu.system.api.course
 
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.Parameters
-import io.ktor.http.encodeURLParameter
-import io.ktor.http.parameters
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import org.kiteio.punica.candy.ifNotBlank
 import org.kiteio.punica.candy.json
+import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.edu.foundation.Campus
 import org.kiteio.punica.edu.system.CourseSystem
 import org.kiteio.punica.edu.system.CourseSystem.Companion.fixTeacherName
@@ -28,10 +34,7 @@ suspend fun CourseSystem.list(
     pageIndex: Int = 0,
     count: Int = 15
 ) = withContext(Dispatchers.Default) {
-    parse(
-        session.post(route { courseListRoute(sort) }, form(pageIndex, count)).bodyAsText().json,
-        sort
-    )
+    parse(token.username, session.post(route { courseListRoute(sort) }, form(pageIndex, count)), sort)
 }
 
 
@@ -52,6 +55,7 @@ suspend fun CourseSystem.search(
 ) = withContext(Dispatchers.Default) {
     with(searchParams) {
         parse(
+            token.username,
             session.post(
                 route { courseListRoute(sort) },
                 form(pageIndex, count)
@@ -65,7 +69,7 @@ suspend fun CourseSystem.search(
                 if (sort is Sort.General) {
                     parameter("xq", campus?.id ?: "")  // 校区
                 }
-            }.bodyAsText().json,
+            },
             sort
         )
     }
@@ -120,29 +124,38 @@ private fun form(pageIndex: Int, count: Int) = parameters {
 
 
 /**
- * 将 [json] 解析为 [Course] 列表
- * @param json
+ * 将 [response] 解析为 [Course] 列表
+ * @param response
  * @return [List]<[Course]>
  */
-private fun parse(json: JSONObject, sort: Sort): List<Course> {
-    val rawCourses = json.getJSONArray("aaData")
+private suspend fun parse(username: String, response: HttpResponse, sort: Sort): List<Course> {
+    val rawCourses = try {
+        response.bodyAsText().json.getJSONArray("aaData")
+    }catch (e: Throwable) {
+        return emptyList()
+    }
 
     val courses = arrayListOf<Course>()
     for (index in 0..<rawCourses.length()) {
         rawCourses.getJSONObject(index).apply {
             courses.add(
                 Course(
+                    username = username,
                     operateId = getString("jx0404id"),
-                    id = getString("kch"),
+                    courseId = getString("kch"),
                     name = getString("kcmc"),
                     teacher = getString("skls").fixTeacherName(),
                     point = getString("xf"),
                     campus = Campus.getById(getInt("xqid")),
-                    time = getString("sksj"),
-                    area = getString("skdd"),
+                    time = getString("sksj").noHtmlSyntax(),
+                    area = getString("skdd").noHtmlSyntax(),
                     total = getString("xxrs"),
                     remaining = getString("syrs"),
-                    status = getString("ctsm"),
+                    status = try {
+                        getString("ctsm")
+                    } catch (e: Throwable) {
+                        ""
+                    },
                     department = getString("dwmc"),
                     classHours = getString("zxs"),
                     examMode = try {
@@ -151,7 +164,7 @@ private fun parse(json: JSONObject, sort: Sort): List<Course> {
                         null
                     },
                     selectable = getInt("sfkfxk") == 1,
-                    selected = getInt("sfYx") == 1,
+                    selected = mutableStateOf(getInt("sfYx") == 1),
                     sort = sort
                 )
             )
@@ -161,10 +174,20 @@ private fun parse(json: JSONObject, sort: Sort): List<Course> {
     return courses
 }
 
+
+/**
+ * 剔除 html 语法
+ * @receiver [String]
+ * @return [String]
+ */
+private fun String.noHtmlSyntax() = replace("&nbsp;", "").replace("<br>", "\n")
+
+
 /**
  * 课程
+ * @property username 学号
  * @property operateId 操作 id
- * @property id 课程编号
+ * @property courseId 课程编号
  * @property name 课程名
  * @property teacher 教师
  * @property point 学分
@@ -180,9 +203,11 @@ private fun parse(json: JSONObject, sort: Sort): List<Course> {
  * @property selectable 是否开放选课
  * @property selected 是否已选
  */
-data class Course(
+@Serializable
+class Course(
+    val username: String,
     val operateId: String,
-    val id: String,
+    val courseId: String,
     val name: String,
     val teacher: String,
     val point: String,
@@ -196,6 +221,25 @@ data class Course(
     val classHours: String,
     val examMode: String?,
     val selectable: Boolean,
-    val selected: Boolean,
+    val selected: @Serializable(with = MutableStateSerializer::class) MutableState<Boolean>,
     val sort: Sort
-)
+) : Identified() {
+    override val id = username + operateId
+}
+
+
+/**
+ * [MutableState]<[Boolean]> 序列器
+ * @property descriptor
+ */
+class MutableStateSerializer: KSerializer<MutableState<Boolean>> {
+    override val descriptor = PrimitiveSerialDescriptor("Cookie", PrimitiveKind.BOOLEAN)
+
+
+    override fun deserialize(decoder: Decoder) = mutableStateOf(decoder.decodeBoolean())
+
+
+    override fun serialize(encoder: Encoder, value: MutableState<Boolean>) {
+        encoder.encodeBoolean(value.value)
+    }
+}
