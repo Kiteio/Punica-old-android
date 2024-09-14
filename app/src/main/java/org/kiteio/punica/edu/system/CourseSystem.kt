@@ -30,7 +30,7 @@ class CourseSystem private constructor(
     val name: String,
     val start: String,
     val end: String,
-    private val token: Token,
+    val token: Token,
     override val proxied: Boolean
 ) : ProxiedAPIOwner<CourseSystem.Companion>(Companion) {
     companion object : ProxiedAPI {
@@ -40,6 +40,7 @@ class CourseSystem private constructor(
         private const val GET_ENTRY = "$BASE/xsxk/xklc_list"  // 选课系统链接获取
         private const val ENTRY = "$BASE/xsxk/xsxk_index"  // 选课系统链接
         const val OVERVIEW = "$BASE/xsxk/xsxk_tzsm"  // 学分总览
+        const val TABLE = "$BASE/xsxkjg/xsxkkb"  // 选课课表
         const val MY_COURSE = "$BASE/xsxkjg/comeXkjglb"  // 已选课程
         const val LOG = "$BASE/xsxkjg/getTkrzList"  // 退课日志
         const val DELETE = "$BASE/xsxkjg/xstkOper"  // 退课
@@ -102,7 +103,7 @@ class CourseSystem private constructor(
          * @return [CourseSystem]
          */
         suspend fun from(eduSystem: EduSystem, token: Token) = withContext(Dispatchers.Default) {
-            if (token.name != eduSystem.name) error("token.name != eduSystem.name")
+            if (token.username != eduSystem.name) error("token.name != eduSystem.name")
 
             val text = eduSystem.session.fetch(
                 route { ENTRY }
@@ -113,9 +114,9 @@ class CourseSystem private constructor(
 
             return@withContext CourseSystem(
                 eduSystem.session,
-                "由 id 进入",
-                "未知",
-                "未知",
+                "",
+                "",
+                "",
                 token,
                 eduSystem.proxied
             )

@@ -13,19 +13,30 @@ import org.kiteio.punica.candy.appendClickable
  * @param checked
  * @param onCheckedChange
  * @param label
+ * @param reverse 复选框和 [label] 是否反向排列
  */
 @Composable
 fun CheckBox(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    label: String? = null
+    label: String? = null,
+    reverse: Boolean = false
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Checkbox(checked = checked, onCheckedChange = onCheckedChange)
-        label?.let {
-            Text(
-                text = buildAnnotatedString { appendClickable(label) { onCheckedChange(!checked) } }
-            )
+        if (reverse) {
+            label?.let {
+                Text(
+                    text = buildAnnotatedString { appendClickable(label) { onCheckedChange(!checked) } }
+                )
+            }
+            Checkbox(checked = checked, onCheckedChange = onCheckedChange)
+        } else {
+            Checkbox(checked = checked, onCheckedChange = onCheckedChange)
+            label?.let {
+                Text(
+                    text = buildAnnotatedString { appendClickable(label) { onCheckedChange(!checked) } }
+                )
+            }
         }
     }
 }

@@ -210,7 +210,7 @@ private fun TopAppBar(
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text(text = "展示其他周次课程") },
+                        text = { Text(text = getString(R.string.show_other_weeks)) },
                         onClick = {
                             coroutineScope.launchCatching {
                                 Preferences.edit {

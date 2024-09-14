@@ -7,7 +7,6 @@
     <string name="course_system_closed">選課系統未開放</string>
     <string name="course_basic">必修課</string>
     <string name="course_optional">選修課</string>
-    <string name="course_pe">體育課</string>
     <string name="course_general">通識課</string>
     <string name="course_cross_year">跨年級</string>
     <string name="course_cross_major">跨專業</string>
@@ -108,7 +107,7 @@
     <string name="open_in_browser">在瀏覽器打開</string>
     <string name="deadline">截止時間</string>
     <string name="assignments_must_be_submitted">需要提交作業</string>
-    <string name="size">人數</string>
+    <string name="limit">名額</string>
     <string name="admin">管理員</string>
     <string name="phone_number">手機號</string>
     <string name="training_hours">培訓時間</string>
@@ -154,18 +153,17 @@
     <string name="filter_conflicting">過濾衝突</string>
     <string name="course_select">選課</string>
     <string name="course_delete">退課</string>
-    <string name="selected">已選擇</string>
+    <string name="selected_">已選</string>
+    <string name="unselected">已退</string>
     <string name="priority">志願</string>
     <string name="list">清單</string>
-    <string name="table">表格</string>
     <string name="input_to_delete">輸入%1$s 以確定刪除</string>
     <string name="input_does_not_match">輸入名稱不一致</string>
     <string name="connect_to_campus_network_or_VPN">請連接校園網或開啟 VPN</string>
-    <string name="tip_token_input">輸入瀏覽器連結后的 jx0502zbid 值（等號後）以進入系統</string>
     <string name="todo_editing">待辦編輯</string>
     <string name="name">名稱</string>
     <string name="done">已完成</string>
-    <string name="reset">已重置</string>
+    <string name="reset_complete">已重置</string>
     <string name="second_class_password">第二課堂密碼</string>
     <string name="tip_current">（當前）</string>
     <string name="punica_together">和我一起使用小石榴 %1$s</string>
@@ -190,4 +188,6 @@
     <string name="show_other_weeks">顯示其他周次課程</string>
     <string name="evaluate_all">評價所有課程</string>
     <string name="tip_evaluate">您希望儲存還是直接提交（我們推薦您先儲存並前往教務系統檢查後再提交）</string>
+    <string name="favorites">收藏</string>
+    <string name="reset">重置</string>
 </resources>

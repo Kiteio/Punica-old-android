@@ -143,18 +143,20 @@ fun <T> rememberRemote(key: Any? = null, fromRemote: suspend () -> T?): T? {
 
 /**
  * 远端数据列表
- * @param key
+ * @param key1
+ * @param key2
  * @param fromRemote
  * @return [SnapshotStateList]<[T]>
  */
 @Composable
 fun <T> rememberRemoteList(
-    key: Any? = null,
+    key1: Any? = null,
+    key2: Any? = null,
     fromRemote: suspend () -> List<T>?
 ): SnapshotStateList<T> {
     val list = remember { mutableStateListOf<T>() }
 
-    LaunchedEffect(key1 = key) {
+    LaunchedEffect(key1 = key1, key2 = key2) {
         launchCatching {
             list.clear()
             fromRemote()?.let { list.addAll(it) }

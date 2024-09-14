@@ -1,5 +1,7 @@
 package org.kiteio.punica.edu.system.api
 
+import kotlinx.serialization.Serializable
+import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.edu.system.EduSystem
 
 /**
@@ -14,7 +16,11 @@ fun EduSystem.token(value: String) =
 
 /**
  * 选课系统 [Token]
- * @property name 学号
- * @property value id
+ * @property username 学号
+ * @property value Token 值
+ * @property id [username]
  */
-data class Token(val name: String, val value: String)
+@Serializable
+class Token(val username: String, val value: String): Identified() {
+    override val id = username
+}

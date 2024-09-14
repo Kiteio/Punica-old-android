@@ -90,8 +90,8 @@ fun SecondClassScreen() {
     val secondClassReport = SecondClassReports.collectAsIdentified(proxiedAPIOwner = secondClass) {
         report()
     }
-    val activities = rememberRemoteList(key = secondClass) { secondClass?.activities() }
-    val logs = rememberRemoteList(key = secondClass) { secondClass?.log() }
+    val activities = rememberRemoteList(key1 = secondClass) { secondClass?.activities() }
+    val logs = rememberRemoteList(key1 = secondClass) { secondClass?.log() }
 
     val tabPagerState = rememberTabPagerState(R.string.report, R.string.activity, R.string.log)
 
@@ -286,7 +286,7 @@ private fun ActivityBottomSheet(
                     IconText(
                         text = "$num / $maxNum",
                         leadingIcon = Icons.Rounded.Person,
-                        leadingText = getString(R.string.size)
+                        leadingText = getString(R.string.limit)
                     )
                     IconText(
                         text = area,
