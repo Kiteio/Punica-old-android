@@ -7,15 +7,11 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
 import org.kiteio.punica.candy.ifNotBlank
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.datastore.Identified
+import org.kiteio.punica.datastore.MutableStateBooleanSerializer
 import org.kiteio.punica.edu.foundation.Campus
 import org.kiteio.punica.edu.system.CourseSystem
 import org.kiteio.punica.edu.system.CourseSystem.Companion.fixTeacherName
@@ -221,25 +217,8 @@ class Course(
     val classHours: String,
     val examMode: String?,
     val selectable: Boolean,
-    val selected: @Serializable(with = MutableStateSerializer::class) MutableState<Boolean>,
+    val selected: @Serializable(with = MutableStateBooleanSerializer::class) MutableState<Boolean>,
     val sort: Sort
 ) : Identified() {
     override val id = username + operateId
-}
-
-
-/**
- * [MutableState]<[Boolean]> 序列器
- * @property descriptor
- */
-class MutableStateSerializer: KSerializer<MutableState<Boolean>> {
-    override val descriptor = PrimitiveSerialDescriptor("Cookie", PrimitiveKind.BOOLEAN)
-
-
-    override fun deserialize(decoder: Decoder) = mutableStateOf(decoder.decodeBoolean())
-
-
-    override fun serialize(encoder: Encoder, value: MutableState<Boolean>) {
-        encoder.encodeBoolean(value.value)
-    }
 }

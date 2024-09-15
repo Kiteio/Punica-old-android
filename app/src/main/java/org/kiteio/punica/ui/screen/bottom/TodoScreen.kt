@@ -1,12 +1,6 @@
 package org.kiteio.punica.ui.screen.bottom
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -14,17 +8,8 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Replay
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.edit
@@ -36,18 +21,12 @@ import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.datastore.Todos
 import org.kiteio.punica.datastore.remove
 import org.kiteio.punica.datastore.set
+import org.kiteio.punica.datastore.MutableStateBooleanSerializer
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.collectAsIdentifiedList
-import org.kiteio.punica.ui.component.DeleteDialog
-import org.kiteio.punica.ui.component.Dialog
-import org.kiteio.punica.ui.component.DialogVisibility
-import org.kiteio.punica.ui.component.Icon
-import org.kiteio.punica.ui.component.ScaffoldBox
-import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.TextField
-import org.kiteio.punica.ui.component.Title
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.dp4
-import java.util.Date
+import java.util.*
 
 /**
  * 待办
@@ -69,11 +48,13 @@ fun TodoScreen() {
         }
     ) {
         LazyColumn(contentPadding = PaddingValues(dp4(2))) {
-            items(todos.sortedBy { it.done }) { todo ->
+            items(todos.sortedBy { it.done.value }) { todo ->
                 ElevatedCard(
                     onClick = { visibleTodo = todo; todoDialogVisible = true },
-                    modifier = Modifier.padding(dp4(2)),
-                    enabled = !todo.done
+                    modifier = Modifier
+                        .padding(dp4(2))
+                        .animateItem(),
+                    enabled = !todo.done.value
                 ) {
                     Row(
                         modifier = Modifier.padding(dp4(4)),
@@ -83,7 +64,7 @@ fun TodoScreen() {
                         Column(modifier = Modifier.weight(1f)) {
                             Title(text = todo.name)
                             SubduedText(text = todo.desc)
-                            SubduedText(text = todo.deadline)
+                            KVText(key = getString(R.string.deadline), value = todo.deadline)
                         }
 
                         Row {
@@ -92,15 +73,13 @@ fun TodoScreen() {
                                     coroutineScope.launchCatch {
                                         val newTodo = !todo
                                         Todos.edit { it.set(newTodo) }
-                                        Toast(
-                                            if (newTodo.done) R.string.done else R.string.reset_complete
-                                        ).show()
+                                        Toast(if (newTodo.done.value) R.string.done else R.string.reset_complete).show()
                                     }
                                 },
                                 enabled = true
                             ) {
                                 Icon(
-                                    imageVector = if (todo.done) Icons.Rounded.Replay
+                                    imageVector = if (todo.done.value) Icons.Rounded.Replay
                                     else Icons.Rounded.Done
                                 )
                             }
@@ -225,10 +204,7 @@ class Todo(
     val name: String,
     val desc: String,
     val deadline: String,
-    val done: Boolean = false
+    val done: @Serializable(with = MutableStateBooleanSerializer::class) MutableState<Boolean> = mutableStateOf(false)
 ) : Identified() {
-    operator fun not() = copy(!done)
-
-
-    private fun copy(done: Boolean) = Todo(id, name, desc, deadline, done)
+    operator fun not() = this.also { done.value = !done.value }
 }

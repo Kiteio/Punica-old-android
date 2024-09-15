@@ -30,11 +30,7 @@ import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material.icons.rounded.Timelapse
 import androidx.compose.material.icons.rounded.TipsAndUpdates
 import androidx.compose.material.icons.rounded.VolunteerActivism
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -145,8 +141,14 @@ private fun Report(secondClassReport: SecondClassReport?) {
     )
 
     LazyColumn(contentPadding = PaddingValues(dp4(2))) {
-        secondClassReport?.run {
-            itemsIndexed(items) { index, item ->
+        if (secondClassReport == null) {
+            item {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    LinearProgressIndicator()
+                }
+            }
+        }else {
+            itemsIndexed(secondClassReport.items) { index, item ->
                 ElevatedCard(onClick = {}, modifier = Modifier.padding(dp4(2))) {
                     Row(
                         modifier = Modifier
