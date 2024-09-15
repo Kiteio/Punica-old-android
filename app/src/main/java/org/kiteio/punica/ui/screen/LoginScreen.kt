@@ -2,32 +2,12 @@ package org.kiteio.punica.ui.screen
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -41,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.ktor.http.Cookie
+import io.ktor.http.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
@@ -49,9 +29,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.candy.Toast
 import org.kiteio.punica.candy.appendClickable
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.candy.limit
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
@@ -61,18 +40,8 @@ import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.getString
 import org.kiteio.punica.openUri
-import org.kiteio.punica.ui.AppViewModel
-import org.kiteio.punica.ui.Link
-import org.kiteio.punica.ui.LocalNavController
-import org.kiteio.punica.ui.LocalViewModel
-import org.kiteio.punica.ui.component.Icon
-import org.kiteio.punica.ui.component.Image
-import org.kiteio.punica.ui.component.PasswordField
-import org.kiteio.punica.ui.component.ScaffoldBox
-import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.TextField
-import org.kiteio.punica.ui.component.Title
-import org.kiteio.punica.ui.dp4
+import org.kiteio.punica.ui.*
+import org.kiteio.punica.ui.component.*
 
 /**
  * 登录页
@@ -215,7 +184,7 @@ class LoginViewModel(private val viewModel: AppViewModel) : ViewModel() {
 
     init {
         // 初始化用户
-        viewModelScope.launchCatching {
+        viewModelScope.launchCatch {
             Preferences.data.map { it[Keys.lastUsername] }.firstOrNull()?.let { username ->
                 refreshUser(username)
             }
@@ -244,7 +213,7 @@ class LoginViewModel(private val viewModel: AppViewModel) : ViewModel() {
     fun login(onLoggedIn: () -> Unit) {
         interactable = false
         val user = User(name, pwd, secondClassPwd, campusNetPwd, cookies)
-        job = viewModelScope.launchCatching(onCatch = { Toast().show(); interactable = true }) {
+        job = viewModelScope.launchCatch(onError = { interactable = true }) {
             viewModel.login(user).collect {
                 Toast(getString(R.string.logged_in)).show()
                 interactable = true

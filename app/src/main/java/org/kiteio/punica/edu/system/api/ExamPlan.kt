@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.R
+import org.kiteio.punica.candy.errorOnToastLayer
 import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
@@ -28,7 +29,7 @@ suspend fun EduSystem.examPlan() = withContext(Dispatchers.Default) {
     val table = document.getElementById("dataList")!!
     val rows = table.getElementsByTag("tr")
 
-    if (rows.size == 1) error(getString(R.string.exam_plan_is_unavailable))
+    if (rows.size == 1) errorOnToastLayer(getString(R.string.exam_plan_is_unavailable))
 
     val items = arrayListOf<ExamPlanItem>()
     for (index in 1..<rows.size) {

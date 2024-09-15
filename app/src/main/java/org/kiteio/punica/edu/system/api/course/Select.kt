@@ -5,6 +5,7 @@ import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.candy.json
+import org.kiteio.punica.candy.errorOnToastLayer
 import org.kiteio.punica.edu.system.CourseSystem
 
 /**
@@ -27,7 +28,7 @@ suspend fun CourseSystem.select(
         parameter("trjf", "")
         parameter("cxxdlx", "1")
     }.bodyAsText().json.run {
-        if (!getBoolean("success")) error(getString("message"))
+        if (!getBoolean("success")) errorOnToastLayer(getString("message"))
     }
 }
 

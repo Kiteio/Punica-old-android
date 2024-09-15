@@ -7,10 +7,7 @@ import io.ktor.client.statement.readBytes
 import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiteio.punica.candy.ProxiedAPI
-import org.kiteio.punica.candy.ProxiedAPIOwner
-import org.kiteio.punica.candy.route
-import org.kiteio.punica.candy.text
+import org.kiteio.punica.candy.*
 import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.foundation.User
@@ -125,9 +122,9 @@ class EduSystem private constructor(
                         if (message == "验证码错误!!" && count > 0)
                             return@with login(user, session, proxied, count - 1)
 
-                        error(message)
+                        errorOnToastLayer(message)
                     }
-                    error(title)
+                    errorOnToastLayer(title)
                 }
             }
         }

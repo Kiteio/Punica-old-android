@@ -8,6 +8,7 @@ import kotlinx.coroutines.withContext
 import org.kiteio.punica.R
 import org.kiteio.punica.candy.ProxiedAPI
 import org.kiteio.punica.candy.ProxiedAPIOwner
+import org.kiteio.punica.candy.errorOnToastLayer
 import org.kiteio.punica.candy.route
 import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.system.api.Token
@@ -91,7 +92,7 @@ class CourseSystem private constructor(
                         eduSystem.proxied
                     )
                 }
-                error(getString(R.string.course_system_closed))
+                errorOnToastLayer(getString(R.string.course_system_closed))
             }
         }
 
@@ -110,7 +111,7 @@ class CourseSystem private constructor(
             ) { parameter("jx0502zbid", token.value) }.bodyAsText()
 
             if (Ksoup.parse(text).body().text() == "当前未开放选课，具体请查看学校选课通知！")
-                error(getString(R.string.course_system_closed))
+                errorOnToastLayer(getString(R.string.course_system_closed))
 
             return@withContext CourseSystem(
                 eduSystem.session,

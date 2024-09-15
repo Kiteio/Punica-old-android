@@ -5,13 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
-import io.ktor.client.network.sockets.ConnectTimeoutException
+import io.ktor.client.network.sockets.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import org.kiteio.punica.candy.LocalDate
-import org.kiteio.punica.candy.catching
+import org.kiteio.punica.candy.catchUnit
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.datastore.Users
@@ -62,7 +62,7 @@ class AppViewModel : ViewModel() {
                     it[Keys.schoolStart]?.let { schoolStart -> LocalDate.parse(schoolStart) }
 
                 // 在 本地无开学日期 或 旧日期为旧学期 时更新
-                if (old == null || !(old `in` EduSystem.semester)) catching {
+                if (old == null || !(old `in` EduSystem.semester)) catchUnit {
                     eduSystem.schoolStart()?.run {
                         it[Keys.schoolStart] = this@run.toString()
                     }

@@ -29,8 +29,8 @@ import androidx.paging.Pager
 import androidx.paging.compose.collectAsLazyPagingItems
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.candy.catching
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.catch
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.datastore.*
 import org.kiteio.punica.edu.foundation.Campus
 import org.kiteio.punica.edu.system.CourseSystem
@@ -57,7 +57,7 @@ fun CourseSystemScreen() {
     LaunchedEffect(key1 = eduSystem) {
         eduSystem?.runWithReLogin {
             // 进入选课系统并保存 Token
-            courseSystem = catching<CourseSystem> {
+            courseSystem = catch({ null }) {
                 CourseSystem.from(eduSystem).also { courseSystem -> Tokens.edit { it.set(courseSystem.token) } }
             }
 
@@ -65,7 +65,7 @@ fun CourseSystemScreen() {
             if (courseSystem == null) {
                 Tokens.data.collect {
                     it.get<Token>(eduSystem.name)?.let { token ->
-                        courseSystem = catching<CourseSystem> { CourseSystem.from(eduSystem, token) }
+                        courseSystem = catch { CourseSystem.from(eduSystem, token) }
                     }
                 }
             }
@@ -74,7 +74,7 @@ fun CourseSystemScreen() {
 
     BackHandler(enabled = courseSystem != null) {
         // 退出选课系统
-        coroutineScope.launchCatching { courseSystem?.exit() }
+        coroutineScope.launchCatch { courseSystem?.exit() }
         navController.popBackStack()
     }
 
@@ -228,7 +228,7 @@ private fun CourseSystem.MyCoursesBottomSheet(visible: Boolean, onDismiss: () ->
                             onDismiss = { courseDeleteDialogVisible = false },
                             onConfirm = {
                                 visibleMyCourse?.let { myCourse ->
-                                    coroutineScope.launchCatching {
+                                    coroutineScope.launchCatch {
                                         delete(myCourse.operateId)
                                         listChangeKey = !listChangeKey
                                         Toast(R.string.unselected)
@@ -618,7 +618,7 @@ private fun CourseSystem.CourseListOuter(
                 onClick = { visibleCourse = course; courseBottomSheetVisible = true },
                 onSelect = {
                     if (course.selectable) {
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             select(course.operateId, course.sort, null)
                             course.selected.value = true
                             Toast(R.string.selected_).show()
@@ -630,7 +630,7 @@ private fun CourseSystem.CourseListOuter(
                 },
                 stared = getStared(course.operateId),
                 onStaredChange = { stared ->
-                    coroutineScope.launchCatching {
+                    coroutineScope.launchCatch {
                         Courses.edit {
                             if (stared) it.set(course)
                             else it.remove(course)
@@ -653,7 +653,7 @@ private fun CourseSystem.CourseListOuter(
         onDismiss = { priorityDialogVisible = false },
         onConfirm = {
             visibleCourse?.run {
-                coroutineScope.launchCatching {
+                coroutineScope.launchCatch {
                     select(operateId, sort, it)
                     selected.value = true
                     Toast(R.string.selected_).show()
@@ -816,7 +816,7 @@ private fun CourseSystem.CourseBottomSheet(
                         onClick = {
                             if (course.selected.value) courseDeleteDialogVisible = true
                             else {
-                                coroutineScope.launchCatching {
+                                coroutineScope.launchCatch {
                                     select(operateId, sort, null)
                                     selected.value = true
                                     Toast(R.string.selected_).show()
@@ -843,7 +843,7 @@ private fun CourseSystem.CourseBottomSheet(
                 visible = courseDeleteDialogVisible,
                 onDismiss = { courseDeleteDialogVisible = false },
                 onConfirm = {
-                    coroutineScope.launchCatching {
+                    coroutineScope.launchCatch {
                         delete(operateId)
                         selected.value = false
                         Toast(R.string.unselected).show()

@@ -11,14 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.paging.CombinedLoadStates
-import androidx.paging.LoadState
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
+import androidx.paging.*
 import androidx.paging.PagingSource
-import androidx.paging.PagingState
 import androidx.paging.compose.LazyPagingItems
-import org.kiteio.punica.candy.Toast
+import org.kiteio.punica.candy.catch
 
 /**
  * 分页 [LazyColumn]
@@ -92,14 +88,7 @@ abstract class PagingSource<Value : Any>(private val initialKey: Int = 0) : Pagi
         }
 
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Value> {
-        try {
-            return loadCatching(params)
-        } catch (e: Throwable) {
-            e.Toast().show()
-            return LoadResult.Error(e)
-        }
-    }
+    override suspend fun load(params: LoadParams<Int>) = catch({ LoadResult.Error(it) }) { loadCatching(params) }
 
 
     /**

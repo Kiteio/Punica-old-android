@@ -5,6 +5,7 @@ import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.candy.json
+import org.kiteio.punica.candy.errorOnToastLayer
 import org.kiteio.punica.edu.system.CourseSystem
 
 /**
@@ -18,6 +19,6 @@ suspend fun CourseSystem.delete(operateId: String) = withContext(Dispatchers.Def
     }.bodyAsText().json.run {
         // 退课成功只会有 success 值为 true
         // 退课失败会有额外 message 参数
-        if(!getBoolean("success")) error(getString("message"))
+        if(!getBoolean("success")) errorOnToastLayer(getString("message"))
     }
 }

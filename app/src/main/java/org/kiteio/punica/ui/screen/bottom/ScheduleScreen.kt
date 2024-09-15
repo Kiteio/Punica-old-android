@@ -38,7 +38,7 @@ import org.kiteio.punica.R
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.daysUntil
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.datastore.Timetables
@@ -202,7 +202,7 @@ private fun TopAppBar(
                     DropdownMenuItem(
                         text = { Text(text = getString(R.string.back_to_this_week)) },
                         onClick = {
-                            coroutineScope.launchCatching {
+                            coroutineScope.launchCatch {
                                 onSemesterChange(EduSystem.semester)
                                 pagerState.scrollToPage(pagerState.pageCount / 2)
                                 moreDropdownMenuExpanded = false
@@ -212,7 +212,7 @@ private fun TopAppBar(
                     DropdownMenuItem(
                         text = { Text(text = getString(R.string.show_other_weeks)) },
                         onClick = {
-                            coroutineScope.launchCatching {
+                            coroutineScope.launchCatch {
                                 Preferences.edit {
                                     it[Keys.showOtherWeeks] = !(it[Keys.showOtherWeeks] ?: false)
                                 }
@@ -223,7 +223,7 @@ private fun TopAppBar(
                             CheckBox(
                                 checked = preferences?.get(Keys.showOtherWeeks) ?: false,
                                 onCheckedChange = { value ->
-                                    coroutineScope.launchCatching {
+                                    coroutineScope.launchCatch {
                                         Preferences.edit { it[Keys.showOtherWeeks] = value }
                                         moreDropdownMenuExpanded = false
                                     }
@@ -373,7 +373,7 @@ private fun TimeBar(width: Dp, itemHeight: Dp) {
                 modifier = Modifier
                     .border(0.5.dp, MaterialTheme.colorScheme.surfaceVariant)
                     .clickable {
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             Preferences.edit {
                                 it[Keys.campusId] =
                                     if (campusId == Campus.Canton.id) Campus.Foshan.id

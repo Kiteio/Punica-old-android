@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.kiteio.punica.candy.catching
+import org.kiteio.punica.candy.catch
 
 val DefaultJson = Json { ignoreUnknownKeys = true }
 
@@ -17,8 +17,8 @@ val DefaultJson = Json { ignoreUnknownKeys = true }
  * @param key
  * @return [T]?
  */
-inline operator fun <reified T : @Serializable Identified> Preferences.get(key: String) =
-    get(stringPreferencesKey(key))?.let { catching<T> { DefaultJson.decodeFromString<T>(it) } }
+inline fun <reified T : @Serializable Identified> Preferences.get(key: String) =
+    get(stringPreferencesKey(key))?.let { catch { DefaultJson.decodeFromString<T>(it) } }
 
 
 /**

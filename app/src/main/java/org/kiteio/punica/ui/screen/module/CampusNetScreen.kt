@@ -1,67 +1,34 @@
 package org.kiteio.punica.ui.screen.module
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.PermIdentity
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.edit
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.candy.catching
+import org.kiteio.punica.candy.catch
 import org.kiteio.punica.candy.collectAsState
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.candy.limit
-import org.kiteio.punica.datastore.CampusNetUsers
-import org.kiteio.punica.datastore.Users
-import org.kiteio.punica.datastore.get
-import org.kiteio.punica.datastore.remove
-import org.kiteio.punica.datastore.set
+import org.kiteio.punica.datastore.*
 import org.kiteio.punica.edu.CampusNet
 import org.kiteio.punica.edu.foundation.CampusNetUser
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.collectAsIdentifiedList
-import org.kiteio.punica.ui.component.DeleteDialog
-import org.kiteio.punica.ui.component.Dialog
-import org.kiteio.punica.ui.component.DialogVisibility
-import org.kiteio.punica.ui.component.Icon
-import org.kiteio.punica.ui.component.IconText
-import org.kiteio.punica.ui.component.NavBackTopAppBar
-import org.kiteio.punica.ui.component.PasswordField
-import org.kiteio.punica.ui.component.ScaffoldBox
-import org.kiteio.punica.ui.component.TextField
-import org.kiteio.punica.ui.component.Title
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.rememberUser
-import java.util.Date
+import java.util.*
 
 /**
  * 校园网
@@ -90,7 +57,7 @@ fun CampusNetScreen() {
                 var checked by remember { mutableStateOf(false) }
 
                 // 自动登录
-                LaunchedEffect(key1 = user) { checked = campusNetUser.login(user) }
+                LaunchedEffect(key1 = user) { checked = user?.run { campusNetUser.login(user) } ?: false }
 
                 ElevatedCard(
                     onClick = {
@@ -136,11 +103,11 @@ fun CampusNetScreen() {
                             Switch(
                                 checked = checked,
                                 onCheckedChange = {
-                                    coroutineScope.launchCatching {
+                                    coroutineScope.launchCatch {
                                         if (it) {
-                                            checked = campusNetUser.login(user) {
-                                                Toast(R.string.connected).show()
-                                            }
+                                            checked = user?.run {
+                                                campusNetUser.login(user) { Toast(R.string.connected).show() }
+                                            } ?: false
                                         } else {
                                             checked = false
                                             CampusNet.logout(campusNetUser.ip)
@@ -159,7 +126,7 @@ fun CampusNetScreen() {
         visible = deleteDialogVisible,
         onDismiss = { deleteDialogVisible = false },
         onConfirm = {
-            coroutineScope.launchCatching {
+            coroutineScope.launchCatch {
                 visibleCampusNetUser?.let { campusNetUser ->
                     CampusNetUsers.edit { it.remove(campusNetUser) }
                 }
@@ -185,13 +152,11 @@ fun CampusNetScreen() {
  * @param onLoggedIn 登录成功回调
  * @return [Boolean]
  */
-private suspend fun CampusNetUser.login(user: User?, onLoggedIn: () -> Unit = {}) = user?.run {
-    catching<Boolean> {
-        CampusNet.login(name, user.campusNetPwd, ip)
-        onLoggedIn()
-        true
-    }
-} ?: false
+private suspend fun CampusNetUser.login(user: User, onLoggedIn: () -> Unit = {}) = catch({ false }) {
+    CampusNet.login(name, user.campusNetPwd, ip)
+    onLoggedIn()
+    true
+}
 
 
 /**
@@ -272,7 +237,7 @@ private fun CampusNetUserDialog(
                 TextButton(
                     enabled = name.length == 11,
                     onClick = {
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             val myIp = ip.ifBlank { ipPlaceholder }
                             val myDesc = desc.ifBlank { "${getString(R.string.campus_net)}$myIp" }
                             val user = CampusNetUser(

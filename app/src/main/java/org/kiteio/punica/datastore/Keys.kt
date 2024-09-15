@@ -31,4 +31,7 @@ object Keys {
 
     /** 主题风格 */
     val themeStyle by lazy { intPreferencesKey("themeStyle") }
+
+    /** 调试 */
+    val debug by lazy { booleanPreferencesKey("debug") }
 }

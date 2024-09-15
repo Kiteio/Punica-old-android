@@ -1,30 +1,13 @@
 package org.kiteio.punica.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import kotlinx.serialization.Serializable
-import org.kiteio.punica.candy.ProxiedAPIOwner
-import org.kiteio.punica.candy.catching
-import org.kiteio.punica.candy.collectAsState
-import org.kiteio.punica.candy.launchCatching
-import org.kiteio.punica.datastore.Identified
-import org.kiteio.punica.datastore.Keys
-import org.kiteio.punica.datastore.Preferences
-import org.kiteio.punica.datastore.Users
-import org.kiteio.punica.datastore.get
-import org.kiteio.punica.datastore.set
-import org.kiteio.punica.datastore.values
+import org.kiteio.punica.candy.*
+import org.kiteio.punica.datastore.*
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.foundation.User
 import org.kiteio.punica.edu.system.EduSystem
@@ -92,7 +75,7 @@ inline fun <reified T : @Serializable Identified, U : ProxiedAPIOwner<*>> DataSt
 
     LaunchedEffect(key1 = proxiedAPIOwner, key2 = key) {
         proxiedAPIOwner?.run {
-            coroutineScope.launchCatching {
+            coroutineScope.launchCatch {
                 fromRemote()?.also { remoteValue ->
                     value = remoteValue
                     edit { it.set(remoteValue) }
@@ -116,7 +99,7 @@ inline fun <reified T : @Serializable Identified> DataStore<Preferences>.collect
     val list = remember { mutableStateListOf<T>() }
 
     LaunchedEffect(key1 = preferences) {
-        catching { preferences?.values<T>()?.let { list.clear(); list.addAll(it) } }
+        catchUnit { preferences?.values<T>()?.let { list.clear(); list.addAll(it) } }
     }
 
     return list
@@ -134,7 +117,7 @@ fun <T> rememberRemote(key: Any? = null, fromRemote: suspend () -> T?): T? {
     var value by remember { mutableStateOf<T?>(null) }
 
     LaunchedEffect(key1 = key) {
-        value = catching<T?> { fromRemote() }
+        value = catch { fromRemote() }
     }
 
     return value
@@ -157,7 +140,7 @@ fun <T> rememberRemoteList(
     val list = remember { mutableStateListOf<T>() }
 
     LaunchedEffect(key1 = key1, key2 = key2) {
-        launchCatching {
+        launchCatch {
             list.clear()
             fromRemote()?.let { list.addAll(it) }
         }

@@ -234,4 +234,6 @@
     <string name="gdufe_mooc">广财慕课（雨课堂）</string>
     <string name="library">图书馆</string>
     <string name="favorites">收藏</string>
+    <string name="others">其他</string>
+    <string name="debug">调试</string>
 </resources>

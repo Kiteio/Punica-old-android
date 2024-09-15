@@ -7,6 +7,7 @@ import io.ktor.http.ParametersBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.R
+import org.kiteio.punica.candy.errorOnToastLayer
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.getString
 
@@ -51,7 +52,7 @@ suspend fun EduSystem.evaluateList(): List<EvaluateItem> = withContext(Dispatche
         }
 
         return@withContext items
-    } else error(getString(R.string.evaluation_closed))
+    } else errorOnToastLayer(getString(R.string.evaluation_closed))
 }
 
 

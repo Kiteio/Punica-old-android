@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.rajat.pdfviewer.compose.PdfRendererViewCompose
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.edu.EduNotice
 import org.kiteio.punica.edu.Notice
 import org.kiteio.punica.edu.NoticeItem
@@ -120,7 +120,7 @@ private fun NoticeBottomSheet(visible: Boolean, onDismiss: () -> Unit, noticeIte
         var notice by remember { mutableStateOf<Notice?>(null) }
 
         LaunchedEffect(key1 = Unit) {
-            launchCatching { noticeItem?.let { notice = EduNotice.notice(it) } }
+            launchCatch { noticeItem?.let { notice = EduNotice.notice(it) } }
         }
 
         if (notice == null) {
