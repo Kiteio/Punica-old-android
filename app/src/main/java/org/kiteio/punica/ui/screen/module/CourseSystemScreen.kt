@@ -43,7 +43,6 @@ import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.navigation.Route
 import java.time.DayOfWeek
 
-
 /**
  * 选课系统
  */
