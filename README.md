@@ -28,8 +28,8 @@
 
 | 描述                                                                          |                            已修复版本                             |
 |-----------------------------------------------------------------------------|:------------------------------------------------------------:|
-| 课表顶部日期错误（只存在于 [0.0.3](https://github.com/Kiteio/Punica/releases/tag/0.0.3)） |                          0.0.4（未发布）                          |
-| 评教无法使用                                                                      |                          0.0.4（未发布）                          |
+| 课表顶部日期错误（只存在于 [0.0.3](https://github.com/Kiteio/Punica/releases/tag/0.0.3)） | [0.0.4](https://github.com/Kiteio/Punica/releases/tag/0.0.4) |
+| 教学评价无法使用                                                                    | [0.0.4](https://github.com/Kiteio/Punica/releases/tag/0.0.4) |
 | 课表学期更新会晚一个月（9月份仍为旧学期）                                                       | [0.0.3](https://github.com/Kiteio/Punica/releases/tag/0.0.3) |
 | 选课选中第二志愿仍为第一志愿                                                              | [0.0.3](https://github.com/Kiteio/Punica/releases/tag/0.0.3) |
 | 开学日期无法正常设置                                                                  | [0.0.2](https://github.com/Kiteio/Punica/releases/tag/0.0.2) |
