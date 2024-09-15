@@ -190,4 +190,6 @@
     <string name="tip_evaluate">您希望儲存還是直接提交（我們推薦您先儲存並前往教務系統檢查後再提交）</string>
     <string name="favorites">收藏</string>
     <string name="reset">重置</string>
+    <string name="others">其他</string>
+    <string name="debug">調試</string>
 </resources>

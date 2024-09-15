@@ -1,15 +1,11 @@
 package org.kiteio.punica.edu
 
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import org.kiteio.punica.candy.API
-import org.kiteio.punica.candy.catching
-import org.kiteio.punica.candy.json
-import org.kiteio.punica.candy.route
+import org.kiteio.punica.candy.*
 import org.kiteio.punica.request.fetch
 import java.net.Inet4Address
 import java.net.NetworkInterface
@@ -59,9 +55,10 @@ object CampusNet : API {
         }.jsonString().json
 
         if (json.getInt("result") != 1) {
-            catching({ error(json.getString("msg")) }) {
+            catch({ errorOnToastLayer(json.getString("msg")) }) {
                 if (json.getInt("ret_code") == 2 || ip == status().getString("v4ip"))
                     return@withContext
+                else json.getString("msg")
             }
         }
     }

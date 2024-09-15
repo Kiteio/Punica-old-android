@@ -69,7 +69,7 @@ import kotlinx.coroutines.delay
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
 import org.kiteio.punica.candy.collectAsState
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.copyToFiles
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
@@ -321,7 +321,7 @@ private fun AvatarDialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             Preferences.edit {
                                 uri?.let { uri -> it[Keys.avatarUri] = uri }
                                     ?: it.remove(Keys.avatarUri)
@@ -413,7 +413,7 @@ private fun Settings(modifier: Modifier = Modifier) {
                         DropdownMenuItem(
                             text = { Text(text = getString(campus.nameResId)) },
                             onClick = {
-                                coroutineScope.launchCatching {
+                                coroutineScope.launchCatch {
                                     Preferences.edit {
                                         it[Keys.campusId] = campus.id
                                     }
@@ -438,7 +438,7 @@ private fun Settings(modifier: Modifier = Modifier) {
         visible = datePickerDialogVisible,
         onDismiss = { datePickerDialogVisible = false },
         onConfirm = { localDate ->
-            coroutineScope.launchCatching {
+            coroutineScope.launchCatch {
                 Preferences.edit { it[Keys.schoolStart] = localDate.toString() }
             }
         },
@@ -527,7 +527,7 @@ private fun CampusDialog(visible: Boolean, onDismiss: () -> Unit, initialCampus:
                         selected = campus.id == campusId,
                         onClick = {
                             campusId = campus.id
-                            coroutineScope.launchCatching {
+                            coroutineScope.launchCatch {
                                 Preferences.edit {
                                     it[Keys.campusId] = campusId
                                 }

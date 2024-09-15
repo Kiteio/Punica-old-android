@@ -5,48 +5,15 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CalendarMonth
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.ColorLens
-import androidx.compose.material.icons.rounded.ContentPaste
-import androidx.compose.material.icons.rounded.MailOutline
-import androidx.compose.material.icons.rounded.Numbers
-import androidx.compose.material.icons.rounded.ScatterPlot
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,34 +34,11 @@ import compose.icons.simpleicons.Gitee
 import compose.icons.simpleicons.Github
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.candy.URLs
-import org.kiteio.punica.candy.catching
-import org.kiteio.punica.candy.collectAsState
-import org.kiteio.punica.candy.launchCatching
-import org.kiteio.punica.candy.setText
-import org.kiteio.punica.datastore.ExamPlans
-import org.kiteio.punica.datastore.Keys
-import org.kiteio.punica.datastore.LevelReports
-import org.kiteio.punica.datastore.Plans
-import org.kiteio.punica.datastore.Preferences
-import org.kiteio.punica.datastore.Progresses
-import org.kiteio.punica.datastore.SchoolReports
-import org.kiteio.punica.datastore.SecondClassReports
-import org.kiteio.punica.datastore.TimetableAlls
-import org.kiteio.punica.datastore.Timetables
-import org.kiteio.punica.datastore.keys
+import org.kiteio.punica.candy.*
+import org.kiteio.punica.datastore.*
 import org.kiteio.punica.getString
 import org.kiteio.punica.openUri
-import org.kiteio.punica.ui.component.BottomSheet
-import org.kiteio.punica.ui.component.DeleteDialog
-import org.kiteio.punica.ui.component.Dialog
-import org.kiteio.punica.ui.component.DialogVisibility
-import org.kiteio.punica.ui.component.DropdownMenuItem
-import org.kiteio.punica.ui.component.Icon
-import org.kiteio.punica.ui.component.NavBackTopAppBar
-import org.kiteio.punica.ui.component.ScaffoldBox
-import org.kiteio.punica.ui.component.TextField
-import org.kiteio.punica.ui.component.Title
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.subduedContentColor
@@ -134,7 +78,7 @@ fun SettingsScreen() {
                     toString = { getString(it) },
                     selectedIndex = selectedIndex,
                     onSelect = { index ->
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             Preferences.edit { it[Keys.themeColorSource] = index }
                         }
                         if (index == 3) colorPickerVisible = true
@@ -176,7 +120,7 @@ fun SettingsScreen() {
                     selectedIndex = selectedIndex,
                     enabled = (preferences?.get(Keys.themeColorSource) ?: 0) == 0,
                     onSelect = { index ->
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             Preferences.edit { it[Keys.themeStyle] = index }
                         }
                     },
@@ -240,6 +184,28 @@ fun SettingsScreen() {
                 StoreSetting(
                     onClick = { visibleStore = it.second; keysBottomSheetVisible = true },
                     route = it.first
+                )
+            }
+
+            title(getString(R.string.others))
+
+            item {
+                Setting(
+                    text = { Text(text = getString(R.string.debug)) },
+                    onClick = {
+                        coroutineScope.launchCatch {
+                            Preferences.edit { it[Keys.debug] = !(it[Keys.debug] ?: false) }
+                        }
+                    },
+                    leadingIcon = { Icon(Icons.Rounded.BugReport) },
+                    end = {
+                        Switch(
+                            checked = preferences?.get(Keys.debug) ?: false,
+                            onCheckedChange = { value ->
+                                coroutineScope.launchCatch { Preferences.edit { it[Keys.debug] = value } }
+                            }
+                        )
+                    }
                 )
             }
         }
@@ -470,7 +436,7 @@ private fun KeysBottomSheet(
                 visible = deleteDialogVisible,
                 onDismiss = { deleteDialogVisible = false },
                 onConfirm = {
-                    coroutineScope.launchCatching {
+                    coroutineScope.launchCatch {
                         visibleKey?.let { key ->
                             edit { it.remove(stringPreferencesKey(key)) }
                         }
@@ -513,21 +479,17 @@ private fun ColorPicker(visible: Boolean, onDismiss: () -> Unit, hex: String?) {
                     value = hexString,
                     onValueChange = {
                         hexString = it
-                        catching(onCatch = {}) { color = HsvColor.from(hexString.toColor()) }
+                        catchUnit { color = HsvColor.from(hexString.toColor()) }
                     },
                     label = { Text(text = getString(R.string.hex_color)) },
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Rounded.Numbers)
-                    },
+                    leadingIcon = { Icon(imageVector = Icons.Rounded.Numbers) },
                     trailingIcon = {
                         IconButton(
                             onClick = {
                                 hexString = clipboardManager.getText().toString()
-                                catching { color = HsvColor.from(hexString.toColor()) }
+                                catchUnit { color = HsvColor.from(hexString.toColor()) }
                             }
-                        ) {
-                            Icon(imageVector = Icons.Rounded.ContentPaste)
-                        }
+                        ) { Icon(imageVector = Icons.Rounded.ContentPaste) }
                     }
                 )
             },
@@ -535,7 +497,7 @@ private fun ColorPicker(visible: Boolean, onDismiss: () -> Unit, hex: String?) {
             confirmButton = {
                 TextButton(
                     onClick = {
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             Preferences.edit {
                                 it[Keys.themeColor] = color.toColor().toHexString()
                             }

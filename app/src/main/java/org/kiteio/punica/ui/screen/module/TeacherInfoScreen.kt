@@ -1,41 +1,12 @@
 package org.kiteio.punica.ui.screen.module
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountBalance
-import androidx.compose.material.icons.rounded.AreaChart
-import androidx.compose.material.icons.rounded.AssignmentInd
-import androidx.compose.material.icons.rounded.Category
-import androidx.compose.material.icons.rounded.Description
-import androidx.compose.material.icons.rounded.DoorFront
-import androidx.compose.material.icons.rounded.Filter
-import androidx.compose.material.icons.rounded.Mail
-import androidx.compose.material.icons.rounded.Numbers
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.PhoneAndroid
-import androidx.compose.material.icons.rounded.School
-import androidx.compose.material.icons.rounded.Stars
-import androidx.compose.material.icons.rounded.Verified
-import androidx.compose.material.icons.rounded.Wc
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +15,8 @@ import compose.icons.SimpleIcons
 import compose.icons.simpleicons.Tencentqq
 import compose.icons.simpleicons.Wechat
 import org.kiteio.punica.R
-import org.kiteio.punica.candy.catching
+import org.kiteio.punica.candy.catch
+import org.kiteio.punica.candy.errorOnToastLayer
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.api.Teacher
 import org.kiteio.punica.edu.system.api.TeacherItem
@@ -52,17 +24,7 @@ import org.kiteio.punica.edu.system.api.teacher
 import org.kiteio.punica.edu.system.api.teacherList
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.LocalViewModel
-import org.kiteio.punica.ui.component.BottomSheet
-import org.kiteio.punica.ui.component.IconText
-import org.kiteio.punica.ui.component.LazyPagingColumn
-import org.kiteio.punica.ui.component.NavBackTopAppBar
-import org.kiteio.punica.ui.component.Pager
-import org.kiteio.punica.ui.component.PagingSource
-import org.kiteio.punica.ui.component.ScaffoldColumn
-import org.kiteio.punica.ui.component.SearchBar
-import org.kiteio.punica.ui.component.SubduedText
-import org.kiteio.punica.ui.component.Title
-import org.kiteio.punica.ui.component.items
+import org.kiteio.punica.ui.component.*
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.runWithReLogin
@@ -164,7 +126,7 @@ private class TeacherInfoPagingSource(
             reLogin()
             teacherList(name, params.key!!)
         }.let { Page(it, params) }
-    } ?: error(getString(R.string.not_logged_in))
+    } ?: errorOnToastLayer(getString(R.string.not_logged_in))
 }
 
 
@@ -186,9 +148,7 @@ fun TeacherBottomSheet(
         var teacher by remember { mutableStateOf<Teacher?>(null) }
 
         LaunchedEffect(key1 = eduSystem, key2 = id) {
-            id?.let {
-                teacher = catching<Teacher?> { eduSystem?.runWithReLogin { teacher(it) } }
-            }
+            id?.let { teacher = catch { eduSystem?.runWithReLogin { teacher(it) } } }
         }
 
         LazyColumn(contentPadding = PaddingValues(dp4(4))) {

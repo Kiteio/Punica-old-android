@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.edu.system.api.EvaluateItem
 import org.kiteio.punica.edu.system.api.evaluate
@@ -114,7 +114,7 @@ fun EvaluationScreen() {
         visible = stateSelectDialogVisible,
         onDismiss = { stateSelectDialogVisible = false },
         onSelect = { submit ->
-            coroutineScope.launchCatching {
+            coroutineScope.launchCatch {
                 eduSystem?.runWithReLogin {
                     if (selectedIndex == -1)
                         for (index in evaluateItems.indices.reversed())
@@ -140,10 +140,10 @@ private fun EduSystem.evaluate(
     coroutineScope: CoroutineScope,
     submit: Boolean,
     index: Int
-) = coroutineScope.launchCatching {
+) = coroutineScope.launchCatch {
     with(evaluateItems) {
         var tmp = get(index).apply {
-            if (route == null) return@launchCatching
+            if (route == null) return@launchCatch
         }
         evaluate(tmp, submit, false)
 

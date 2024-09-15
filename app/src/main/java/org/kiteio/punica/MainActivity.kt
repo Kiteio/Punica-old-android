@@ -14,7 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import org.kiteio.punica.candy.catching
+import org.kiteio.punica.candy.catchUnit
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.datastore.Users
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
 
                 // 自动登录
                 LaunchedEffect(key1 = Unit) {
-                    catching {
+                    catchUnit {
                         flow {
                             Preferences.data.collect {
                                 it[Keys.lastUsername]?.let { username -> emit(username) }

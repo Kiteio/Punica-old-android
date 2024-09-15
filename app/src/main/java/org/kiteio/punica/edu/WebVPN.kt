@@ -10,10 +10,7 @@ import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.R
-import org.kiteio.punica.candy.AgentAPI
-import org.kiteio.punica.candy.ProxiedAPI
-import org.kiteio.punica.candy.json
-import org.kiteio.punica.candy.route
+import org.kiteio.punica.candy.*
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.getString
 import org.kiteio.punica.request.Session
@@ -72,7 +69,7 @@ object WebVPN : AgentAPI {
         cookies: MutableSet<Cookie>
     ) = withContext(Dispatchers.Default) {
         // 学校已经为 WebVPN 添加了短信登录
-        error(getString(R.string.connect_to_campus_network_or_VPN))
+        errorOnToastLayer(getString(R.string.connect_to_campus_network_or_VPN))
 
         val session = Session(cookies).apply { fetch(route { COOKIE }) }
 
@@ -105,7 +102,7 @@ object WebVPN : AgentAPI {
 
         // 检查登录状态
         session.fetch(route { STATE }).bodyAsText().json.run {
-            if (getInt("code") != 0) error(getString("msg"))
+            if (getInt("code") != 0) errorOnToastLayer(getString("msg"))
         }
     }
 

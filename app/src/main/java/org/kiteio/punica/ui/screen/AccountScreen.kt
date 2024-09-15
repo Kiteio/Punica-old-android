@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.datastore.preferences.core.edit
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.candy.limit
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
@@ -103,7 +103,7 @@ fun AccountScreen() {
         visible = deleteDialogVisible,
         onDismiss = { deleteDialogVisible = false },
         onConfirm = {
-            coroutineScope.launchCatching {
+            coroutineScope.launchCatch {
                 visibleUser?.let { user ->
                     Users.edit { it.remove(user) }
                     Preferences.edit {
@@ -172,7 +172,7 @@ private fun UserDialog(visible: Boolean, onDismiss: () -> Unit, user: User?) {
             confirmButton = {
                 TextButton(
                     onClick = {
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             Users.edit {
                                 it.set(
                                     User(

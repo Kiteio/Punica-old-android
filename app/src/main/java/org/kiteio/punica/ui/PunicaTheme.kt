@@ -8,14 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -30,7 +23,7 @@ import com.materialkolor.rememberDynamicColorScheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.R
-import org.kiteio.punica.candy.catching
+import org.kiteio.punica.candy.catchUnit
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
@@ -129,7 +122,7 @@ private fun rememberBitmapTheme(
     var themeColor by remember { mutableStateOf(init) }
     LaunchedEffect(bitmap) {
         bitmap?.let {
-            catching {
+            catchUnit {
                 withContext(Dispatchers.Default) {
                     Palette.from(bitmap.copy(Bitmap.Config.ARGB_8888, true))
                         .generate().dominantSwatch?.also { themeColor = Color(it.rgb) }

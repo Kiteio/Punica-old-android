@@ -31,7 +31,7 @@ import androidx.datastore.preferences.core.edit
 import kotlinx.serialization.Serializable
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
-import org.kiteio.punica.candy.launchCatching
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.datastore.Identified
 import org.kiteio.punica.datastore.Todos
 import org.kiteio.punica.datastore.remove
@@ -89,7 +89,7 @@ fun TodoScreen() {
                         Row {
                             IconButton(
                                 onClick = {
-                                    coroutineScope.launchCatching {
+                                    coroutineScope.launchCatch {
                                         val newTodo = !todo
                                         Todos.edit { it.set(newTodo) }
                                         Toast(
@@ -132,7 +132,7 @@ fun TodoScreen() {
         visible = deleteDialogVisible,
         onDismiss = { deleteDialogVisible = false },
         onConfirm = {
-            coroutineScope.launchCatching {
+            coroutineScope.launchCatch {
                 visibleTodo?.let { todo ->
                     Todos.edit { it.remove(todo) }
                 }
@@ -187,7 +187,7 @@ private fun TodoDialog(visible: Boolean, onDismiss: () -> Unit, todo: Todo?) {
             confirmButton = {
                 TextButton(
                     onClick = {
-                        coroutineScope.launchCatching {
+                        coroutineScope.launchCatch {
                             Todos.edit {
                                 it.set(
                                     Todo(

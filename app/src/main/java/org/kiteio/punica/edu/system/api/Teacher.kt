@@ -7,6 +7,7 @@ import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.R
+import org.kiteio.punica.candy.errorOnToastLayer
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.system.EduSystem
 import org.kiteio.punica.getString
@@ -39,7 +40,7 @@ suspend fun EduSystem.teacherList(
     for (index in 1..<rows.size) {
         val infos = rows[index].children()
 
-        if (infos.size != 5) error(getString(R.string.no_more))
+        if (infos.size != 5) errorOnToastLayer(getString(R.string.no_more))
 
         items.add(
             TeacherItem(
