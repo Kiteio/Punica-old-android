@@ -135,7 +135,8 @@
     <string name="account_editing">帳號編輯</string>
     <string name="required">（必填）</string>
     <string name="campus_net_password">校園網密碼</string>
-    <string name="default_is_last_8_of_id_card">默認為身份證號后8位</string>
+    <string name="default_is">默認為%1$s</string>
+    <string name="last_8_of_id_card">身份證號后8位</string>
     <string name="device_ip">設備ip</string>
     <string name="description">描述</string>
     <string name="make_sure_to_delete">您確定刪除</string>

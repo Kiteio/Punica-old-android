@@ -168,7 +168,8 @@
     <string name="account_editing">账号编辑</string>
     <string name="required">（必填）</string>
     <string name="campus_net_password">校园网密码</string>
-    <string name="default_is_last_8_of_id_card">默认为身份证号后 8 位</string>
+    <string name="default_is">默认为%1$s</string>
+    <string name="last_8_of_id_card">身份证号后 8 位</string>
     <string name="device_ip">设备 ip</string>
     <string name="description">描述</string>
     <string name="make_sure_to_delete">您确定删除</string>

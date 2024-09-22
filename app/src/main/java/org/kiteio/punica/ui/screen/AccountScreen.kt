@@ -157,14 +157,30 @@ private fun UserDialog(visible: Boolean, onDismiss: () -> Unit, user: User?) {
                 PasswordField(
                     value = secondClassPwd,
                     onValueChange = { secondClassPwd = it },
-                    label = { Text(text = getString(R.string.second_class_password)) }
+                    label = { Text(text = getString(R.string.second_class_password)) },
+                    placeholder = {
+                        Text(
+                            text = getString(
+                                R.string.default_is,
+                                getString(R.string.student_id)
+                            )
+                        )
+                    }
                 )
                 Spacer(modifier = Modifier.height(dp4(2)))
 
                 PasswordField(
                     value = campusNetPwd,
                     onValueChange = { campusNetPwd = it },
-                    label = { Text(text = getString(R.string.campus_net_password)) }
+                    label = { Text(text = getString(R.string.campus_net_password)) },
+                    placeholder = {
+                        Text(
+                            text = getString(
+                                R.string.default_is,
+                                getString(R.string.last_8_of_id_card)
+                            )
+                        )
+                    }
                 )
             },
             onDismiss = onDismiss,
