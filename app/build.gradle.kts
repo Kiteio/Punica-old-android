@@ -1,4 +1,6 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 plugins {
     alias(libs.plugins.android.application)
@@ -16,7 +18,14 @@ android {
         minSdk = 29
         targetSdk = 35
         versionCode = 4
+        // 正式版
         versionName = "0.0.4"
+        // 预览版
+        versionName = checkNotNull(versionName).let { versionName ->
+            val dateCode = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"))
+            "$versionName-preview-$dateCode"
+        }
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

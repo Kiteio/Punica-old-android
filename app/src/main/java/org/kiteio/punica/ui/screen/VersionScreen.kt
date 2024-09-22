@@ -267,7 +267,7 @@ private object Gitee : API {
 
             releases.add(
                 Release(
-                    json.getString("tag_name"),
+                    json.getString("name"),
                     LocalDateTime.parse(
                         json.getString("created_at"),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
