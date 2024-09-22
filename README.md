@@ -1,30 +1,38 @@
-# 广东财经大学小石榴（Punica）
+# 小石榴 广财教务系统直连工具
 
 <p>
 
-[![](https://img.shields.io/github/release/Kiteio/Punica?label=最新版本&labelColor=white&color=white)](https://github.com/Kiteio/Punica/releases)
-[![](https://img.shields.io/static/v1?label=Android%20版本支持&message=10%2B&labelColor=white&color=white&logo=android)](https://developer.android.google.cn/about/versions)
-[![](https://img.shields.io/github/stars/Kiteio/Punica.svg?style=flat&labelColor=white&color=white&logo=github&logoColor=black)](https://github.com/Kiteio/Punica/stargazers)
+[![](https://img.shields.io/static/v1?label=Android&message=10%2B&labelColor=white&color=white&logo=android)](https://developer.android.google.cn/about/versions)
 [![](https://img.shields.io/static/v1?label=Kotlin&logo=kotlin&message=2.0.20&labelColor=white&color=white)](https://kotlinlang.org)
 [![](https://img.shields.io/static/v1?label=Jetpack%20Compose&logo=jetpackcompose&message=1.7.0-rc01&labelColor=white&color=white)](https://developer.android.google.cn/develop/ui)
 
 </p>
 
-<div align="center">
-    <img width="180" src="app/src/main/res/drawable/punica.png" alt="Punica Logo"/>
-</div>
+<p align="center">
+    <img width="160" src="app/src/main/res/drawable/punica.png" alt="logo"/>
+</p>
 
-## 概览 🍥
 
-小石榴致力于打造更加 **完备**、**安全** 的 **广财教务系统工具**。
 
-将近两年的尝试，我们有理由说这是一款 **现代化**、**便捷** 的教务系统工具。
+## 简介 🕊️
 
-我们不是数据的创造者，一直以来我们都是与官方服务器 **直连**（尽管官方可能不太乐意）。
-我们希望用户能更加安心地使用小石榴，而不需要承担附加风险。
+小石榴是一款 **非官方** 的开源教务系统直连工具，它整合了教务系统、教务处通知、第二课堂等功能。
 
-## 恶性 Bug 集合 📌
-这里我们会收集一些已知的影响使用的 Bug，并列出已修复的最低版本，我们强烈推荐您升级至最新版以规避恶性 Bug。
+我们基于 Android 原生 Material Design 设计了小石榴，我们希望它足够好用、简单且安全。
+我们引入了本地 OCR [tesseract](https://github.com/tesseract-ocr/tesseract) 用于教务系统登录时自动识别验证码，在启动时小石榴会自动登录最后一次登录的账号，您无需手动同步任何数据。
+您的账号信息会借助 [DataStore](https://developer.android.google.cn/topic/libraries/architecture/datastore?hl=zh-cn) 存储于本地，且不会有其他服务器插手您与官方服务器的数据传输。
+
+当然，目前小石榴部分功能仍需优化，例如教学评价、选课系统。
+此外，小石榴目前只支持通过连接校园网、Motion Pro 才能正常连接教务系统、第二课堂。
+
+
+
+## 开始使用 ⛄
+小石榴支持 Android 10+ 的设备，您可以到我们的[发行版](https://github.com/Kiteio/Punica/releases)中下载安装包，我们强烈推荐您使用最新版，避免不必要的异常。
+
+<img src="readme/download.png" alt="download" />
+
+这里我们收集了一些已知的影响使用的 Bug，并列出已修复的最低版本。
 
 | 描述                                                                          |                            已修复版本                             |
 |-----------------------------------------------------------------------------|:------------------------------------------------------------:|
@@ -34,51 +42,44 @@
 | 选课选中第二志愿仍为第一志愿                                                              | [0.0.3](https://github.com/Kiteio/Punica/releases/tag/0.0.3) |
 | 开学日期无法正常设置                                                                  | [0.0.2](https://github.com/Kiteio/Punica/releases/tag/0.0.2) |
 
-## 截屏 ✂️
 
+
+## 支持 🐻‍❄️
+我们利用宝贵的课余时间制作小石榴，如果您喜欢我们的作品，可以点亮小石榴的仓库的星标，这对我们很重要。
+
+您也可以向我们发起[捐赠](https://afdian.com/a/kiteio)（请选择最低的款项5元/月）。
+
+所有的支持都将用来：提升我们的积极性，延长小石榴的存活时间。
+
+**致谢**
+
+<a href="https://github.com/Kiteio/Punica/stargazers">
+    <img width="180" src="https://reporoster.com/stars/Kiteio/Punica" alt="stargazers" />
+</a>
+
+
+
+## 截图 🐈‍⬛
 <p>
-
-<img src="readme/screenshot1.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot2.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot3.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot4.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot5.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot6.jpg" alt="screenshot" width="16%" />
-
+    <img src="readme/screenshot1.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot2.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot3.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot4.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot5.jpg" alt="screenshot" width="19%" />
 </p>
 
 <p>
-
-<img src="readme/screenshot7.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot8.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot9.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot10.jpg" alt="screenshot" width="16%" />
-<img src="readme/screenshot11.jpg" alt="screenshot" width="16%" />
-
+    <img src="readme/screenshot6.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot7.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot8.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot9.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot10.jpg" alt="screenshot" width="19%" />
 </p>
 
-## 为什么选择小石榴 🎡
-
-### ✨ 近乎全量功能复刻
-
-您所能见到的大部分教务系统功能已经打包进小石榴。
-
-### 🧣 更加舒适的操作体验
-
-小石榴优化了原本繁复的操作。
-
-- 使用开源 OCR 库跳过验证码，这也给我们带来了自动登录的支持。
-- 支持一键教评。
-- 使用 Android 原生开发，UI 遵循 Material Design。
-
-### 🔥 本地持久化数据
-
-小石榴支持数据本地化，断网也能正常使用。
-
-## 支持 🦢
-
-我们的项目开发没有任何启动资金，全靠爱发电，我们需要一些反馈来维持项目的运营。
-
-- 如果小石榴博得了您的喜欢，请为小石榴点亮 🌟（右上角）。
-- 如果您在使用过程中遇到了问题，请发送 [issues](https://github.com/Kiteio/Punica/issues)。
-- 如果有条件的话，可以[为我充电](https://afdian.com/a/kiteio)（无自动续费）。
+<p>
+    <img src="readme/screenshot11.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot12.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot13.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot14.jpg" alt="screenshot" width="19%" />
+    <img src="readme/screenshot15.jpg" alt="screenshot" width="19%" />
+</p>
