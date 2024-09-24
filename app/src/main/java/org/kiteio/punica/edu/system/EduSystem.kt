@@ -3,11 +3,15 @@ package org.kiteio.punica.edu.system
 import com.fleeksoft.ksoup.Ksoup
 import io.ktor.client.request.parameter
 import io.ktor.client.statement.bodyAsText
-import io.ktor.client.statement.readBytes
+import io.ktor.client.statement.readRawBytes
 import io.ktor.http.parameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.kiteio.punica.candy.*
+import org.kiteio.punica.candy.ProxiedAPI
+import org.kiteio.punica.candy.ProxiedAPIOwner
+import org.kiteio.punica.candy.errorOnToastLayer
+import org.kiteio.punica.candy.route
+import org.kiteio.punica.candy.text
 import org.kiteio.punica.edu.WebVPN
 import org.kiteio.punica.edu.foundation.Semester
 import org.kiteio.punica.edu.foundation.User
@@ -99,7 +103,7 @@ class EduSystem private constructor(
             count: Int = 15
         ): EduSystem = withContext(Dispatchers.Default) {
             with(user) {
-                val captcha = session.fetch(route(proxied) { CAPTCHA }).readBytes().text()
+                val captcha = session.fetch(route(proxied) { CAPTCHA }).readRawBytes().text()
                 val text = session.post(
                     route(proxied) { LOGIN },
                     parameters {

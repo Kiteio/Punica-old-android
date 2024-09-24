@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory
 import android.graphics.BitmapFactory.Options
 import android.graphics.Color
 import com.googlecode.tesseract.android.TessBaseAPI
-import io.ktor.client.statement.readBytes
+import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kiteio.punica.FilesDir
@@ -26,7 +26,7 @@ suspend fun ByteArray.text() = withContext(Dispatchers.Default) {
         // 数据文件不存在
         if (!dataFile.exists()) {
             // 下载
-            val byteArray = fetch(URLs.TESSDATA).readBytes()
+            val byteArray = fetch(URLs.TESSDATA).readRawBytes()
             // 创建并写入文件
             File(fileDir).mkdir()
             withContext(Dispatchers.IO) {
