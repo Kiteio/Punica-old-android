@@ -307,9 +307,8 @@ private fun Timetable(
                             ) {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center,
-
-                                    ) {
+                                    verticalArrangement = Arrangement.Center
+                                ) {
                                     CompositionLocalProvider(
                                         value = LocalContentColor provides
                                                 if (date == now) MaterialTheme.colorScheme.primary

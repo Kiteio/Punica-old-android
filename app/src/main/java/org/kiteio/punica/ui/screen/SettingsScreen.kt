@@ -78,10 +78,10 @@ fun SettingsScreen() {
                     toString = { getString(it) },
                     selectedIndex = selectedIndex,
                     onSelect = { index ->
-                        coroutineScope.launchCatch {
+                        if (index == 3) colorPickerVisible = true
+                        else coroutineScope.launchCatch {
                             Preferences.edit { it[Keys.themeColorSource] = index }
                         }
-                        if (index == 3) colorPickerVisible = true
                     },
                     leadingIcon = { Icon(imageVector = Icons.Rounded.ColorLens) },
                     desc = if (selectedIndex == 3) {
@@ -500,14 +500,13 @@ private fun ColorPicker(visible: Boolean, onDismiss: () -> Unit, hex: String?) {
                     onClick = {
                         coroutineScope.launchCatch {
                             Preferences.edit {
+                                it[Keys.themeColorSource] = 3
                                 it[Keys.themeColor] = color.toColor().toHexString()
                             }
                             onDismiss()
                         }
                     }
-                ) {
-                    Text(text = getString(R.string.confirm))
-                }
+                ) { Text(text = getString(R.string.confirm)) }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) { Text(text = getString(R.string.cancel)) }
