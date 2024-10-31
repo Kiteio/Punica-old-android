@@ -109,7 +109,7 @@ fun ScheduleScreen() {
         )
         // 课表备注
         timetable?.apply {
-            PlaidText(
+            if (remark != "未安排时间课程：") PlaidText(
                 text = remark,
                 color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Start
@@ -302,7 +302,7 @@ private fun Timetable(
                                     .fillMaxWidth(1f / (7 - index))
                                     .fillMaxHeight()
                                     .padding(1.dp),
-                                shadowElevation = if (date == now) 1.dp else 0.dp,
+                                shadowElevation = if (date == now) 2.dp else 0.dp,
                                 shape = MaterialTheme.shapes.medium
                             ) {
                                 Column(
@@ -312,7 +312,7 @@ private fun Timetable(
                                     CompositionLocalProvider(
                                         value = LocalContentColor provides
                                                 if (date == now) MaterialTheme.colorScheme.primary
-                                                else LocalContentColor.current
+                                                else LocalContentColor.current.copy(0.3f)
                                     ) {
                                         Text(
                                             text = item,
@@ -320,8 +320,7 @@ private fun Timetable(
                                         )
                                         AnimatedVisibility(visible = date != null) {
                                             if (date != null) PlaidText(
-                                                text = "${date.month.value}-${date.dayOfMonth}",
-                                                color = subduedContentColor()
+                                                text = "${date.month.value}-${date.dayOfMonth}"
                                             )
                                         }
                                     }
@@ -438,12 +437,13 @@ private fun List<TimetableItem>?.Plaid(
         val alpha = if (firstContainsWeek != null) 1f else 0.35f
 
         (firstContainsWeek ?: if (showOtherWeeks) first() else null)?.apply {
-            OutlinedCard(
+            Surface (
                 onClick = onClick,
                 shape = MaterialTheme.shapes.small,
+                color = MaterialTheme.colorScheme.secondaryContainer,
                 border = BorderStroke(
                     0.6.dp,
-                    MaterialTheme.colorScheme.outlineVariant.copy(if (firstContainsWeek != null) 0.7f else 0.4f)
+                    MaterialTheme.colorScheme.outlineVariant
                 ),
                 modifier = Modifier.fillMaxWidth(1f / 7)
             ) {
@@ -462,7 +462,8 @@ private fun List<TimetableItem>?.Plaid(
                             text = name,
                             maxLines = 3,
                             color = MaterialTheme.colorScheme.primary.copy(alpha),
-                            fontSize = 11.sp
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(dp4(2)))
                         PlaidText(
