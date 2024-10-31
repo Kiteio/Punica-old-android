@@ -1,10 +1,10 @@
-# 小石榴 广财教务系统直连工具
+# 小石榴 - 广财教务系统直连工具
 
 <p>
 
 [![](https://img.shields.io/static/v1?label=Android&message=10%2B&labelColor=white&color=white&logo=android)](https://developer.android.google.cn/about/versions)
-[![](https://img.shields.io/static/v1?label=Kotlin&logo=kotlin&message=2.0.20&labelColor=white&color=white)](https://kotlinlang.org)
-[![](https://img.shields.io/static/v1?label=Jetpack%20Compose&logo=jetpackcompose&message=1.7.0-rc01&labelColor=white&color=white)](https://developer.android.google.cn/develop/ui)
+[![](https://img.shields.io/static/v1?label=Kotlin&logo=kotlin&message=2.1.0-Beta2&labelColor=white&color=white)](https://kotlinlang.org)
+[![](https://img.shields.io/static/v1?label=Jetpack%20Compose&logo=jetpackcompose&message=1.8.0-alpha04&labelColor=white&color=white)](https://developer.android.google.cn/develop/ui)
 
 </p>
 

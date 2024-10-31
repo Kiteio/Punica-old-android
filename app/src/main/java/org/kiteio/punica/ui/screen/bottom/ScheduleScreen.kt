@@ -1,8 +1,23 @@
 package org.kiteio.punica.ui.screen.bottom
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowColumn
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -12,7 +27,14 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Timeline
 import androidx.compose.material.icons.rounded.ViewWeek
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -53,7 +75,17 @@ import org.kiteio.punica.edu.system.api.timetable
 import org.kiteio.punica.getString
 import org.kiteio.punica.getStringArray
 import org.kiteio.punica.ui.collectAsEduSystemIdentified
-import org.kiteio.punica.ui.component.*
+import org.kiteio.punica.ui.component.CheckBox
+import org.kiteio.punica.ui.component.Dialog
+import org.kiteio.punica.ui.component.DialogVisibility
+import org.kiteio.punica.ui.component.DropdownMenuItem
+import org.kiteio.punica.ui.component.HorizontalPager
+import org.kiteio.punica.ui.component.Icon
+import org.kiteio.punica.ui.component.IconText
+import org.kiteio.punica.ui.component.ScaffoldColumn
+import org.kiteio.punica.ui.component.SubduedText
+import org.kiteio.punica.ui.component.Title
+import org.kiteio.punica.ui.component.TopAppBar
 import org.kiteio.punica.ui.dp4
 import org.kiteio.punica.ui.rememberLastUsername
 import org.kiteio.punica.ui.subduedContentColor
@@ -249,7 +281,7 @@ private fun TopAppBar(
  * @param showOtherWeeks
  * @param modifier
  */
-@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Timetable(
     pagerState: PagerState,

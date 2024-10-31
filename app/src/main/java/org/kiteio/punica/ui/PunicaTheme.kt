@@ -92,8 +92,9 @@ fun PunicaTheme(
             }
 
             rememberDynamicColorScheme(
-                seedColor = seedColor,
+                primary = seedColor,
                 isDark = darkTheme,
+                isAmoled = false,
                 style = themeStyle
             )
         }
