@@ -18,9 +18,9 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import org.kiteio.punica.R
+import org.kiteio.punica.candy.LocalDateTimeNow
 import org.kiteio.punica.candy.minutesUntil
 import org.kiteio.punica.datastore.ExamPlans
 import org.kiteio.punica.edu.system.EduSystem
@@ -44,7 +44,6 @@ import java.time.format.DateTimeFormatter
  */
 @Composable
 fun ExamPlanScreen() {
-    val now = remember { LocalDateTime.now() }
     val examPlan = ExamPlans.collectAsEduSystemIdentified(
         id = rememberLastUsername(EduSystem.semester)
     ) { examPlan() }
@@ -65,10 +64,14 @@ fun ExamPlanScreen() {
     ) {
         LazyColumn(contentPadding = PaddingValues(dp4(2))) {
             examPlan?.run {
-                items(items.sortedBy { now.minutesUntil(LocalDateTime(it.time.first)) < 0 }) {
+                items(
+                    items.sortedBy {
+                        LocalDateTimeNow.minutesUntil(LocalDateTime(it.time.first)) < 0
+                    }
+                ) {
                     ExamPlanItem(
                         examPlanItem = it,
-                        enabled = now.minutesUntil(LocalDateTime(it.time.first)) > 0
+                        enabled = LocalDateTimeNow.minutesUntil(LocalDateTime(it.time.first)) > 0
                     )
                 }
             }

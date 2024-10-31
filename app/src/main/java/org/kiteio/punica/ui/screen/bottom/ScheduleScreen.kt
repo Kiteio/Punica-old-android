@@ -36,6 +36,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import org.kiteio.punica.R
 import org.kiteio.punica.Toast
+import org.kiteio.punica.candy.LocalDateNow
 import org.kiteio.punica.candy.collectAsState
 import org.kiteio.punica.candy.daysUntil
 import org.kiteio.punica.candy.launchCatch
@@ -77,8 +78,8 @@ fun ScheduleScreen() {
     val week by remember {
         derivedStateOf {
             schoolStart?.run {
-                val now = LocalDate.now()
-                (daysUntil(now) + dayOfWeek.value - now.dayOfWeek.value).toInt() / 7 + 1
+                (daysUntil(LocalDateNow) + dayOfWeek.value - LocalDateNow.dayOfWeek.value)
+                    .toInt() / 7 + 1
             } ?: 0
         }
     }
@@ -262,12 +263,12 @@ private fun Timetable(
     val height = dp4(14)
     val timeBarWidth = dp4(10)
     val daysOfWeek = getStringArray(R.array.days_of_week)
-    val now = LocalDate.now()
 
     HorizontalPager(state = pagerState, modifier = modifier) { page ->
         val offset = page - (pagerState.pageCount / 2)
         val offsetWeek = week + offset
-        val offsetNow = if (semester != EduSystem.semester) null else now.plusWeeks(offset.toLong())
+        val offsetNow =
+            if (semester != EduSystem.semester) null else LocalDateNow.plusWeeks(offset.toLong())
 
         LazyColumn {
             // 顶部周次和星期几
@@ -302,7 +303,7 @@ private fun Timetable(
                                     .fillMaxWidth(1f / (7 - index))
                                     .fillMaxHeight()
                                     .padding(1.dp),
-                                shadowElevation = if (date == now) 2.dp else 0.dp,
+                                shadowElevation = if (date == LocalDateNow) 2.dp else 0.dp,
                                 shape = MaterialTheme.shapes.medium
                             ) {
                                 Column(
@@ -311,12 +312,12 @@ private fun Timetable(
                                 ) {
                                     CompositionLocalProvider(
                                         value = LocalContentColor provides
-                                                if (date == now) MaterialTheme.colorScheme.primary
+                                                if (date == LocalDateNow) MaterialTheme.colorScheme.primary
                                                 else LocalContentColor.current.copy(0.3f)
                                     ) {
                                         Text(
                                             text = item,
-                                            fontWeight = FontWeight.Black.takeIf { date == now }
+                                            fontWeight = FontWeight.Black.takeIf { date == LocalDateNow }
                                         )
                                         AnimatedVisibility(visible = date != null) {
                                             if (date != null) PlaidText(
@@ -437,7 +438,7 @@ private fun List<TimetableItem>?.Plaid(
         val alpha = if (firstContainsWeek != null) 1f else 0.35f
 
         (firstContainsWeek ?: if (showOtherWeeks) first() else null)?.apply {
-            Surface (
+            Surface(
                 onClick = onClick,
                 shape = MaterialTheme.shapes.small,
                 color = MaterialTheme.colorScheme.secondaryContainer,

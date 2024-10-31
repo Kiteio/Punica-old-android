@@ -1,11 +1,18 @@
 package org.kiteio.punica.candy
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+
+var LocalDateNow by mutableStateOf<LocalDate>(LocalDate.now())
+
+var LocalDateTimeNow by mutableStateOf<LocalDateTime>(LocalDateTime.now())
 
 /** 时间戳 */
 val LocalDate.dateMillis

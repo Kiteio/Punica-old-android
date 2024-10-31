@@ -10,11 +10,17 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import org.kiteio.punica.candy.LocalDateNow
+import org.kiteio.punica.candy.LocalDateTimeNow
 import org.kiteio.punica.candy.catchUnit
+import org.kiteio.punica.candy.launchCatch
 import org.kiteio.punica.datastore.Keys
 import org.kiteio.punica.datastore.Preferences
 import org.kiteio.punica.datastore.Users
@@ -27,6 +33,7 @@ import org.kiteio.punica.ui.PunicaTheme
 import org.kiteio.punica.ui.navigation.NavHost
 import org.kiteio.punica.ui.navigation.Route
 import org.kiteio.punica.ui.navigation.composable
+import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +83,32 @@ class MainActivity : ComponentActivity() {
                         composable(Route.Module.values)
                     }
                 }
+            }
+        }
+    }
+
+
+    private var job: Job? = null
+
+
+    override fun onStop() {
+        job?.cancel()
+        super.onStop()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        job = lifecycleScope.launchCatch {
+            // 实时更新时间
+            while (true) {
+                val localDateTime = LocalDateTime.now()
+                // 每隔 1 分钟更新一次
+                if (localDateTime.second == 0) {
+                    LocalDateTimeNow = localDateTime
+                    LocalDateNow = localDateTime.toLocalDate()
+                }
+                delay(1000)
             }
         }
     }

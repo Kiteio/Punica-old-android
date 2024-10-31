@@ -39,6 +39,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import org.kiteio.punica.R
 import org.kiteio.punica.candy.LocalDate
+import org.kiteio.punica.candy.LocalDateNow
 import org.kiteio.punica.candy.dateMillis
 import org.kiteio.punica.getString
 import org.kiteio.punica.ui.dp4
@@ -114,7 +115,7 @@ fun DatePickerDialog(
 ) {
     DialogVisibility(visible = visible) {
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = (initialDate ?: LocalDate.now()).dateMillis
+            initialSelectedDateMillis = (initialDate ?: LocalDateNow).dateMillis
         )
 
         DatePickerDialog(
