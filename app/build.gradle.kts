@@ -17,14 +17,8 @@ android {
         applicationId = "org.kiteio.punica"
         minSdk = 29
         targetSdk = 35
-        versionCode = 4
-        // 正式版
-        versionName = "0.0.4"
-        // 预览版
-        versionName = checkNotNull(versionName).let { versionName ->
-            val dateCode = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"))
-            "$versionName-preview-$dateCode"
-        }
+        versionCode = 5
+        versionName = "0.0.5"
 
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

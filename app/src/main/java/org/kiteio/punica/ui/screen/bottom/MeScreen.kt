@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ContentPaste
 import androidx.compose.material.icons.rounded.EditLocationAlt
@@ -51,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -166,7 +169,11 @@ private fun UserCard(
     val avatarSize = dp4(18)
     val space = dp4(5)
 
-    Box(modifier = modifier.run { if (this == Modifier) height(dp4(60) + avatarSize / 2) else this }) {
+    Box(
+        modifier = modifier.run {
+            if (this == Modifier) height(dp4(60) + avatarSize / 2) else this
+        }
+    ) {
         // 背景
         Column {
             Image(
@@ -185,15 +192,24 @@ private fun UserCard(
         Column {
             Spacer(modifier = Modifier.weight(1f))
             Surface(
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(0.9f),
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shadowElevation = 2.dp,
                 modifier = Modifier
                     .padding(horizontal = space)
-                    .clip(MaterialTheme.shapes.extraLarge)
+                    .clip(
+                        RoundedCornerShape(
+                            topStartPercent = 50,
+                            topEndPercent = 40,
+                            bottomStartPercent = 50,
+                            bottomEndPercent = 40
+                        )
+                    )
                     .clickable(onClick = onClick)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(dp4()),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Avatar(
@@ -201,7 +217,7 @@ private fun UserCard(
                         onClick = onAvatarClick,
                         modifier = Modifier.size(avatarSize)
                     )
-                    Spacer(modifier = Modifier.width(dp4(4)))
+                    Spacer(modifier = Modifier.width(dp4(2)))
                     Column {
                         Title(
                             text = viewModel.eduSystem?.name ?: getString(R.string.click_to_login),
@@ -227,8 +243,8 @@ private fun Avatar(painter: Painter, onClick: () -> Unit, modifier: Modifier = M
     OutlinedCard(
         onClick = onClick,
         elevation = CardDefaults.elevatedCardElevation(),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.surfaceVariant),
-        shape = MaterialTheme.shapes.extraLarge
+        border = BorderStroke(0.dp, Color.Transparent),
+        shape = CircleShape
     ) {
         Image(
             painter = painter,
