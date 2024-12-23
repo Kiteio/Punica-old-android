@@ -251,7 +251,7 @@ fun SettingsScreen() {
                     text = { Text(text = getString(R.string.debug)) },
                     onClick = {
                         coroutineScope.launchCatch {
-                            Preferences.edit { it[Keys.debug] = !(it[Keys.debug] ?: false) }
+                            Preferences.edit { it[Keys.debug] = it[Keys.debug] != true }
                         }
                     },
                     leadingIcon = { Icon(Icons.Rounded.BugReport) },

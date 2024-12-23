@@ -1,36 +1,41 @@
 # 小石榴
 
+### 领先的广东财经大学教务系统工具 | 自动登录 | 全量开源
+
 <p align="center">
-    <img width="160" src="app/src/main/res/drawable/punica.png" alt="logo"/>
+    <img width="160" src="app/src/main/res/drawable/punica.png" alt="Punica Logo"/>
 </p>
 
 <p align="center">
     <i>爱一个人需要理由吗？不需要吗？需要吗？</i>
 </p>
 
-<p>
+> ### 近期计划
+> 我们将对小石榴的代码做全量重审（Code Review），并在不久的将来将其版本提升至`1.0.0`。
+> 请注意，该版本可能会与旧版本产生数据兼容性问题，旧版本将在新版本发布不久后失去支持。
+>
+> 我们会将注意力集中在：
+> 1. 新增课表桌面小组件
+> 2. 性能优化、代码逻辑检查
+> 3. 操作体验提升
 
-[![](https://img.shields.io/static/v1?label=Android&message=10%2B&labelColor=white&color=white&logo=android)](https://developer.android.google.cn/about/versions)
-[![](https://img.shields.io/static/v1?label=Kotlin&logo=kotlin&message=2.1.0-Beta2&labelColor=white&color=white)](https://kotlinlang.org)
-[![](https://img.shields.io/static/v1?label=Jetpack%20Compose&logo=jetpackcompose&message=1.8.0-alpha04&labelColor=white&color=white)](https://developer.android.google.cn/develop/ui)
-
-</p>
-
-很高兴见到您！<br/>
+很高兴见到你！\
 小石榴是一款开源、功能丰富的广东财经大学教学信息查询工具。
 
-## 为什么选小石榴 🐻‍❄️
+小石榴大部分功能的数据来自广财教务系统官方接口，你可以在小石榴中使用以下功能：
 
-- 小石榴运用设计语言 [Material Design](https://m3.material.io/)，予你简洁的 UI 界面
-- 小石榴配备图像识别用于教务系统登录，一次登录即可享自动数据同步
-- 小石榴的教学信息都在您的设备上获取和存储，您无需担心个人信息被存于他人服务器
+- 个人、全选课表
+- 选课 | 第二课堂活动、成绩 | 考试安排 | 课程、等级考试成绩
+- 执行计划 | 学业进度
+- 广财常用网站
+- 校园网登录
+- 紧急电话
+- 教学通知
+- 教师信息
 
 ## 下载 ⛄
 
-小石榴支持 Android 10+ 的手机，请根据您当前使用的平台进入对应的版本列表，展开最新版本中的 **Assets**（Gitee 为**下载**），并点击下载第一项 **punica-x-x.x.x.apk**。
-
-- [GitHub](https://github.com/Kiteio/Punica/releases)
-- [Gitee](https://gitee.com/Kiteio/Punica/releases)
+小石榴支持搭载 Android 10+ 的手机，你需要进入[版本列表](https://github.com/Kiteio/Punica/releases)，展开最新版本中的 **Assets**，并点击下载`.apk`文件。
 
 ## 截图 🐈‍⬛
 
@@ -54,22 +59,5 @@
 
 ## 支持 🕊️
 
-我们利用宝贵的课余时间制作小石榴，如果您喜欢我们的作品，可以点亮星标，这对我们很重要。
-
-![img.png](readme/star.png)
-
-您也可以向我们发起[捐赠](https://afdian.com/a/kiteio)（该平台并不会自动续费）。
-
-![img.png](readme/donate.png)
-
-所有的支持都将用来：提升我们的积极性，延长小石榴的存活时间。
-
-### 致谢
-
-迄今为止我们共收到 **0** 元捐赠。
-
-感谢以下小伙伴点亮星标：
-
-<a href="https://github.com/Kiteio/Punica/stargazers">
-    <img width="180" src="https://reporoster.com/stars/Kiteio/Punica" alt="stargazers" />
-</a>
+我们利用宝贵的课余时间制作小石榴，如果你喜欢我们的作品，可以点亮星标，这对小石榴的发展很重要。
+你也可以向我们发起[捐赠](https://afdian.com/a/kiteio)（该平台并不会自动续费）。

@@ -76,7 +76,7 @@ fun TimetableAllScreen() {
                                 // 包含 query
                                 (isKeyContainsQuery || it.teacher.contains(query) ||
                                         it.area.contains(query) || it.clazz.contains(query))
-                    } ?: false
+                    } == true
                 }
             }
         }

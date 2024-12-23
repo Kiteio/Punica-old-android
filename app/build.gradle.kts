@@ -1,6 +1,4 @@
 import com.android.build.gradle.internal.api.ApkVariantOutputImpl
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 plugins {
     alias(libs.plugins.android.application)
@@ -14,17 +12,19 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "org.kiteio.punica"
+        applicationId = namespace
         minSdk = 29
         targetSdk = 35
         versionCode = 5
         versionName = "0.0.5"
 
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     debugImplementation(libs.androidx.ui.test.manifest)
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    implementation(libs.material.icons.extended)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3)
     implementation(libs.materialKolor)
     implementation(project(":request"))

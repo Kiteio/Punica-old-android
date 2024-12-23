@@ -65,7 +65,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 import compose.icons.TablerIcons
 import compose.icons.tablericons.CalendarEvent
 import kotlinx.coroutines.delay

@@ -91,7 +91,7 @@ fun CampusNetScreen() {
 
                 // 自动登录
                 LaunchedEffect(key1 = user) {
-                    checked = user?.run { campusNetUser.login(user) } ?: false
+                    checked = user?.run { campusNetUser.login(user) } == true
                 }
 
                 ElevatedCard(
@@ -142,7 +142,7 @@ fun CampusNetScreen() {
                                         if (it) {
                                             checked = user?.run {
                                                 campusNetUser.login(user) { Toast(R.string.connected).show() }
-                                            } ?: false
+                                            } == true
                                         } else {
                                             checked = false
                                             CampusNet.logout(campusNetUser.ip)

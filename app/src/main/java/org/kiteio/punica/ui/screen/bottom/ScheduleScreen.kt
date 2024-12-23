@@ -137,7 +137,7 @@ fun ScheduleScreen() {
             semester = semester,
             timetable = timetable,
             onItemClick = { visibleItems = it; itemsDialogVisible = true },
-            showOtherWeeks = preferences?.get(Keys.showOtherWeeks) ?: false,
+            showOtherWeeks = preferences?.get(Keys.showOtherWeeks) == true,
             modifier = Modifier.weight(1f)
         )
         // 课表备注
@@ -247,14 +247,14 @@ private fun TopAppBar(
                         onClick = {
                             coroutineScope.launchCatch {
                                 Preferences.edit {
-                                    it[Keys.showOtherWeeks] = !(it[Keys.showOtherWeeks] ?: false)
+                                    it[Keys.showOtherWeeks] = it[Keys.showOtherWeeks] != true
                                 }
                                 moreDropdownMenuExpanded = false
                             }
                         },
                         trailingIcon = {
                             CheckBox(
-                                checked = preferences?.get(Keys.showOtherWeeks) ?: false,
+                                checked = preferences?.get(Keys.showOtherWeeks) == true,
                                 onCheckedChange = { value ->
                                     coroutineScope.launchCatch {
                                         Preferences.edit { it[Keys.showOtherWeeks] = value }

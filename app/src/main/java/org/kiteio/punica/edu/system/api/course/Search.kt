@@ -8,6 +8,7 @@ import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import org.kiteio.punica.candy.Log
 import org.kiteio.punica.candy.ifNotBlank
 import org.kiteio.punica.candy.json
 import org.kiteio.punica.datastore.Identified
@@ -67,7 +68,9 @@ suspend fun CourseSystem.search(
                 }
             },
             sort
-        )
+        ).also {
+            Log.i(searchParams.name, it.joinToString("\n") { it.name + it.time + it.operateId })
+        }
     }
 }
 
@@ -127,7 +130,7 @@ private fun form(pageIndex: Int, count: Int) = parameters {
 private suspend fun parse(username: String, response: HttpResponse, sort: Sort): List<Course> {
     val rawCourses = try {
         response.bodyAsText().json.getJSONArray("aaData")
-    }catch (e: Throwable) {
+    }catch (_: Throwable) {
         return emptyList()
     }
 
@@ -149,14 +152,14 @@ private suspend fun parse(username: String, response: HttpResponse, sort: Sort):
                     remaining = getString("syrs"),
                     status = try {
                         getString("ctsm")
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         ""
                     },
                     department = getString("dwmc"),
                     classHours = getString("zxs"),
                     examMode = try {
                         getString("khfs")
-                    } catch (e: Throwable) {
+                    } catch (_: Throwable) {
                         null
                     },
                     selectable = getInt("sfkfxk") == 1,

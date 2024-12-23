@@ -14,10 +14,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.AsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
+import coil3.toBitmap
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicColorScheme
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +52,7 @@ fun PunicaTheme(
         model = avatarUri,
         error = painterResource(id = R.drawable.punica),
         onSuccess = {
-            avatarImageBitmap = it.result.drawable.toBitmap()
+            avatarImageBitmap = it.result.image.toBitmap()
         }
     )
     // Painter 得使用才会请求图片
