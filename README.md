@@ -1,6 +1,8 @@
 # 小石榴
 
-### 领先的广东财经大学教务系统工具 | 自动登录 | 全量开源
+## 该仓库已不再维护
+
+如需获取最新支持，请前往[Punica-CMP（小石榴跨平台版本）](https://github.com/Kiteio/Punica-CMP)。
 
 <p align="center">
     <img width="160" src="app/src/main/res/drawable/punica.png" alt="Punica Logo"/>
@@ -9,15 +11,6 @@
 <p align="center">
     <i>爱一个人需要理由吗？不需要吗？需要吗？</i>
 </p>
-
-> ### 近期计划
-> 我们将对小石榴的代码做全量重审（Code Review），并在不久的将来将其版本提升至`1.0.0`。
-> 请注意，该版本可能会与旧版本产生数据兼容性问题，旧版本将在新版本发布不久后失去支持。
->
-> 我们会将注意力集中在：
-> 1. 新增课表桌面小组件
-> 2. 性能优化、代码逻辑检查
-> 3. 操作体验提升
 
 很高兴见到你！\
 小石榴是一款开源、功能丰富的广东财经大学教学信息查询工具。
@@ -32,10 +25,6 @@
 - 紧急电话
 - 教学通知
 - 教师信息
-
-## 下载 ⛄
-
-小石榴支持搭载 Android 10+ 的手机，你需要进入[版本列表](https://github.com/Kiteio/Punica/releases)，展开最新版本中的 **Assets**，并点击下载`.apk`文件。
 
 ## 截图 🐈‍⬛
 
@@ -56,8 +45,3 @@
     <img src="readme/screenshot6.jpg" alt="screenshot" width="24%" />
     <img src="readme/screenshot8.jpg" alt="screenshot" width="24%" />
 </p>
-
-## 支持 🕊️
-
-我们利用宝贵的课余时间制作小石榴，如果你喜欢我们的作品，可以点亮星标，这对小石榴的发展很重要。
-你也可以向我们发起[捐赠](https://afdian.com/a/kiteio)（该平台并不会自动续费）。
